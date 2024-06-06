@@ -1,0 +1,289 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: url(rsc/background.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.normal{
+   background-color: #ffffff;
+   
+
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.back{
+    background-color: #4e5d7c;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    margin-right: 20px;
+}
+
+.navbar ul li {
+    margin-left: 20px;
+}
+
+.navbar ul li {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.navbar a {
+    font-size: 20px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 800;
+    position: relative;
+    margin-left: 20px;
+}
+
+.navbar a::after {
+    content: "";
+    display: block;
+    height: 4px;
+    border-radius: 15px;
+    width: 100%;
+    background-color: #fdae30;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+    position: absolute;
+    bottom: -3px;
+    left: -5px;
+}
+
+.navbar a:hover::after {
+    transform: scaleX(1.2);
+}
+
+.navbar a:hover,
+.navbar a.active {
+    color: #fdae30;
+}
+
+.site-logo h1 {
+    float: left;
+    color: #ffffff;
+    font-size: 24px;
+    margin-left: 10px;
+    position: absolute;
+    top: 30px;
+    left: 130px;
+    font-size: 30px;
+}
+
+.logo {
+    width: 98px;
+    height: 70px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.block {
+    width: 700px;
+    padding: 10px;
+    display: block;
+    position: absolute;
+    top: 40vh;
+    right: 5vw;
+}
+
+.title {
+    color: #ffffff;
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 8px;
+}
+
+.desc {
+    flex-shrink: 0;
+    color: #ffffff;
+    font-size: 23px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 50px;
+}
+
+.btn_book {
+    width: 200px;
+    height: 50px;
+    border-radius: 30px;
+    border-color: transparent;
+    font-size: 22px;
+    font-weight: bold;
+    background: #FCBB6D;
+}
+
+.btn_book:hover {
+    background: rgb(248, 202, 127);
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+/* Login Page */
+.board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    margin: 40px 200px;
+    
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 30px;
+    background-color: rgba(29, 34, 45, 0.9);
+    width: 50vw;
+    height: 65vh;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.loginChange {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30vw;
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgba(29, 34, 45, 0.9);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.login h1 {
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-size: 28px;
+    position: relative;
+    
+}
+
+.login h1::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 100%;
+    height: 5px; 
+    background-color: #ffffff; 
+    border-radius: 15px;
+}
+.login form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+    margin-top: 40px;
+}
+
+.login form input {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25) inset;
+    border-radius: 15px;
+    background-color: rgba(217, 217, 217, 0.2);
+    height: 45px;
+    width: 400px;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+ 
+}
+
+.login form input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.login form input:focus {
+    background-color: rgba(217, 217, 217, 0.3);
+    outline: none;
+}
+
+.login button,.loginChange button {
+    height: 45px;
+    border-radius: 25px;
+    border: none;
+    background-color: #FCBB6D;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1D222D;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 200px;
+    align-self: center;
+}
+
+.login form button:hover {
+    background-color: #f8ca7f;
+}
+
+.loginChange{
+    height: 65vh;
+}
+
+.loginChange h1{
+    color: #ffffff;
+}
+
+.loginChange p {
+    color: #ffffff;
+    margin-bottom: 70px;
+
+}
+
+.loginChange a {
+    color: #fdae30;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.loginChange a:hover {
+    text-decoration: underline;
+}
+
+.box{
+    display: flex;
+    background-color: #ffffff;
+    margin: 0 auto;
+    width: 80%;
+    height: 70vh;
+    border-radius: 10px;
+}
+
