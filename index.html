@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="rsc/style/bootstrap.css">
+    <link rel="stylesheet" href="rsc/style/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start; 
+            background: url('rsc/image/background.png') no-repeat center center fixed;
+            background-size: cover;
+            padding: 60px;
+            color: #c9d1d9;
+            padding-top: 15vh; 
+        }
+        .content-wrapper {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            text-align: left;
+            max-width: 50%;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .content-wrapper h2 {
+            color: #58a6ff;
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .content-wrapper p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            <img src="rsc/image/logo.svg" alt="INTERIOR Logo">
+            WORM
+        </h1>
+        <div class="nav">
+            <a href="index.html" class ="active">Home</a>
+            <a href="aboutUs.html">About Us</a>
+            <a href="contact.html">Contact</a>
+            <a href="login.html">Login</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="content-wrapper">
+            <h2>"Books are like magic"</h2>
+            <p>They have the power to transport us to world beyond our own and spark our imagination with endless possibilities.</p>
+            <p>So what are you waiting for? Sign up now and start exploring the world of books!</p>
+
+             <a class="btn btn-primary" href="login.html">Get Started</a>
+        </div>
+    </div>
+</body>
+</html>
