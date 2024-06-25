@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact</title>
     <link rel="stylesheet" href="rsc/style/bootstrap.css">
     <link rel="stylesheet" href="rsc/style/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <div class="header">
         <h1>
@@ -17,9 +18,50 @@
         <div class="nav">
             <a href="index.html">Home</a>
             <a href="aboutUs.html">About Us</a>
-            <a href="contact.html" class ="active">Contact</a>
-            <a href="login.html">Login</a>
+            <a href="contact.html" class="active">Contact</a>
+            <a href="login.php">Login</a>
         </div>
     </div>
+    <div class="main-content">
+        <div class="content-wrapper">
+            <button type="button" class="btn btn-success" id="successToastBtn">Show Success Toast</button>
+            <button type="button" class="btn btn-danger" id="errorToastBtn">Show Error Toast</button>
+            <div class="toast-container position-fixed top-0 end-0 p-3">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"
+                    style="background-color: #161b22; color: #c9d1d9; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <div class="toast-body d-flex align-items-center">
+                        <img id="toastIcon" src="rsc/gif/error.gif" alt="Toast Icon" width="50px" style="margin-right: 10px;">
+                        <div id="toastText" class="text">
+                            <strong>Error:</strong>
+                            <p>Message goes here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const successBtn = document.getElementById('successToastBtn');
+        const errorBtn = document.getElementById('errorToastBtn');
+        const toastLiveExample = document.getElementById('liveToast');
+        const toast = new bootstrap.Toast(toastLiveExample);
+        const toastIcon = document.getElementById('toastIcon');
+        const toastText = document.getElementById('toastText');
+
+        successBtn.addEventListener('click', () => {
+            toastIcon.src = "rsc/gif/success.gif";
+            toastText.innerHTML = '<strong>Success:</strong><p>Operation successful!</p>';
+            toast.show();
+        });
+
+        errorBtn.addEventListener('click', () => {
+            toastIcon.src = "rsc/gif/error.gif";
+            toastText.innerHTML = '<strong>Error:</strong><p>Error message test</p>';
+            toast.show();
+        });
+    </script>
 </body>
+
 </html>

@@ -7,6 +7,91 @@
     <link rel="stylesheet" href="rsc/style/bootstrap.css">
     <link rel="stylesheet" href="rsc/style/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        .main-content {
+            position: relative;
+            display: block;
+            min-height: 100vh;
+            background: url('rsc/image/background.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); 
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2; 
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 800px;
+            margin: auto;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .content-wrapper h2 {
+            color: #58a6ff;
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .infoGraphic img {
+            width: 150px;
+            margin-bottom: 15px;
+        }
+
+        .infoGraphic {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .info {
+            color:antiquewhite;
+            text-align: center;
+            margin: 20px;
+            flex: 1;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 2;
+        }
+
+        .info:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="header">
@@ -15,10 +100,35 @@
             WORM
         </h1>
         <div class="nav">
-            <a href="index.html">Home</a>
-            <a href="aboutUs.html" class ="active">About Us</a>
+            <a href="index.html" >Home</a>
+            <a href="aboutUs.html" class="active">About Us</a>
             <a href="contact.html">Contact</a>
-            <a href="login.html">Login</a>
+            <a href="login.php">Login</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="overlay"></div>
+        <div class="content-wrapper text-light py-5">
+            <h2 class="text-center">Book Your Next Escape</h2>
+            <p>At Bibliotech, our passion drives us to connect readers with the books they love. Founded with a vision to make literature accessible to all, we embark on a journey to revolutionize the way people engage with reading materials. We strive to create a world where access to knowledge and literature is effortless, enriching lives and fostering a love for reading among individuals of all backgrounds and ages.</p>
+        </div>
+
+        <div class="infoGraphic container my-5">
+            <div class="row justify-content-center">
+                <div class="col-md-3 col-sm-6 info">
+                    <img src="rsc/image/aboutUs-item1.png" alt="About Us Image 1" class="img-fluid">
+                    <p>Provide a vast and diverse collection of books spanning various genres and interests.</p>
+                </div>
+                <div class="col-md-3 col-sm-6 info">
+                    <img src="rsc/image/aboutUs-item2.png" alt="About Us Image 2" class="img-fluid">
+                    <p>Empower effortless book rentals with streamlined online browsing and reservation tools.</p>
+                </div>
+                <div class="col-md-3 col-sm-6 info">
+                    <img src="rsc/image/aboutUs-item3.png" alt="About Us Image 3" class="img-fluid">
+                    <p>Champion local libraries and lifelong learning, fostering a vibrant reading community.</p>
+                </div>
+            </div>
         </div>
     </div>
 </body>
