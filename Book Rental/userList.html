@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="list.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="profile">
+            <img src="Items/warden.png" alt="Profile Picture">
+            <h2>Staff</h2>
+            <p>aqilhagemaru</p>
+        </div>
+        <ul class="List">
+            <li class="Items"><a href="profile.php"><img src="Items/profile.png" alt="profile">Profile</a></li>
+            <li class="Items active"><a href="dashboard.php"><img src="Items/dashboard.png" alt="dashboard">Dashboard</a></li>
+            <li class="Items"><a href="book.php"><img src="Items/book.png" alt="book">Book</a></li>
+            <li class="Items"><a href="feedback.php"><img src="Items/feedback.png" alt="feedback">Feedback</a></li>
+            <li class="Items logout"><a href="logout.php"><img src="Items/logout.png" alt="logout">Log Out</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <header class="header">
+            <div class="logo-container">
+                <img src="Items/logo.jpg" alt="Company Logo">
+                <h1>WORM</h1>
+            </div>
+        </header>
+        <div class="dashboard">
+            <table class="staff-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>User Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1001</td>
+                        <td>ALISA SOFIA</td>
+                        <td>
+                            <button class="edit-btn">EDIT</button>
+                            <button class="suspend-btn">SUSPEND</button>
+                            <button class="delete-btn">DELETE</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1002</td>
+                        <td>SYAFA IRDINA</td>
+                        <td>
+                            <button class="edit-btn">EDIT</button>
+                            <button class="suspend-btn">SUSPEND</button>
+                            <button class="delete-btn">DELETE</button>
+                        </td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

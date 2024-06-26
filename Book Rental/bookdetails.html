@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    <link rel="stylesheet" href="bookdetails.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="profile">
+                <img src="Items/warden.png" alt="Profile Picture">
+                <h2>USER</h2>
+                <p>aqilhagemaru</p>
+            </div>
+            <ul class="List">
+                <li class="Items"><a href="profile.php"><img src="Items/profile.png" alt="profile">Profile</a></li>
+                <li class="Items active"><a href="catalogue.php"><img src="Items/catalogue.png" alt="catalogue">Catalogue</a></li>
+                <li class="Items"><a href="rent.php"><img src="Items/rent.png" alt="Rent">Rent</a></li>
+                <li class="Items"><a href="feedback.php"><img src="Items/feedback.png" alt="Feedback">Feedback</a></li>
+                <li class="Items logout"><a href="logout.php"><img src="Items/logout.png" alt="logout">Log Out</a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <header class="header">
+                <div class="logo-container">
+                    <img src="Items/logo.jpg" alt="Company Logo">
+                    <h1>WORM</h1>
+                </div>
+            </header>
+            <div class="book-details">
+                <div class="book-image">
+                    <img src="Items/thediaryofceo.png" alt="The Diary of a CEO">
+                </div>
+                <div class="book-info">
+                    <h1>THE DIARY OF A CEO</h1>
+                    <p><strong>RM 30</strong></p>
+                    <p>Rental : RM 5</p>
+                    <p>Deposit : RM 25</p>
+                    <p>Rental Duration : 30 Days</p>
+                    <p><strong>Synopsis :</strong></p>
+                    <p>At the very heart of all the success and failure I've been exposed to - both my own entrepreneurial journey and through the thousands of interviews I've conducted on my podcast - are a set of principles that can stand the test of time, apply to any industry, and be used by anyone who is in search of building something great or becoming someone great.</p>
+                    <p><strong>Category :</strong> Business</p>
+                    <div class="actions">
+                        <select class="rental-dropdown">
+                            <option>Start Rental</option>
+                        </select>
+                        <select class="rental-dropdown">
+                            <option>End Rental</option>
+                        </select>
+                    </div>
+                    <div class="checkout">
+                        <button class="back-btn">Back</button>
+                        <button class="checkout-btn">Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
