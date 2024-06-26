@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="payment.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="Items/logo.jpg" alt="Company Logo">
+            <h1>WORM</h1>
+        </div>
+    </header>
+    <div class="sidebar">
+        <div class="profile">
+            <img src="Items/warden.png" alt="Profile Picture">
+            <h2>Staff</h2>
+            <p>aqilhagemaru</p>
+        </div>
+        <ul class="List">
+            <li class="Items"><a href="#Profile"><img src="Items/profile.png" alt="profile">Profile</a></li>
+            <li class="Items"><a href="#Catalogue"><img src="Items/catalogue.png" alt="catalogue">Catalogue</a></li> 
+            <li class="Items"><a href="#Rent"><img src="Items/rent.png" alt="Rent">Rent</a></li>
+            <li class="Items"><a href="#Feedback"><img src="Items/feedback.png" alt="Rent">Feedback</a></li>
+            <li class="Items logout"><a href="#Logout"><img src="Items/logout.png" alt="logout">Log Out</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="content">
+            <h1>Payment Details</h1>
+            <table class="payment-table">
+                <thead>
+                    <tr>
+                        <th>Book Image</th>
+                        <th>Book Name</th>
+                        <th>Rental Price</th>
+                        <th>Deposit Price</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="Items/book1.jpg" alt="Book 1" width="50"></td>
+                        <td>Book Title 1</td>
+                        <td>RM5.00</td>
+                        <td>RM50.00</td>
+                        <td>RM15.00</td>
+                    </tr>
+                    <tr>
+                        <td><img src="Items/book2.jpg" alt="Book 2" width="50"></td>
+                        <td>Book Title 2</td>
+                        <td>RM7.00</td>
+                        <td>RM10.00</td>
+                        <td>RM17.00</td>
+                    </tr>
+                    <!-- Add more book rows as needed -->
+                </tbody>
+            </table>
+            <div class="total-amount">
+                <strong>Total Amount: RM32.00</strong>
+            </div>
+            <div class="submit-button">
+                <button type="submit">Submit Payment</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
