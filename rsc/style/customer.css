@@ -5,6 +5,8 @@
     --bg-color-drop: #f1f1f1;
     --bg-popcolor: #f1f1f1;
 
+
+
 }
 
 
@@ -162,11 +164,11 @@
 
 }
 
-
 .sidebar {
     margin-top: 60px;
     width: 250px;
     padding: 20px;
+    background-color: yellow;
 }
 
 .sidebar h4 {
