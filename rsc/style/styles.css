@@ -10,7 +10,7 @@
     --input-bg-color: rgba(0, 0, 0, 0.1);
     --dropdown-bg-color: rgba(22, 27, 34, 0.95);
     --dropdown-hover-color: rgba(33, 37, 41, 0.95);
-    --border-color:1px solid rgba(255, 255, 255, 0.1);
+    --border-color: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -100,7 +100,7 @@ body {
     text-align: center;
 }
 
-.login-container a{
+.login-container a {
     color: #58a6ff;
     text-decoration: none;
 }
@@ -117,14 +117,16 @@ body {
     position: relative;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
     box-shadow: none;
     border-color: var(--primary-color);
     background-color: var(--input-bg-color);
     color: var(--text-color);
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
     background-color: var(--input-bg-color);
     border: var(--border-color);
     color: #c9d1d9;
@@ -133,7 +135,7 @@ body {
 
 .input-group-text {
     background-color: rgba(0, 0, 0, 0.2);
-    border:var(--border-color);
+    border: var(--border-color);
     color: #c9d1d9;
 }
 
@@ -150,12 +152,4 @@ body {
 
 .form-select option:hover {
     background-color: var(--dropdown-hover-color);
-}
-
-/*Toast CSS*/
-
-.toast-body img{
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
 }
