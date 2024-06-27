@@ -15,6 +15,37 @@ body {
 
 }
 
+.headerbg {
+    background-image: url('header.png');
+    background-size: cover;
+    width: 100%;
+    height: 300px;
+    justify-content: flex;
+
+}
+
+.header-content {
+    padding-top: 70px;
+    margin-left: 40px;
+    width: 30%;
+}
+
+.headerbg a {
+    background-color: #ff3b34;
+    border-color: #ff3b34;
+}
+
+.headerbg a:hover {
+    background-color: #FF5751;
+    border-color: #FF5751;
+}
+
+
+.main-content {
+    padding: 20px;
+
+}
+
 .header {
     font-weight: 600;
     background-color: var(--bg-color);
