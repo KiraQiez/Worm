@@ -22,11 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             // Invalid password
-            $login_error = "Invalid password.";
+            $login_error = "Please check your password.";
         }
     } else {
         // Invalid username
-        $login_error = "Invalid username";
+        $login_error = "Username does not exist";
     }
 
     $stmt->close();
@@ -52,10 +52,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+
     <div class="header">
         <h1>
             <img src="rsc/image/logo.svg" alt="INTERIOR Logo"> WORM
         </h1>
+
         <div class="nav">
             <a href="index.html">Home</a>
             <a href="aboutUs.html">About Us</a>
@@ -92,25 +94,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
                 </div>
+
+
+
                 <button id='login-button' type="submit" class="btn btn-primary btn-block w-100">Login</button>
             </form>
             <p class="mt-3 text-center">Don't have an account? <a href="register.php" class="text-primary">Register</a></p>
         </div>
     </div>
 
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header" style='background-color:var(--header-background-color); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-color);'>
-                <img src="rsc/image/logo.svg" class="rounded me-2" alt="Worm Logo" style="height: 20px;">
-                <strong class="me-auto">Worm</strong>
-            </div>
-            <div class="toast-body" style="background-color: var(--background-color); color: var(--text-color); border: var(--border-color);">
-                <?php
-                echo $login_error;
-                ?>
-            </div>
-        </div>
-    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -141,16 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }, false);
             });
         });
-
-        const toastTrigger = document.getElementById('login-button')
-        const toastLiveExample = document.getElementById('liveToast')
-
-        if (toastTrigger) {
-            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-            toastTrigger.addEventListener('click', () => {
-                toastBootstrap.show()
-            })
-        }
     </script>
 </body>
 

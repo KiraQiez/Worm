@@ -1,9 +1,8 @@
+drop table customer;
+drop table system_users;
 
 
-
-
-
-CREATE TABLE system_user (
+CREATE TABLE system_users (
     userid VARCHAR(8) PRIMARY KEY NOT NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
     fullname VARCHAR(100) NOT NULL,
@@ -12,6 +11,24 @@ CREATE TABLE system_user (
     password VARCHAR(255) NOT NULL,
     usertype VARCHAR(50) NOT NULL
 );
+
+CREATE TABLE customer (
+    custid VARCHAR(8) PRIMARY KEY,
+    status VARCHAR(8) NOT NULL,
+    FOREIGN KEY (custid) REFERENCES system_users(userid)
+);
+
+
+
+
+
+
+
+
+
+//CHAT GPT
+
+
 
 CREATE TABLE customer (
     custid VARCHAR(8) PRIMARY KEY,

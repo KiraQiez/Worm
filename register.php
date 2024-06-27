@@ -209,16 +209,18 @@ $conn->close();
                 }, false);
             });
 
-            const toastTrigger = document.getElementById('register-button')
-            const toastLiveExample = document.getElementById('liveToast')
 
-            if (toastTrigger) {
-                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-                toastTrigger.addEventListener('click', () => {
-                    toastBootstrap.show()
-                })
-            }
         });
+
+        const toastTrigger = document.getElementById('register-button')
+        const toastLiveExample = document.getElementById('liveToast')
+
+        if (toastTrigger) {
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+            toastTrigger.addEventListener('click', () => {
+                toastBootstrap.show()
+            })
+        }
     </script>
 </body>
 

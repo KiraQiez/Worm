@@ -7,7 +7,7 @@
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="rsc/style/styles.css">
-    <link rel="stylesheet" href="rsc/style/customer.css">
+    <link rel="stylesheet" href="rsc/style/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
@@ -19,19 +19,9 @@
         </div>
         <div class="nav">
             <ul>
-                <li><a href="CustomerDashboard.php">Home</a></li>
-                <li><a href="CustomerLibrary.php">Library</a></li>
-                <li class="dropdown">
-                    <a href="#">Genres</a>
-                    <i class="fas fa-caret-down"></i>
-                    <div class="dropdown-menu">
-                        <a href="#">Fiction</a>
-                        <a href="#">Non-Fiction</a>
-                        <a href="#">Mystery</a>
-                        <a href="#">Romance</a>
-                    </div>
-                </li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="MainHomepage.php">Home</a></li>
+                <li><a href="MainAbout.php">About</a></li>
+                <li><a href="MainContact.php">Contact</a></li>
             </ul>
         </div>
         <div class="user-profile">
@@ -39,12 +29,10 @@
             <div class="dropdown">
                 <div class="user-info">
                     <p>Username</p>
-                    <p class="rank">Member</p>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="#">Profile</a>
-                    <a href="#">Settings</a>
-                    <a href="logout.php">Logout</a>
+                    <a href="MainLogin.php">Login</a>
+                    <a href="MainRegister.php">Register</a>
                 </div>
             </div>
         </div>
