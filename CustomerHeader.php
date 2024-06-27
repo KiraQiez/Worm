@@ -19,7 +19,7 @@
         </div>
         <div class="nav">
             <ul>
-                <li><a href="CustomerDashboard.php">Home</a></li>
+                <li><a href="MainHomepage.php">Home</a></li>
                 <li><a href="CustomerLibrary.php">Library</a></li>
                 <li class="dropdown">
                     <a href="#">Genres</a>
@@ -44,7 +44,7 @@
                 <div class="dropdown-menu">
                     <a href="#">Profile</a>
                     <a href="#">Settings</a>
-                    <a href="logout.php">Logout</a>
+                    <a href="MainLogout.php">Logout</a>
                 </div>
             </div>
         </div>
