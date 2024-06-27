@@ -12,7 +12,6 @@ include 'MainHeader.php';
     <div class="home-container">
         <h2>Quotes</h2>
         <div id="quotes" class="quotes-holder">
-            <!-- Quotes will be injected here by JavaScript -->
         </div>
     </div>
 </div>
