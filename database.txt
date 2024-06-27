@@ -27,17 +27,6 @@ CREATE TABLE customer (
 
 
 //CHAT GPT
-
-
-
-CREATE TABLE customer (
-    custid VARCHAR(8) PRIMARY KEY,
-    phone VARCHAR(20),
-    address VARCHAR(255),
-    date_of_birth DATE,
-    FOREIGN KEY (custid) REFERENCES system_user(userid)
-);
-
 CREATE TABLE staff (
     staffid VARCHAR(8) PRIMARY KEY,
     phone VARCHAR(20),
