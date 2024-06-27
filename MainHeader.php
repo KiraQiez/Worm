@@ -28,7 +28,7 @@
             <img src="rsc/image/picture.png" alt="Profile Image">
             <div class="dropdown">
                 <div class="user-info">
-                    <p>Username</p>
+                    <p>Login Now</p>
                 </div>
                 <div class="dropdown-menu">
                     <a href="MainLogin.php">Login</a>
