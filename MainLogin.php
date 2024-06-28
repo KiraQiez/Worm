@@ -35,6 +35,7 @@ if (isset($_POST['submit'])) {
                 session_start();
                 $_SESSION['username'] = $username;
                 $_SESSION['usertype'] = $row['usertype'];
+                $_SESSION['userid'] = $row['userid'];
                 echo "<script> 
                 setTimeout(function() { location.href = 'MainHomepage.php'; }, 1000); 
                 </script>";

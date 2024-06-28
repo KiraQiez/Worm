@@ -3,6 +3,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+include 'db.php';
+
 if ($_SESSION['usertype'] != "customer") {
     echo "<script> 
     alert('You are not authorized to access this page.');
@@ -20,6 +22,7 @@ if ($_SESSION['usertype'] != "customer") {
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="rsc/styles.css">
+    <link rel="stylesheet" href="rsc/main.css">
     <link rel="stylesheet" href="rsc/customer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
