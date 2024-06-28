@@ -3,14 +3,13 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     height: 100vh;
-    color: #fff;
+    background-color: #f0f0f0; /* Light background color */
 }
 
 .header {
     width: 100%;
     display: flex;
     justify-content: flex-end;
-  
     position: absolute;
     top: 0;
     right: 0;
@@ -31,21 +30,6 @@ body {
     font-size: 24px;
     margin-right: 25px;
     color: #fff;
-}
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 180px;
-    height: 100vh;
-    background-color: #3e4c65;
-    color: #fff;
-    box-sizing: border-box;
-    padding: 20px;
 }
 
 .profile {
@@ -104,18 +88,17 @@ body {
 }
 
 .main-content {
-    margin-left: 7%;
+    margin: 7% auto; /* Center align and adjust margin for responsiveness */
     padding: 20px;
-    width: calc(100% - 200px);
+    width: calc(100% - 40px); /* Adjust width for better centering */
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 13%;
 }
 
 .content {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: #F9E4BC; /* Light background color for content */
     padding: 40px;
     border-radius: 10px;
     text-align: center;
@@ -127,7 +110,8 @@ body {
 .content h1 {
     font-size: 36px;
     margin-bottom: 20px;
-    color: #F8A502;
+    color: black; /* Adjusted text color */
+    font-weight: bold; /* Makes the text bold */
 }
 
 form input[type="text"],
@@ -140,10 +124,11 @@ form textarea {
     border-radius: 5px;
     font-size: 16px;
     color: #333;
+    box-sizing: border-box;
 }
 
 form textarea {
-    height: 100px;
+    height: 120px; /* Increased height for comments */
     resize: none;
 }
 
@@ -157,7 +142,7 @@ form textarea {
     color: #fff;
     border: none;
     padding: 15px 30px;
-    border-radius: 5px;
+    border-radius: 50px; /* Make the buttons more oval-shaped */
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
