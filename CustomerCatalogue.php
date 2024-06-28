@@ -2,7 +2,7 @@
 $title = "Library";
 include 'CustomerHeader.php';
 
-// Sample book data for demonstration. Replace with actual database data.
+// Books Available 
 $books = [
     ['title' => 'Fiction Book 1', 'author' => 'Author 1', 'category' => 'Fiction'],
     ['title' => 'Non-Fiction Book 1', 'author' => 'Author 2', 'category' => 'Non-Fiction'],
