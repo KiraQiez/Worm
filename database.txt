@@ -30,11 +30,15 @@ CREATE TABLE customer (
 //FOR TEST PURPOSE
 
 CREATE TABLE book (
-    bookid VARCHAR(10) PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    genre VARCHAR(100) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL
+    bookID VARCHAR(10) PRIMARY KEY,
+    bookTitle VARCHAR(255) NOT NULL,
+    bookAuthor VARCHAR(255) NOT NULL,
+    bookCategory VARCHAR(100) NOT NULL,
+    bookPrice DECIMAL(10, 2) NOT NULL,
+    bookSynopsis VARCHAR(255),
+    bookDatePublished DATE,
+    bookStatus VARCHAR(10),
+    bookImage LONGBLOB
 );
 
 
