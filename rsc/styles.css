@@ -316,68 +316,86 @@ body {
 }
 
 .contact-container {
-    text-align: center;
-    padding: 40px 20px;
-    border-radius: 10px;
-    margin: 20px auto;
-    max-width: 1000px;
+    background-color: white;
+    padding: 30px;
+
+    width: 80%;
 }
 
-.contact-container h1 {
-    font-weight: 700;
+.title {
+    color: #ff3b34;
     margin-bottom: 30px;
+    font-size: 2em;
+    text-align: center;
 }
 
 .contact-section {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
     align-items: center;
-    width: 100%;
-    gap: 20px;
 }
 
 .contact-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-basis: 40%;
-    text-align: left;
-    margin-left: 50px;
-
-    padding-right: 20px;
+    flex: 1;
+    margin-right: 20px;
 }
 
 .contact-item {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-    transition: transform 0.3s;
 }
 
-.contact-item:hover {
-    transform: scale(1.05);
+.contact-icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease-in-out;
 }
 
-.contact-item img {
-    width: 40px;
-    height: 40px;
-    margin-right: 15px;
+.contact-icon:hover {
+    transform: scale(1.1);
 }
 
 .contact-item p {
-    font-size: 20px;
-    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    transition: color 0.2s ease-in-out;
+}
+
+.contact-item:hover p {
+    color: #FF5751;
 }
 
 .contact-image {
-    flex-basis: 40%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    flex: 1;
+    text-align: center;
 }
 
 .contact-image img {
-    width: 100%;
-    max-width: 600px;
+    max-width: 100%;
     height: auto;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .contact-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .contact-info {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .contact-image {
+        text-align: center;
+    }
 }

@@ -44,7 +44,7 @@ if ($_SESSION['usertype'] != "customer") {
                         <a href="#">Romance</a>
                     </div>
                 </li>
-                <li><a href="CustomerContactUs.php">Contact</a></li>
+                <li><a href="MainContact.php">Contact</a></li>
             </ul>
         </div>
         <div class="user-profile">
