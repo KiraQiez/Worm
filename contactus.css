@@ -74,7 +74,8 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    gap: 20px; /* Add some space between the contact info and image */
+    gap: 20px;
+    /* Add some space between the contact info and image */
 }
 
 .contact-info {

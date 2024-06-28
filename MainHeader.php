@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="rsc/style/styles.css">
-    <link rel="stylesheet" href="rsc/style/main.css">
+    <link rel="stylesheet" href="rsc/styles.css">
+    <link rel="stylesheet" href="rsc/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
@@ -28,7 +28,7 @@
             <img src="rsc/image/picture.png" alt="Profile Image">
             <div class="dropdown">
                 <div class="user-info">
-                    <p>Username</p>
+                    <p>Login Now</p>
                 </div>
                 <div class="dropdown-menu">
                     <a href="MainLogin.php">Login</a>

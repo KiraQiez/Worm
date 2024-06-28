@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="rsc/style/styles.css">
-    <link rel="stylesheet" href="rsc/style/customer.css">
+    <link rel="stylesheet" href="rsc/styles.css">
+    <link rel="stylesheet" href="rsc/customer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
@@ -19,7 +19,7 @@
         </div>
         <div class="nav">
             <ul>
-                <li><a href="CustomerDashboard.php">Home</a></li>
+                <li><a href="MainHomepage.php">Home</a></li>
                 <li><a href="CustomerLibrary.php">Library</a></li>
                 <li class="dropdown">
                     <a href="CustomerCatalogue.php">Genres</a>
@@ -44,7 +44,7 @@
                 <div class="dropdown-menu">
                     <a href="#">Profile</a>
                     <a href="#">Settings</a>
-                    <a href="logout.php">Logout</a>
+                    <a href="MainLogout.php">Logout</a>
                 </div>
             </div>
         </div>

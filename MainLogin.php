@@ -32,6 +32,12 @@ if (isset($_POST['submit'])) {
             } else {
                 $message = "Login successful";
                 $ping = true;
+                session_start();
+                $_SESSION['username'] = $username;
+                $_SESSION['usertype'] = $row['usertype'];
+                echo "<script> 
+                setTimeout(function() { location.href = 'MainHomepage.php'; }, 1000); 
+                </script>";
             }
         }
     }
