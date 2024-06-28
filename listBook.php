@@ -63,7 +63,7 @@
                     <p>Available</p>
                     <button class="edit-btn">EDIT</button>
                     <button class="delete-btn">DELETE</button>
-                </div>
+                </div>asdafw
             </div>
         </div>
     </div>
