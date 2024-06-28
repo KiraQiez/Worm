@@ -1,6 +1,6 @@
 <?php
 
-$title = "Homepage";
+$title = "Contact Us";
 include 'CustomerHeader.php';
 
 ?>
@@ -9,25 +9,27 @@ include 'CustomerHeader.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title>
+    <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="contactus.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </head>
 <body>
-
-    <div class="main-content">
-        <h1 class="title">CONTACT US</h1>
+<div class="main-content">
+    <div class="contact-container">
+        <h1 class="title text-center">Contact Us</h1>
         <div class="contact-section">
             <div class="contact-info">
                 <div class="contact-item">
-                    <img src="Items/whatsapp.png" alt="WhatsApp">
+                    <img src="rsc/image/whatsapp.png" alt="WhatsApp">
                     <p>017 - 9547236</p>
                 </div>
                 <div class="contact-item">
-                    <img src="Items/facebook.png" alt="Facebook">
+                    <img src="rsc/image/facebook.png" alt="Facebook">
                     <p>BOOKWORMRENTAL</p>
                 </div>
                 <div class="contact-item">
-                    <img src="Items/instagram.png" alt="Instagram">
+                    <img src="rsc/image/instagram.png" alt="Instagram">
                     <p>BOOKWORMRENTAL</p>
                 </div>
             </div>
@@ -36,5 +38,8 @@ include 'CustomerHeader.php';
             </div>
         </div>
     </div>
+</div>
+
 </body>
+
 </html>
