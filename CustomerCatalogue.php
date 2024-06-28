@@ -4,7 +4,7 @@ include 'CustomerHeader.php';
 
 ?>
 
-<div class="main-content">
+<div class="main-content d-flex">
     <div class="sidebar">
         <h4>Categories</h4>
         <hr>
