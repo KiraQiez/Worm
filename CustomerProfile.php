@@ -1,34 +1,46 @@
 <?php
 $title = "Profile";
 include 'CustomerHeader.php';
+
+$sql = "SELECT * FROM SYSTEM_USERS WHERE USERID = '$_SESSION[userid]'";
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+} else {
+    echo "Error: " . mysqli_error($conn);
+    exit;
+}
 ?>
 <div class="main-content d-flex justify-content-center">
     <div class="profile-container">
-        <div class="profile-image">
-            <img src="rsc/image/picture.png" alt="Profile Image">
-            <p class="user text-center">John Doe</p>
+        <div class="profile-image text-center mb-3">
+            <img src="rsc/image/picture.png" alt="Profile Image" class="rounded-circle mb-2" style="width: 150px; height: 150px;">
+            <p class="user text-center"><?php echo htmlspecialchars($row['fullname']);
+                                        if ($row['gender'] == 'M') {
+                                            echo '<span class="badge text-bg-primary ms-2">M</span>';
+                                        } else {
+                                            echo '<span class="badge text-bg-danger ms-2">F</span>';
+                                        } ?>
+            </p>
         </div>
         <div class="profile-details">
-            <div class="detail-header d-flex">
+            <div class="detail-header d-flex justify-content-between">
                 <h4>Profile Details</h4>
                 <a href="CustomerEditProfile.php" class="edit-link">Edit Profile</a>
             </div>
             <hr>
             <div class="form-group">
                 <label for="userid">User ID</label>
-                <input type="text" class="form-control" id="userid" value="U001" disabled>
+                <input type="text" class="form-control" id="userid" value="<?php echo htmlspecialchars($row['userid']); ?>" disabled>
             </div>
             <div class="form-group">
-                <label for="fullname">Full Name</label>
-                <input type="text" class="form-control" id="fullname" value="John Doe" disabled>
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" value="<?php echo htmlspecialchars($row['username']); ?>" disabled>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" value="john.doe@example.com" disabled>
-            </div>
-            <div class="form-group">
-                <label for="gender">Gender</label>
-                <input type="text" class="form-control" id="gender" value="Male" disabled>
+                <input type="email" class="form-control" id="email" value="<?php echo htmlspecialchars($row['email']); ?>" disabled>
             </div>
         </div>
     </div>

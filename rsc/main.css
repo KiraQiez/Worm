@@ -48,7 +48,6 @@
     background-color: var(--button-hover);
 }
 
-
 .ping-container {
     margin-top: 12px;
     margin-left: 5px;
@@ -62,6 +61,7 @@
     border-radius: 50%;
     position: relative;
     margin-right: 8px;
+
 }
 
 .ping-error {
