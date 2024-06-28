@@ -1,3 +1,16 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if ($_SESSION['usertype'] != "customer") {
+    echo "<script> 
+    alert('You are not authorized to access this page.');
+    location.href='MainHomepage.php';
+    </script>";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,9 +33,9 @@
         <div class="nav">
             <ul>
                 <li><a href="MainHomepage.php">Home</a></li>
-                <li><a href="CustomerLibrary.php">Library</a></li>
+                <li><a href="#">Rent</a></li>
                 <li class="dropdown">
-                    <a href="CustomerCatalogue.php">Genres</a>
+                    <a href="CustomerCatalogue.php">Catalogue</a>
                     <i class="fas fa-caret-down"></i>
                     <div class="dropdown-menu">
                         <a href="#">Fiction</a>
@@ -38,12 +51,11 @@
             <img src="rsc/image/picture.png" alt="Profile Image">
             <div class="dropdown">
                 <div class="user-info">
-                    <p>Username</p>
+                    <p><?php echo $_SESSION['username']; ?></p>
                     <p class="rank">Member</p>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="#">Profile</a>
-                    <a href="#">Settings</a>
+                    <a href="CustomerProfile.php">Profile</a>
                     <a href="MainLogout.php">Logout</a>
                 </div>
             </div>
