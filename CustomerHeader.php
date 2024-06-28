@@ -22,7 +22,7 @@
                 <li><a href="CustomerDashboard.php">Home</a></li>
                 <li><a href="CustomerLibrary.php">Library</a></li>
                 <li class="dropdown">
-                    <a href="#">Genres</a>
+                    <a href="CustomerCatalogue.php">Genres</a>
                     <i class="fas fa-caret-down"></i>
                     <div class="dropdown-menu">
                         <a href="#">Fiction</a>
@@ -31,7 +31,7 @@
                         <a href="#">Romance</a>
                     </div>
                 </li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="CustomerContactUs.php">Contact</a></li>
             </ul>
         </div>
         <div class="user-profile">
