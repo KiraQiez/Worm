@@ -3,7 +3,6 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     height: 100vh;
-    background: url('Items/Background.jpg') center/cover no-repeat fixed;
     color: #fff;
 }
 
@@ -105,13 +104,14 @@ body {
 }
 
 .main-content {
-    margin-left: 200px;
+    margin-left: 7%;
     padding: 20px;
     width: calc(100% - 200px);
     box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 13%;
 }
 
 .content {

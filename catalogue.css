@@ -1,0 +1,58 @@
+/* catalogue.css */
+
+.main-content {
+    display: flex;
+}
+
+.sidebar {
+    flex: 1;
+    padding: 20px;
+}
+
+.content {
+    flex: 3;
+    padding: 20px;
+}
+
+.Category-list {
+    margin-bottom: 20px;
+}
+
+.Category-list button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.book-list {
+    margin-top: 20px;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.book {
+    padding: 10px;
+    text-align: center;
+}
+
+.book img {
+    max-width: 100%;
+    height: auto;
+}
+
+.book-title {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.book-author {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.form-check{
+    margin-bottom: 10px;
+}
