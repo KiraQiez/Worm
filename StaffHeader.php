@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,9 +30,9 @@ session_start();
                     <a href="#">Books</a>
                     <i class="fas fa-caret-down"></i>
                     <div class="dropdown-menu">
-                        <a href="#">Book Data</a>
-                        <a href="#">Insert Book</a>
-                        <a href="#">Update Book</a>
+                        <a href="StaffBookList.php">Book Data</a>
+                        <a href="StaffAddBook.php">Insert Book</a>
+                        <a href="StaffRentedBook.php">Rented Book</a>
                     </div>
                 </li>
                 <li class="dropdown">
