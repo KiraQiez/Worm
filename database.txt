@@ -18,11 +18,13 @@ CREATE TABLE customer (
     FOREIGN KEY (custid) REFERENCES system_users(userid)
 );
 
-CREATE TABLE customer (
+CREATE TABLE staff (
     staffid VARCHAR(8) PRIMARY KEY,
     stafftype VARCHAR(8) NOT NULL,
     FOREIGN KEY (staffid) REFERENCES system_users(userid)
 );
+
+
 
 
 
