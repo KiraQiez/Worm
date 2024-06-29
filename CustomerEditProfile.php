@@ -1,6 +1,14 @@
 <?php
-$title = "Profile";
-include 'CustomerHeader.php';
+$title = "Edit Profile";
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if ($_SESSION['usertype'] == 'customer') {
+    include 'CustomerHeader.php';
+} else {
+    include 'StaffHeader.php';
+}
 
 $sql = "SELECT * FROM SYSTEM_USERS WHERE USERID = '$_SESSION[userid]'";
 $result = mysqli_query($conn, $sql);

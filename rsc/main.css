@@ -110,3 +110,148 @@
         opacity: 0;
     }
 }
+
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.profile-details {
+    width: 100%;
+}
+
+.detail-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.detail-header h4 {
+    color: #FF5751;
+    margin: 0;
+}
+
+.edit-link {
+    background-color: #ff3b34;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+.edit-link button {
+    border-color: none;
+}
+
+.edit-link:hover {
+    color: white;
+    background-color: #FF5751;
+}
+
+.profile-details .form-group {
+    margin-bottom: 15px;
+}
+
+.profile-details .form-control[disabled] {
+    background-color: #e9ecef;
+    opacity: 1;
+    color: #495057;
+}
+
+.profile-details label {
+    font-weight: bold;
+    color: #333;
+}
+
+.profile-details hr {
+    margin: 20px 0;
+}
+
+.read-progress {
+    margin-left: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 20%;
+    height: 320px;
+}
+
+.read-progress h4 {
+    color: #FF5751;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.read-progress label {
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.progress {
+    height: 15px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #ff7e5f, #feb47b);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    transition: width 0.6s ease;
+}
+
+.profile-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+.profile-picture img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.form-control {
+    border-radius: 0.5rem;
+}
+
+.btn-primary {
+    background-color: #ff3b34;
+    border-color: #ff3b34;
+}
+
+.btn-primary:hover {
+    background-color: #ff5751;
+    border-color: #ff5751;
+}

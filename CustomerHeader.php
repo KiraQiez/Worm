@@ -36,7 +36,7 @@ if ($_SESSION['usertype'] != "customer") {
         <div class="nav">
             <ul>
                 <li><a href="MainHomepage.php">Home</a></li>
-                <li><a href="#">Rent</a></li>
+                <li><a href="CustomerRent.php">Rent</a></li>
                 <li class="dropdown">
                     <a href="CustomerCatalogue.php">Catalogue</a>
                     <i class="fas fa-caret-down"></i>

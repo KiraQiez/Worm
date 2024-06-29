@@ -2,6 +2,15 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
+include 'db.php';
+
+if ($_SESSION['usertype'] != "staff") {
+    echo "<script> 
+    alert('You are not authorized to access this page.');
+    location.href='MainHomepage.php';
+    </script>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +22,8 @@ if (session_status() == PHP_SESSION_NONE) {
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="rsc/styles.css">
-    <link rel="stylesheet" href="rsc/customer.css">
+    <link rel="stylesheet" href="rsc/main.css">
+    <link rel="stylesheet" href="rsc/staff.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
@@ -26,6 +36,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="nav">
             <ul>
                 <li><a href="MainHomepage.php">Home</a></li>
+
                 <li class="dropdown">
                     <a href="#">Books</a>
                     <i class="fas fa-caret-down"></i>
@@ -62,6 +73,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         <a href="#">Update Transaction</a>
                     </div>
                 </li>
+
                 <li><a href="#">Report</a></li>
             </ul>
         </div>
@@ -69,12 +81,11 @@ if (session_status() == PHP_SESSION_NONE) {
             <img src="rsc/image/picture.png" alt="Profile Image">
             <div class="dropdown">
                 <div class="user-info">
-                    <p>Username</p>
+                    <p><?php echo $_SESSION['username']; ?></p>
                     <p class="rank">Member</p>
                 </div>
                 <div class="dropdown-menu">
-                    <a href="#">Profile</a>
-                    <a href="#">Settings</a>
+                    <a href="CustomerProfile.php">Profile</a>
                     <a href="MainLogout.php">Logout</a>
                 </div>
             </div>
