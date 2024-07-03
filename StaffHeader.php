@@ -82,7 +82,7 @@ if ($_SESSION['usertype'] != "staff") {
             <div class="dropdown">
                 <div class="user-info">
                     <p><?php echo $_SESSION['username']; ?></p>
-                    <p class="rank">Member</p>
+                    <p class="rank"><?php echo $_SESSION['usertype'] ?></p>
                 </div>
                 <div class="dropdown-menu">
                     <a href="CustomerProfile.php">Profile</a>

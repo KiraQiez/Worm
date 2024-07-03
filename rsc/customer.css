@@ -90,3 +90,30 @@
     color: #555;
     margin-bottom: 10px;
 }
+
+.due-card {
+    max-width: 600px;
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 1.5rem;
+    color: #FF5751;
+    margin-bottom: 1rem;
+}
+
+.due-card img {
+    max-width: auto;
+    height: 300px;
+    display: block;
+    margin: 0 auto;
+}
+
+.due-card p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1rem;
+}

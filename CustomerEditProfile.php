@@ -66,12 +66,18 @@ if (isset($_POST['submit'])) {
                         mysqli_query($conn, $sql);
                         $message = "Profile updated successfully";
                         $ping = true;
+                        echo "<script> 
+                setTimeout(function() { location.href = 'CustomerProfile.php'; }, 1000); 
+                </script>";
                     }
                 } else {
                     $sql = "UPDATE SYSTEM_USERS SET username='$username', fullname='$fullname', email='$email', gender='$gender' WHERE USERID='$_SESSION[userid]'";
                     mysqli_query($conn, $sql);
                     $message = "Profile updated successfully";
                     $ping = true;
+                    echo "<script> 
+                setTimeout(function() { location.href = 'CustomerProfile.php'; }, 1000); 
+                </script>";
                 }
             }
         }

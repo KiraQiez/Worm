@@ -48,6 +48,9 @@ CREATE TABLE book (
 
 
 
+
+
+
 //CHAT GPT
 CREATE TABLE staff (
     staffid VARCHAR(8) PRIMARY KEY,

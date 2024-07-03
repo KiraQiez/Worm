@@ -5,6 +5,21 @@ if (session_status() == PHP_SESSION_NONE) {
 
 include 'db.php';
 
+// Check if there is username changed
+$userid = $_SESSION['userid'];
+$sql = "SELECT username FROM system_users WHERE userid = '$userid'";
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    if ($row) {
+        $username = $row['username'];
+        if ($_SESSION['username'] != $username) {
+            $_SESSION['username'] = $username;
+        }
+    }
+}
+
 if ($_SESSION['usertype'] != "customer") {
     echo "<script> 
     alert('You are not authorized to access this page.');

@@ -32,6 +32,10 @@ if ($result) {
                                             echo '<span class="badge text-bg-danger ms-2">F</span>';
                                         } ?>
             </p>
+            <div class="ping-container" style="display: none;">
+                <div class="ping" id="ping-indicator"></div>
+                <div id="ping-message"></div>
+            </div>
         </div>
         <div class="profile-details">
             <div class="detail-header d-flex justify-content-between">
@@ -73,6 +77,25 @@ if ($result) {
         </div>
     </div>
 </div>
+
+
+<script>
+    function displayMessage(message, isSuccess) {
+        var pingContainer = document.querySelector('.ping-container');
+        var pingIndicator = document.getElementById('ping-indicator');
+        var pingMessage = document.getElementById('ping-message');
+
+        pingMessage.innerText = message;
+        pingIndicator.className = isSuccess ? 'ping ping-success' : 'ping ping-error';
+        pingContainer.style.display = 'flex';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        <?php if (!empty($message)) : ?>
+            displayMessage("<?php echo $message; ?>", <?php echo $ping ? 'true' : 'false'; ?>);
+        <?php endif; ?>
+    });
+</script>
 </body>
 
 </html>
