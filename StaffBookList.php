@@ -44,9 +44,8 @@ function displayBooks($books, $selectedCategories)
 $filteredBooks = displayBooks($books, $selectedCategories);
 ?>
 
-
 <div class="main-content">
-    <div class="sidebar">
+    <div class="sidebarF">
         <h4>Categories</h4>
         <hr>
         <div class="form-check">
@@ -90,13 +89,17 @@ $filteredBooks = displayBooks($books, $selectedCategories);
                 <div class="book-grid">
                     <?php foreach ($filteredBooks as $book) : ?>
                         <div class="book">
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($book['image']); ?>" alt="Book Image">
-                            <p class="book-title"><?php echo $book['title']; ?></p>
-                            <p class="book-author"><?php echo $book['author']; ?></p>
-                            <p class="book-price"><?php echo $book['price']; ?></p>
-                            <p class="book-synopsis"><?php echo $book['synopsis']; ?></p>
-                            <button onclick="window.location.href='StaffEditBook.php?bookID=<?php echo $book['bookID']; ?>'">Edit</button>
-                            <button onclick="deleteBook('<?php echo $book['bookID']; ?>')">Delete</button>
+                            <?php if ($book['image']) : ?>
+                                <img src="data:image/jpeg;base64,<?php echo base64_encode($book['image']); ?>" alt="Book Image">
+                            <?php else : ?>
+                                <img src="default_image.jpg" alt="No Image Available">
+                            <?php endif; ?>
+                            <p class="book-title"><?php echo htmlspecialchars($book['title']); ?></p>
+                            <p class="book-desc"><?php echo htmlspecialchars($book['author']); ?></p>
+                            <p class="book-desc">RM <?php echo htmlspecialchars($book['price']); ?></p>
+                            <p class="book-desc"><?php echo htmlspecialchars($book['synopsis']); ?></p>
+                            <button class="primary" onclick="window.location.href='StaffEditBook.php?bookID=<?php echo htmlspecialchars($book['bookID']); ?>'">Edit</button>
+                            <button class="delete" onclick="confirmDelete('<?php echo htmlspecialchars($book['bookID']); ?>')">Delete</button>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -105,6 +108,7 @@ $filteredBooks = displayBooks($books, $selectedCategories);
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.querySelectorAll('.form-check-input').forEach(function(checkbox) {
         checkbox.addEventListener('change', function() {
@@ -128,12 +132,21 @@ $filteredBooks = displayBooks($books, $selectedCategories);
         });
     });
 
-    function deleteBook(bookID) {
-        if (confirm('Are you sure you want to delete this book?')) {
-            window.location.href = 'StaffDeleteBook.php?bookID=' + bookID;
-        }
+    function confirmDelete(bookID) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'StaffDeleteBook.php?bookID=' + bookID;
+            }
+        });
     }
 </script>
 </body>
-
 </html>
