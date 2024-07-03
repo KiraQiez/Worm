@@ -1,5 +1,5 @@
 <?php
-$title = "Rented Books";
+$title = "Rented Book";
 include 'StaffHeader.php';
 include 'db.php';
 
@@ -8,105 +8,108 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // Fetch rented books from the database
-function fetchRentedBooks($conn, $selectedCategories) {
-    $query = "SELECT * FROM book WHERE bookStatus = 'Rented'";
-    
-    if (!empty($selectedCategories)) {
-        $placeholders = implode(',', array_fill(0, count($selectedCategories), '?'));
-        $query .= " AND bookCategory IN ($placeholders)";
+$books = [];
+$sql = "SELECT * FROM book WHERE bookStatus = 'Rented'";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $books[] = [
+            'bookID' => $row['bookID'],
+            'title' => $row['bookTitle'],
+            'author' => $row['bookAuthor'],
+            'category' => $row['bookCategory'],
+            'price' => $row['bookPrice'],
+            'synopsis' => $row['bookSynopsis'],
+            'datePublished' => $row['bookDatePublished'],
+            'status' => $row['bookStatus'],
+            'image' => $row['bookImage']
+        ];
     }
-
-    $stmt = $conn->prepare($query);
-
-    if (!empty($selectedCategories)) {
-        $types = str_repeat('s', count($selectedCategories));
-        $stmt->bind_param($types, ...$selectedCategories);
-    }
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC);
 }
 
 $selectedCategories = isset($_GET['categories']) ? explode(',', $_GET['categories']) : [];
-$rentedBooks = fetchRentedBooks($conn, $selectedCategories);
+
+function displayBooks($books, $selectedCategories)
+{
+    if (empty($selectedCategories)) {
+        return $books;
+    }
+
+    return array_filter($books, function ($book) use ($selectedCategories) {
+        return in_array($book['category'], $selectedCategories);
+    });
+}
+
+$filteredBooks = displayBooks($books, $selectedCategories);
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $title; ?></title>
-    <link rel="stylesheet" href="catalogue.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-</head>
-<body>
-    <div class="main-content">
-        <div class="sidebar">
-            <h4>Categories</h4>
-            <hr>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="Fiction" id="fiction" <?php echo in_array('Fiction', $selectedCategories) ? 'checked' : ''; ?>>
-                <label class="form-check-label" for="fiction">
-                    Fiction
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="Non-Fiction" id="nonFiction" <?php echo in_array('Non-Fiction', $selectedCategories) ? 'checked' : ''; ?>>
-                <label class="form-check-label" for="nonFiction">
-                    Non-Fiction
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="Mystery" id="mystery" <?php echo in_array('Mystery', $selectedCategories) ? 'checked' : ''; ?>>
-                <label class="form-check-label" for="mystery">
-                    Mystery
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="Romance" id="romance" <?php echo in_array('Romance', $selectedCategories) ? 'checked' : ''; ?>>
-                <label class="form-check-label" for="romance">
-                    Romance
-                </label>
-            </div>
+<div class="main-content">
+    <div class="sidebarF">
+        <h4>Categories</h4>
+        <hr>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Fiction" id="fiction" <?php echo in_array('Fiction', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="fiction">
+                Fiction
+            </label>
         </div>
-
-        <div class="content">
-            <div class="Category-list">
-                <?php foreach ($selectedCategories as $category): ?>
-                    <button class="category-remove" data-category="<?php echo $category; ?>"><i class="fas fa-times" style="color:#FF5751;"></i> <?php echo $category; ?></button>
-                <?php endforeach; ?>
-            </div>
-
-            <div class="book-list">
-                <h4><?php echo empty($selectedCategories) ? 'All Rented Books' : 'Rented Books in Selected Categories'; ?></h4>
-                <?php if (empty($rentedBooks)): ?>
-                    <p>No rented books available in the selected category.</p>
-                <?php else: ?>
-                    <div class="book-grid">
-                        <?php foreach ($rentedBooks as $book): ?>
-                            <div class="book">
-                                <?php if (!empty($book['image'])): ?>
-                                    <img src="data:image/jpeg;base64,<?php echo base64_encode($book['image']); ?>" alt="Book Image">
-                                <?php else: ?>
-                                    <img src="default_image.jpg" alt="No Image Available">
-                                <?php endif; ?>
-                                <p class="book-title"><?php echo htmlspecialchars($book['bookTitle']); ?></p>
-                                <p class="book-author"><?php echo htmlspecialchars($book['bookAuthor']); ?></p>
-                                <p class="book-price"><?php echo htmlspecialchars($book['bookPrice']); ?></p>
-                                <p class="book-synopsis"><?php echo htmlspecialchars($book['bookSynopsis']); ?></p>
-                                <button onclick="window.location.href='StaffViewBook.php?bookID=<?php echo htmlspecialchars($book['bookID']); ?>'">View</button>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Non-Fiction" id="nonFiction" <?php echo in_array('Non-Fiction', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="nonFiction">
+                Non-Fiction
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Mystery" id="mystery" <?php echo in_array('Mystery', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="mystery">
+                Mystery
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Romance" id="romance" <?php echo in_array('Romance', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="romance">
+                Romance
+            </label>
         </div>
     </div>
 
-    <script>
+    <div class="content">
+        <div class="Category-list">
+            <?php foreach ($selectedCategories as $category) : ?>
+                <button class="category-remove" data-category="<?php echo $category; ?>"><i class="fas fa-times" style="color:#FF5751;"></i> <?php echo $category; ?></button>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="book-list">
+            <h4><?php echo empty($selectedCategories) ? 'All Rented Books' : 'Rented Books in Selected Categories'; ?></h4>
+            <?php if (empty($filteredBooks)) : ?>
+                <p>No rented books available in the selected category.</p>
+            <?php else : ?>
+                <div class="book-grid">
+                    <?php foreach ($filteredBooks as $book) : ?>
+                        <div class="book">
+                            <?php if ($book['image']) : ?>
+                                <img src="data:image/jpeg;base64,<?php echo base64_encode($book['image']); ?>" alt="Book Image">
+                            <?php else : ?>
+                                <img src="default_image.jpg" alt="No Image Available">
+                            <?php endif; ?>
+                            <p class="book-title"><?php echo htmlspecialchars($book['title']); ?></p>
+                            <p class="book-desc"><?php echo htmlspecialchars($book['author']); ?></p>
+                            <p class="book-desc">RM <?php echo htmlspecialchars($book['price']); ?></p>
+                            <p class="book-desc"><?php echo htmlspecialchars($book['synopsis']); ?></p>
+                            <!-- <button class="primary" onclick="window.location.href='StaffEditBook.php?bookID=<?php echo htmlspecialchars($book['bookID']); ?>'">Edit</button>
+                            <button class="delete" onclick="confirmDelete('<?php echo htmlspecialchars($book['bookID']); ?>')">Delete</button> -->
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
     document.querySelectorAll('.form-check-input').forEach(function(checkbox) {
         checkbox.addEventListener('change', function() {
             var selectedCategories = [];
@@ -128,6 +131,22 @@ $rentedBooks = fetchRentedBooks($conn, $selectedCategories);
             window.location.href = '?categories=' + selectedCategories.join(',');
         });
     });
-    </script>
+
+    function confirmDelete(bookID) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'StaffDeleteBook.php?bookID=' + bookID;
+            }
+        });
+    }
+</script>
 </body>
 </html>
