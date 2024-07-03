@@ -24,13 +24,6 @@ CREATE TABLE staff (
     FOREIGN KEY (staffid) REFERENCES system_users(userid)
 );
 
-
-
-
-
-
-//FOR TEST PURPOSE
-
 CREATE TABLE book (
     bookID VARCHAR(10) PRIMARY KEY,
     bookTitle VARCHAR(255) NOT NULL,
