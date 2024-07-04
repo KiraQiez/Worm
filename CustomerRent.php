@@ -55,13 +55,33 @@ $result = $conn->query($sql);
         </div>
         <div class="user-dashboard">
             <div class="cont">
-                a
+
             </div>
             <div class="cont">
                 a
             </div>
-            <div class="cont">
-                a
+            <div class="cont popular-reads">
+                <h5>Random Picks ⭐ </h5>
+
+                <?php
+                 $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book ORDER BY RAND() LIMIT 4";
+                 $result2 = $conn->query($sql2);
+                 if ($result->num_rows > 0) {
+                     while ($row2 = $result2->fetch_assoc()) {
+                         echo '<div class="book-item">';
+                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
+                         echo '<div>';
+                         echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
+                         echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
+                         echo '</div>';
+                         echo '</div>';
+                     }
+                 } else {
+                     echo '<p>No recommendations available.</p>';
+                 }
+                ?>
+                
+                   
             </div>
         </div>
     </div>
