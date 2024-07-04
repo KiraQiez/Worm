@@ -1,28 +1,21 @@
 <?php
 $title = "Library";
 include 'CustomerHeader.php';
+include 'db.php';
 
-$books = [
-    ['title' => 'Fiction Book 1', 'author' => 'Author 1', 'category' => 'Fiction'],
-    ['title' => 'Non-Fiction Book 1', 'author' => 'Author 2', 'category' => 'Non-Fiction'],
-    ['title' => 'Mystery Book 1', 'author' => 'Author 3', 'category' => 'Mystery'],
-    ['title' => 'Romance Book 1', 'author' => 'Author 4', 'category' => 'Romance'],
-    ['title' => 'Fiction Book 2', 'author' => 'Author 5', 'category' => 'Fiction'],
-    ['title' => 'Non-Fiction Book 2', 'author' => 'Author 6', 'category' => 'Non-Fiction'],
-    ['title' => 'Mystery Book 2', 'author' => 'Author 7', 'category' => 'Mystery'],
-    ['title' => 'Romance Book 2', 'author' => 'Author 8', 'category' => 'Romance']
-];
+// Fetch books from database
+$query = "SELECT * FROM book";
+$result = $conn->query($query);
+$books = $result->fetch_all(MYSQLI_ASSOC);
 
 $selectedCategories = isset($_GET['categories']) ? explode(',', $_GET['categories']) : [];
 
-function displayBooks($books, $selectedCategories)
-{
+function displayBooks($books, $selectedCategories) {
     if (empty($selectedCategories)) {
         return $books;
     }
-
     return array_filter($books, function ($book) use ($selectedCategories) {
-        return in_array($book['category'], $selectedCategories);
+        return in_array($book['bookCategory'], $selectedCategories);
     });
 }
 
@@ -46,15 +39,31 @@ $filteredBooks = displayBooks($books, $selectedCategories);
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Mystery" id="mystery" <?php echo in_array('Mystery', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="mystery">
-                Mystery
+            <input class="form-check-input" type="checkbox" value="Action" id="action" <?php echo in_array('Action', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="action">
+                Action
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Horror" id="horror" <?php echo in_array('Horror', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="horror">
+                Horror
             </label>
         </div>
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="Romance" id="romance" <?php echo in_array('Romance', $selectedCategories) ? 'checked' : ''; ?>>
             <label class="form-check-label" for="romance">
                 Romance
+            </label>
+        </div><div class="form-check">
+            <input class="form-check-input" type="checkbox" value="SciFi" id="scifi" <?php echo in_array('SciFi', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="scifi">
+                SciFi
+            </label>
+        </div><div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Mystery" id="mystery" <?php echo in_array('Mystery', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="mystery">
+                Mystery
             </label>
         </div>
     </div>
@@ -74,10 +83,10 @@ $filteredBooks = displayBooks($books, $selectedCategories);
                 <div class="book-grid">
                     <?php foreach ($filteredBooks as $book) : ?>
                         <div class="book">
-                            <img src="rsc/image/book-default.png" alt="Book Image">
-                            <p class="book-title"><?php echo $book['title']; ?></p>
-                            <p class="book-author"><?php echo $book['author']; ?></p>
-                            <button>View</button>
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($book['bookImage']); ?>" alt="Book Image">
+                            <p class="book-title"><?php echo $book['bookTitle']; ?></p>
+                            <p class="book-author"><?php echo $book['bookAuthor']; ?></p>
+                            <a href="CustomerBookDetails.php?bookID=<?php echo $book['bookID']; ?>" class="btn btn-primary">View</a>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -110,5 +119,4 @@ $filteredBooks = displayBooks($books, $selectedCategories);
     });
 </script>
 </body>
-
 </html>
