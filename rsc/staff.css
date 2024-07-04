@@ -56,7 +56,7 @@
 
 .sidebarF {
     width: 250px;
-    height: 300px;
+    height: 350px;
     padding: 20px;
     margin-top: 60px;
     background-color: #f8f9fa;
@@ -145,7 +145,7 @@
 }
 
 button {
-    color: black;
+    color: white;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: none;
@@ -153,7 +153,8 @@ button {
     border-radius: 5px;
     margin-right: 10px;
     margin-top: 10px;
-    transition: background-color 0.5s ease;
+    transition: background-color 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .delete {
@@ -161,11 +162,12 @@ button {
 }
 
 .primary {
-    background-color: #ECF9FC;
+    background-color: #77DD77;
 }
 
 .primary:hover, .delete:hover {
-    filter: brightness(0.9);
+    filter: brightness(0.95);
+    transform: scale(1.05);
 }
 
 /* Add Book */

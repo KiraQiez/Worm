@@ -105,10 +105,10 @@ $result = $conn->query($query);
                 <?php
                 for ($page = 1; $page <= $number_of_pages; $page++) {
                     $class = ($page == $current_page) ? 'active' : '';
-                    echo '<li><a class="page-link ' . $class . '" href="staffData.php?page=' . $page . '">' . $page . '</a></li>';
+                    echo '<li><a class="page-link ' . $class . '" href="StaffRead.php?page=' . $page . '">' . $page . '</a></li>';
                 }
                 if ($current_page < $number_of_pages) {
-                    echo '<li><a class="page-link" href="staffData.php?page=' . ($current_page + 1) . '">&gt;&gt;</a></li>';
+                    echo '<li><a class="page-link" href="StaffRead.php?page=' . ($current_page + 1) . '">&gt;&gt;</a></li>';
                 }
                 ?>
             </ul>

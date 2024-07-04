@@ -137,10 +137,10 @@ function getStatusClass($status) {
                 <?php
                 for ($page = 1; $page <= $number_of_pages; $page++) {
                     $class = ($page == $current_page) ? 'active' : '';
-                    echo '<li><a class="page-link ' . $class . '" href="customerData.php?page=' . $page . '">' . $page . '</a></li>';
+                    echo '<li><a class="page-link ' . $class . '" href="CustomerRead.php?page=' . $page . '">' . $page . '</a></li>';
                 }
                 if ($current_page < $number_of_pages) {
-                    echo '<li><a class="page-link" href="customerData.php?page=' . ($current_page + 1) . '">&gt;&gt;</a></li>';
+                    echo '<li><a class="page-link" href="CustomerRead.php?page=' . ($current_page + 1) . '">&gt;&gt;</a></li>';
                 }
                 ?>
             </ul>

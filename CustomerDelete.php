@@ -174,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
             </div>
             <div class="d-flex justify-content-between">
                 <button type="submit" name="confirm" class="btn btn-danger me-2">Delete</button>
-                <a href="customerData.php" class="btn btn-secondary">Cancel</a>
+                <a href="CustomerRead.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>

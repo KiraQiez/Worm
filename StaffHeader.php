@@ -55,18 +55,15 @@ if ($_SESSION['usertype'] != "staff") {
                     <a href="#">Customer</a>
                     <i class="fas fa-caret-down"></i>
                     <div class="dropdown-menu">
-                        <a href="#">Customer Data</a>
-                        <a href="#">Insert Customer</a>
-                        <a href="#">Update Customer</a>
+                        <a href="CustomerRead.php">Customer Data</a>
                     </div>
                 </li>
                 <li class="dropdown">
                     <a href="#">Staff</a>
                     <i class="fas fa-caret-down"></i>
                     <div class="dropdown-menu">
-                        <a href="#">Staff Data</a>
-                        <a href="#">Insert Staff</a>
-                        <a href="#">Update Staff</a>
+                        <a href="StaffRead.php">Staff Data</a>
+                        <a href="StaffCreate.php">Insert Staff</a>
                     </div>
                 </li>
                 <li class="dropdown">
