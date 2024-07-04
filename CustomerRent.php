@@ -1,89 +1,75 @@
 <?php
-$title = "Library";
+$title = "Rent";
 include 'CustomerHeader.php';
-
-$books = [
-    ['title' => 'Fiction Book 1', 'author' => 'Author 1', 'category' => 'Fiction'],
-    ['title' => 'Non-Fiction Book 1', 'author' => 'Author 2', 'category' => 'Non-Fiction'],
-    ['title' => 'Mystery Book 1', 'author' => 'Author 3', 'category' => 'Mystery'],
-    ['title' => 'Romance Book 1', 'author' => 'Author 4', 'category' => 'Romance'],
-    ['title' => 'Fiction Book 2', 'author' => 'Author 5', 'category' => 'Fiction'],
-    ['title' => 'Non-Fiction Book 2', 'author' => 'Author 6', 'category' => 'Non-Fiction'],
-    ['title' => 'Mystery Book 2', 'author' => 'Author 7', 'category' => 'Mystery'],
-    ['title' => 'Romance Book 2', 'author' => 'Author 8', 'category' => 'Romance']
-];
-
-$selectedCategories = isset($_GET['categories']) ? explode(',', $_GET['categories']) : [];
-
-function displayBooks($books, $selectedCategories)
-{
-    if (empty($selectedCategories)) {
-        return $books;
-    }
-
-    return array_filter($books, function ($book) use ($selectedCategories) {
-        return in_array($book['category'], $selectedCategories);
-    });
-}
-
-$filteredBooks = displayBooks($books, $selectedCategories);
+// Fetch books from the database
+$sql = "SELECT bookTitle, bookAuthor, bookImage FROM book LIMIT 4";
+$result = $conn->query($sql);
 ?>
 
-<div class="main-content">
-    <div class="sidebar">
-        
+<div class="main-content d-flex">
+    <div class="sidebar dashboard">
+        <h4>Navigation</h4>
+        <hr>
+        <ul>
+            <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-book"></i> Rental Books</a></li>
+            <li><a href="#"><i class="fas fa-history"></i> My History</a></li>
+        </ul>
     </div>
-
-    <div class="content">
-        <div class="Category-list">
-            <?php foreach ($selectedCategories as $category) : ?>
-                <button class="category-remove" data-category="<?php echo $category; ?>"><i class="fas fa-times" style="color:#FF5751;"></i> <?php echo $category; ?></button>
-            <?php endforeach; ?>
+    <div class="rent-content">
+        <div class="event-banner mb-4">
+            <div class="banner-content">
+                <h1>Paperback Book Day</h1>
+                <p style="color: #333">Paperback Book Day is celebrated on July 30th, marking the anniversary of the first Penguin paperback publication in 1935.
+                    This day honors the affordability and accessibility of paperback books, encouraging readers to enjoy their favorite
+                    titles in this portable format.</p>
+                <a class="btn btn-primary" href="https://nationaltoday.com/paperback-book-day/">Find Out More</a>
+            </div>
         </div>
+        <div class="rent mb-4">
+            <h2>On Rent</h2>
+            <div class="rent-list img-fluid d-flex">
+                <?php
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<div class="rent-card">';
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row['bookImage']) . '" alt="' . $row['bookTitle'] . '">';
+                        echo '<h3 class="title">' . $row['bookTitle'] . '</h3>';
+                        echo '<p class="author">' . $row['bookAuthor'] . '</p>';
+                        echo '<p class="due"> Due: 24/7/2024 </p>';
+                        echo '</div>';
+                    }
+                }
+                ?>
 
-        <div class="book-list">
-            <h4><?php echo empty($selectedCategories) ? 'All Books' : 'Books in Selected Categories'; ?></h4>
-            <?php if (empty($filteredBooks)) : ?>
-                <p>No books available in the selected category.</p>
-            <?php else : ?>
-                <div class="book-grid">
-                    <?php foreach ($filteredBooks as $book) : ?>
-                        <div class="book">
-                            <img src="rsc/image/book-default.png" alt="Book Image">
-                            <p class="book-title"><?php echo $book['title']; ?></p>
-                            <p class="book-author"><?php echo $book['author']; ?></p>
-                            <button>View</button>
+                <a href="CustomerCatalogue.php" class="add-rent-link">
+                    <div class="add-rent">
+                        <i class="fas fa-plus"></i>
+                        <div class="cc">
+
+                            <p>Borrow More Books</p>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="user-dashboard">
+            <div class="cont">
+                a
+            </div>
+            <div class="cont">
+                a
+            </div>
+            <div class="cont">
+                a
+            </div>
         </div>
     </div>
 </div>
 
-<script>
-    document.querySelectorAll('.form-check-input').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            var selectedCategories = [];
-            document.querySelectorAll('.form-check-input:checked').forEach(function(checkedBox) {
-                selectedCategories.push(checkedBox.value);
-            });
-            window.location.href = '?categories=' + selectedCategories.join(',');
-        });
-    });
-
-    document.querySelectorAll('.category-remove').forEach(function(button) {
-        button.addEventListener('click', function() {
-            var categoryToRemove = this.getAttribute('data-category');
-            var selectedCategories = <?php echo json_encode($selectedCategories); ?>;
-            var index = selectedCategories.indexOf(categoryToRemove);
-            if (index !== -1) {
-                selectedCategories.splice(index, 1);
-            }
-            window.location.href = '?categories=' + selectedCategories.join(',');
-        });
-    });
-</script>
 </body>
 
 </html>
+<?php
+$conn->close();
+?>

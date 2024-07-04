@@ -1,8 +1,20 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+$title = "About Us";
 
-$title = "Homepage";
-include 'MainHeader.php';
-
+if (isset($_SESSION['usertype'])) {
+    if ($_SESSION['usertype'] == 'customer') {
+        include 'CustomerHeader.php';
+    } else if ($_SESSION['usertype'] == 'staff') {
+        include 'StaffHeader.php';
+    } else {
+        include 'MainHeader.php';
+    }
+} else {
+    include 'MainHeader.php';
+}
 ?>
 <div class="main-content">
     <div class="about-container">

@@ -7,10 +7,9 @@
     width: 250px;
     height: 350px;
     padding: 20px;
-    margin-top: 60px;
     background-color: #f8f9fa;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar h4 {
@@ -117,3 +116,184 @@
     color: #333;
     margin-bottom: 1rem;
 }
+
+.rent-content{
+    height: auto;
+    width: 80%;
+    padding: 10px;
+    border-radius: 15px;
+    margin-left: 20px;
+}
+
+.event-banner{
+    background-image: url('image/paperback.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white;
+    height: 280px;
+    width: 100%;
+    display: flex;
+
+}
+
+.banner-content{
+    color: black;
+    width: 60%;
+    margin-left: 300px;
+}
+.rent{
+    background-color: #fff;
+    height: 455px;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.user-dashboard {
+    height: auto;
+    display: flex;
+    gap:30px;
+}
+
+.cont{
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding:20px;
+    width: 40%;
+    height: 400px;
+    border-radius: 10px;
+}
+
+
+
+.sidebar hr {
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.dashboard ul {
+    padding: 0;
+    list-style-type: none;
+}
+
+.dashboard li {
+    margin-bottom: 20px;
+}
+
+.dashboard a {
+    display: block;
+    padding: 10px 15px;
+    color: #666;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dashboard a:hover, .dashboard a:hover i {
+    color: #FF5751;
+}
+
+.dashboard a.active, .dashboard a.active i {
+    color: #FF5751;
+}
+
+.dashboard a i {
+    margin-right: 10px;
+}
+
+.add-rent{
+    background-color: #FFBAB8;
+    width: 190px;
+    height: 250px;
+    border: dotted;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+    color: #FF5751;
+    text-decoration: none;
+    cursor: pointer;
+
+}
+
+.add-rent .cc{
+    margin-top: 10px ;
+    font-weight: 600;
+    font-size: 20px;
+    width: 150px;
+    display: flex;
+    text-align: center;
+    
+}
+.add-rent i{
+    font-size: 40px;
+    
+
+}
+
+.add-rent:hover{
+    transform: scale(1.05);
+    
+}
+
+
+.rent-card{
+    width:150px;
+    height: 250px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+ }
+
+.rent-card:hover{
+    transform: scale(1.05);
+
+}
+ 
+ 
+.rent-list img{
+    width: 180px;
+    height: 250px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.rent-list{
+    gap:74px;
+}
+
+.add-rent-link {
+    text-decoration: none;
+}
+
+.rent-list .title{
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-size: 16px;
+    text-align: left;
+    color: black;
+    font-weight: 600;
+}
+
+.rent-list .author{
+    margin: 0;
+    font-size: 14px;
+    color: black;
+}
+.rent-card .due {
+    font-size: 13px;
+    color: #666;
+    position: absolute;
+    bottom: -140px;
+    left:0;
+}
+
