@@ -5,7 +5,15 @@ if (session_status() == PHP_SESSION_NONE) {
 
 include 'db.php';
 
-// Check if there is username changed
+if (!isset($_SESSION['userid'])) {
+    echo "<script>
+    alert('You must be logged in to view this page.');
+    location.href='MainHomepage.php';
+    </script>";
+    exit;
+}
+
+// Check if the username has changed
 $userid = $_SESSION['userid'];
 $sql = "SELECT username FROM system_users WHERE userid = '$userid'";
 $result = mysqli_query($conn, $sql);
@@ -25,6 +33,7 @@ if ($_SESSION['usertype'] != "customer") {
     alert('You are not authorized to access this page.');
     location.href='MainHomepage.php';
     </script>";
+    exit;
 }
 ?>
 
@@ -41,6 +50,13 @@ if ($_SESSION['usertype'] != "customer") {
     <link rel="stylesheet" href="rsc/bookdetails.css">
     <link rel="stylesheet" href="rsc/customer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>

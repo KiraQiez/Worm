@@ -1,115 +1,170 @@
 <?php
-$title = "Library";
 include 'CustomerHeader.php';
+include 'db.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Validate and sanitize input
+    $bookID = intval($_POST['bookID']);
+    $startRent = $_POST['startRent'];
+
+    // Retrieve custID from session
+    $custID = $_SESSION['userid']; // Assuming 'userid' is the session variable storing custID
+    $receipt = file_get_contents($_FILES['receipt']['tmp_name']);
+
+    // Calculate rental prices and duration
+    $rentalPrice = 5.00;
+    $rentalDeposit = getBookPrice($bookID);
+    $subtotal = $rentalPrice + $rentalDeposit;
+    $endRent = date('Y-m-d', strtotime($startRent . ' + 60 days'));
+    $rentalStatus = "out"; // Setting rental status to 'out'
+
+    // Insert into rental table
+    $stmt = $conn->prepare("INSERT INTO rental (StartDate, EndDate, RentalStatus, RentalPrice, RentalDeposit, RentalDuration, CustID, BookID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    if ($stmt === false) {
+        error_log('mysqli statement prepare error:' . $conn->error);
+        die('An error occurred while processing your request.');
+    }
+
+    $rentalDuration = 60;
+    $stmt->bind_param('sssddisi', $startRent, $endRent, $rentalStatus, $rentalPrice, $rentalDeposit, $rentalDuration, $custID, $bookID);
+    if ($stmt->execute() === false) {
+        error_log('mysqli statement execute error:' . $stmt->error);
+        die('An error occurred while processing your request.');
+    }
+    $rentalID = $stmt->insert_id;
+    $stmt->close();
+
+    // Update book status to 'rented'
+    $stmt = $conn->prepare("UPDATE book SET bookStatus = 'Rented' WHERE bookID = ?");
+    if ($stmt === false) {
+        error_log('mysqli statement prepare error:' . $conn->error);
+        die('An error occurred while updating book status.');
+    }
+    $stmt->bind_param('i', $bookID);
+    if ($stmt->execute() === false) {
+        error_log('mysqli statement execute error:' . $stmt->error);
+        die('An error occurred while updating book status.');
+    }
+    $stmt->close();
+
+    // Insert into payment table
+    $payDate = date('Y-m-d');
+    $stmt = $conn->prepare("INSERT INTO payment (PayAmount, PayDate, PayReceipt, RentalID) VALUES (?, ?, ?, ?)");
+    if ($stmt === false) {
+        error_log('mysqli statement prepare error:' . $conn->error);
+        die('An error occurred while processing your request.');
+    }
+    $stmt->bind_param('dssi', $subtotal, $payDate, $receipt, $rentalID);
+    if ($stmt->execute() === false) {
+        error_log('mysqli statement execute error:' . $stmt->error);
+        die('An error occurred while processing your request.');
+    }
+    $stmt->close();
+
+    // Display success message
+    echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Payment successful!',
+                text: 'Redirecting to Customer Rent page...',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                location.href = 'CustomerRent.php';
+            });
+          </script>";
+}
+
+// Fetch book details for display
+if (isset($_GET['bookID']) && isset($_GET['startRent'])) {
+    $bookID = $_GET['bookID'];
+    $startRent = $_GET['startRent'];
+
+    $stmt = $conn->prepare("SELECT * FROM book WHERE bookID = ?");
+    $stmt->bind_param('i', $bookID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $book = $result->fetch_assoc();
+    $stmt->close();
+} else {
+    echo ".";
+    exit;
+}
+
+function getBookPrice($bookID)
+{
+    global $conn;
+    $stmt = $conn->prepare("SELECT bookPrice FROM book WHERE bookID = ?");
+    if ($stmt === false) {
+        error_log('mysqli statement prepare error:' . $conn->error);
+        die('An error occurred while fetching book price.');
+    }
+    $stmt->bind_param('i', $bookID);
+    if ($stmt->execute() === false) {
+        error_log('mysqli statement execute error:' . $stmt->error);
+        die('An error occurred while fetching book price.');
+    }
+    $result = $stmt->get_result();
+    $book = $result->fetch_assoc();
+    $stmt->close();
+    return $book['bookPrice'];
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            color: black;
+<script>
+    function showToast(message) {
+        var toastContainer = document.getElementById('toast-container');
+        var toast = new bootstrap.Toast(toastContainer);
+        document.getElementById('toast-body').innerText = message;
+        toast.show();
+    }
+
+    function validateForm() {
+        var fileInput = document.getElementById('receipt-upload');
+        var file = fileInput.files[0];
+
+        if (!file) {
+            showToast('Please attach your receipt before submitting.');
+            return false; // Prevent form submission
         }
-        .content {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #ffa500;
-            margin-bottom: 20px;
-        }
-        .payment-details {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .payment-details img {
-            max-width: 200px;
-            border-radius: 8px;
-            margin-right: 20px;
-        }
-        .payment-info {
-            flex-grow: 1;
-        }
-        .payment-info div {
-            margin: 10px 0;
-            font-size: 1.1em;
-        }
-        .total-amount {
-            text-align: right;
-            font-size: 1.2em;
-            margin-top: 20px;
-        }
-        .buttons {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .button {
-            background-color: #ffa500;
-            border: none;
-            padding: 10px 20px;
-            color: #1a1a1a;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 1em;
-            margin-left: 10px;
-        }
-        .button:hover {
-            background-color: #cc8400;
-        }
-        .button-upload {
-            display: flex;
-            align-items: center;
-            margin-right: auto;
-        }
-        .button-upload input {
-            margin-left: 10px;
-        }
-        .button-back {
-            background-color: #343A40;
-            color: #f0f0f0;
-        }
-        .button-back:hover {
-            background-color: #1a1a1a;
-        }
-    </style>
-</head>
-<body>
-    <div class="content">
-        <h1>Payment Details</h1>
-        <div class="payment-details">
-            <img src="items/dotn.jpg" alt="The Diary of a CEO">
-            <div class="payment-info">
-                <div><strong>THE DIARY OF A CEO</strong></div>
-                <div>RENTAL DURATION: 1 Month</div>
-                <div>12 JAN 2024 - 12 FEB 2024</div>
-                <div>DEPOSIT: RM 25.00</div>
-                <div>RENTAL PRICE: RM 5.00</div>
-                <div>SUBTOTAL: RM 30.00</div>
-            </div>
+
+        return true; // Allow form submission
+    }
+</script>
+
+<div class="payment-content">
+    <h1>Payment Details</h1>
+    <div class="payment-details">
+        <img src="data:image/jpeg;base64,<?php echo base64_encode($book['bookImage']); ?>" alt="Book Image">
+        <div class="payment-info">
+            <div><strong><?php echo htmlspecialchars($book['bookTitle']); ?></strong></div>
+            <div>Rental Duration: 60 Days</div>
+            <div>Start Date: <?php echo htmlspecialchars($startRent); ?></div>
+            <div>End Date: <?php echo date('Y-m-d', strtotime($startRent . ' + 60 days')); ?></div>
+            <div>Deposit: $<?php echo htmlspecialchars($book['bookPrice']); ?></div>
+            <div>Rental Price: $5.00</div>
+            <div>Subtotal: $<?php echo htmlspecialchars($book['bookPrice'] + 5); ?></div>
         </div>
-        <div class="total-amount">
-            <strong>Total Amount: RM 30.00</strong>
-        </div>
-        <div class="buttons">
-            <label for="receipt-upload" class="button button-upload">
-                Attach your receipt: <input type="file" id="receipt-upload" style="display: none;">
-            </label>
-            <button class="button button-back" onclick="history.back();">Back</button>
-            <button class="button">Submit</button>
+        <div class="button-container">
+            <form action="CustomerPayment.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm();">
+                <input type="hidden" name="bookID" value="<?php echo htmlspecialchars($bookID); ?>">
+                <input type="hidden" name="startRent" value="<?php echo htmlspecialchars($startRent); ?>">
+                <label for="receipt-upload" class="button button-upload">
+                    Attach your receipt<input type="file" id="receipt-upload" name="receipt" style="position: absolute; left: -9999px;" required>
+                </label>
+                <button class="button button-back" type="button" onclick="history.back();">Back</button>
+                <button class="button" type="submit">Submit</button>
+            </form>
         </div>
     </div>
-</body>
-</html>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast-container" class="toast align-items-center text-white bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div id="toast-body" class="toast-body">
+            <!-- Toast message will appear here -->
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>

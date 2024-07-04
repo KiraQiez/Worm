@@ -7,9 +7,12 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Fetch rented books from the database
+// Fetch rented books from the database with start date and end date
 $books = [];
-$sql = "SELECT * FROM book WHERE bookStatus = 'Rented'";
+$sql = "SELECT b.*, r.StartDate, r.EndDate 
+        FROM book b 
+        INNER JOIN rental r ON b.bookID = r.BookID 
+        WHERE b.bookStatus = 'Rented'";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -23,7 +26,9 @@ if ($result->num_rows > 0) {
             'synopsis' => $row['bookSynopsis'],
             'datePublished' => $row['bookDatePublished'],
             'status' => $row['bookStatus'],
-            'image' => $row['bookImage']
+            'image' => $row['bookImage'],
+            'startDate' => $row['StartDate'],
+            'endDate' => $row['EndDate']
         ];
     }
 }
@@ -45,7 +50,7 @@ $filteredBooks = displayBooks($books, $selectedCategories);
 ?>
 
 <div class="main-content">
-<div class="sidebarF">
+    <div class="sidebarF">
         <h4>Categories</h4>
         <hr>
         <div class="form-check">
@@ -113,11 +118,13 @@ $filteredBooks = displayBooks($books, $selectedCategories);
                                 <img src="default_image.jpg" alt="No Image Available">
                             <?php endif; ?>
                             <p class="book-title"><?php echo htmlspecialchars($book['title']); ?></p>
-                            <p class="book-desc"><?php echo htmlspecialchars($book['author']); ?></p>
+                            <!-- <p class="book-desc"><?php echo htmlspecialchars($book['author']); ?></p>
                             <p class="book-desc">RM <?php echo htmlspecialchars($book['price']); ?></p>
-                            <p class="book-desc"><?php echo htmlspecialchars($book['synopsis']); ?></p>
-                            <!-- <button class="primary" onclick="window.location.href='StaffEditBook.php?bookID=<?php echo htmlspecialchars($book['bookID']); ?>'">Edit</button>
-                            <button class="delete" onclick="confirmDelete('<?php echo htmlspecialchars($book['bookID']); ?>')">Delete</button> -->
+                            <p class="book-desc"><?php echo htmlspecialchars($book['synopsis']); ?></p> -->
+                            <p class="book-desc">Start Date: <?php echo htmlspecialchars($book['startDate']); ?></p>
+                            <p class="book-desc">End Date: <?php echo htmlspecialchars($book['endDate']); ?></p>
+                            <button class="primary" onclick="window.location.href='StaffEditBook.php?bookID=<?php echo htmlspecialchars($book['bookID']); ?>'">Edit</button>
+                            <button class="delete" onclick="confirmDelete('<?php echo htmlspecialchars($book['bookID']); ?>')">Delete</button>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -167,4 +174,5 @@ $filteredBooks = displayBooks($books, $selectedCategories);
     }
 </script>
 </body>
+
 </html>
