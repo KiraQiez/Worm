@@ -154,7 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="StaffDelete.php?id=<?php echo $userid; ?>" method="POST">
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-danger me-2">Delete</button>
-                <a href="staffData.php" class="btn btn-secondary">Cancel</a>
+                <a href="StaffRead.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>

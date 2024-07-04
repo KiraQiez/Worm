@@ -45,7 +45,7 @@ $filteredBooks = displayBooks($books, $selectedCategories);
 ?>
 
 <div class="main-content">
-    <div class="sidebarF">
+<div class="sidebarF">
         <h4>Categories</h4>
         <hr>
         <div class="form-check">
@@ -61,15 +61,33 @@ $filteredBooks = displayBooks($books, $selectedCategories);
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Mystery" id="mystery" <?php echo in_array('Mystery', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="mystery">
-                Mystery
+            <input class="form-check-input" type="checkbox" value="Action" id="action" <?php echo in_array('Action', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="action">
+                Action
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Horror" id="horror" <?php echo in_array('Horror', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="horror">
+                Horror
             </label>
         </div>
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="Romance" id="romance" <?php echo in_array('Romance', $selectedCategories) ? 'checked' : ''; ?>>
             <label class="form-check-label" for="romance">
                 Romance
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="SciFi" id="scifi" <?php echo in_array('SciFi', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="scifi">
+                SciFi
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Mystery" id="mystery" <?php echo in_array('Mystery', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="mystery">
+                Mystery
             </label>
         </div>
     </div>
