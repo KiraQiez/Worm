@@ -62,6 +62,15 @@ if ($_SESSION['usertype'] != "customer") {
                         <a href="#">Romance</a>
                     </div>
                 </li>
+                <li class="dropdown">
+                    <a href="#">About</a>
+                    <i class="fas fa-caret-down"></i>
+                    <div class="dropdown-menu">
+                        <a href="MainAbout.php">About Us</a>
+                        <a href="MainHowWorks.php">How it works</a>
+                        <a href="MainTerms.php">Rental Terms</a>
+                    </div>
+                </li>
                 <li><a href="MainContact.php">Contact</a></li>
             </ul>
         </div>
