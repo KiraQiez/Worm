@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="Fiction">Fiction</option>
                             <option value="Non-Fiction">Non-Fiction</option>
                             <option value="Action">Action</option>
-                            <option value="Business">Business</option>
+                            <option value="Horror">Horror</option>
                             <option value="Romance">Romance</option>
                             <option value="SciFi">SciFi</option>
                             <option value="Mystery">Mystery</option>
