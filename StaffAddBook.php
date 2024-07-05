@@ -83,7 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group col-md-6">
                         <label for="category">Category</label>
                         <select name="category" id="category" class="form-control">
+                            <option selected disabled>Category selection</option>
                             <option value="Fiction">Fiction</option>
+                            <option value="Children">Children</option>
                             <option value="Non-Fiction">Non-Fiction</option>
                             <option value="Action">Action</option>
                             <option value="Horror">Horror</option>

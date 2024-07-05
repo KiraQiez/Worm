@@ -89,12 +89,13 @@ if (isset($_POST['submit'])) {
     <div class="profile-container">
         <div class="profile-image text-center mb-3">
             <img src="rsc/image/picture.png" alt="Profile Image" class="rounded-circle mb-2" style="width: 150px; height: 150px;">
-            <p class="user text-center"><?php echo htmlspecialchars($row['fullname']);
-                                        if ($row['gender'] == 'M') {
-                                            echo '<span class="badge text-bg-primary ms-2">M</span>';
-                                        } else {
-                                            echo '<span class="badge text-bg-danger ms-2">F</span>';
-                                        } ?>
+            <p class="user text-center">
+                <?php echo htmlspecialchars($row['fullname']); ?>
+                <?php if ($row['gender'] == 'M') : ?>
+                    <span class="badge badge-primary ms-2">M</span>
+                <?php else : ?>
+                    <span class="badge badge-danger ms-2">F</span>
+                <?php endif; ?>
             </p>
             <div class="ping-container" style="display: none;">
                 <div class="ping" id="ping-indicator"></div>
