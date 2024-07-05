@@ -30,11 +30,47 @@ CREATE TABLE book (
     bookAuthor VARCHAR(255) NOT NULL,
     bookCategory VARCHAR(100) NOT NULL,
     bookPrice DECIMAL(10, 2) NOT NULL,
-    bookSynopsis VARCHAR(255),
+    bookSynopsis TEXT,
     bookDatePublished DATE,
     bookStatus VARCHAR(10),
     bookImage LONGBLOB
 );
+
+CREATE TABLE RENTAL (
+  RentalID INT AUTO_INCREMENT PRIMARY KEY, //generated
+  StartDate DATE, //input
+  EndDate DATE, //generated
+  RentalStatus VARCHAR(10), //generated (out)
+  RentalPrice DECIMAL(10,2), //generated (5)
+  RentalDeposit DECIMAL(10,2), //generated (bookPrice)
+  RentalDuration INT, //generated (60days)
+  CustID VARCHAR(8), //generated (session)
+  StaffID VARCHAR(8), //null
+  BookID INT, //generated (session)
+  FOREIGN KEY (CustID) REFERENCES Customer(CustID),
+  FOREIGN KEY (StaffID) REFERENCES Staff(StaffID),
+  FOREIGN KEY (BookID) REFERENCES Book(BookID)
+);
+ALTER TABLE RENTAL AUTO_INCREMENT = 1000;
+
+CREATE TABLE PAYMENT (
+    PayID INT AUTO_INCREMENT PRIMARY KEY,
+    PayAmount DECIMAL(10,2),
+    PayDate DATE,
+    PayReceipt LONGBLOB,
+    RentalID INT,
+    FOREIGN KEY (RentalID) REFERENCES RENTAL(RentalID)
+);
+ALTER TABLE PAYMENT AUTO_INCREMENT = 10000;
+
+
+
+
+
+
+
+
+
 
 
 CREATE TABLE orders (
@@ -47,20 +83,6 @@ CREATE TABLE orders (
     status VARCHAR(50) NOT NULL,
     FOREIGN KEY (custid) REFERENCES customer(custid)
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //CHAT GPT
 CREATE TABLE staff (

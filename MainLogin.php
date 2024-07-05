@@ -30,12 +30,14 @@ if (isset($_POST['submit'])) {
                 $message = "Password doesn't match";
                 $ping = false;
             } else {
-                $message = "Login successful";
-                $ping = true;
-                session_start();
+                session_start(); // Start session here
                 $_SESSION['username'] = $username;
                 $_SESSION['usertype'] = $row['usertype'];
                 $_SESSION['userid'] = $row['userid'];
+                
+                $message = "Login successful";
+                $ping = true;
+                
                 echo "<script> 
                 setTimeout(function() { location.href = 'MainHomepage.php'; }, 1000); 
                 </script>";
@@ -87,5 +89,4 @@ if (isset($_POST['submit'])) {
 </script>
 
 </body>
-
 </html>

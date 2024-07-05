@@ -143,7 +143,7 @@ if (!$book) {
                 </div>
                 <div class="form-group">
                     <button type="submit" class="primary">Save</button>
-                    <button type="button" onclick="window.location.href='StaffBookList.php'" class="delete">Back</button>
+                    <button type="button" onclick="history.back()" class="delete">Back</button>
                 </div>
             </form>
         </div>

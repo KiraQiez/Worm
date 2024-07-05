@@ -95,7 +95,7 @@
 .book-grid {
     display: grid;
     column-gap: 20px;
-    row-gap: 20px;
+    row-gap: 40px;
     grid-template-columns: repeat(4, 1fr);
 }
 
@@ -120,6 +120,12 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     padding: 10px;
     text-align: center;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.book:hover{
+    transform: scale(1.05);
 }
 
 .book-list h4 {
