@@ -16,17 +16,10 @@ if (isset($_GET['bookID'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $title; ?></title>
-    <link rel="stylesheet" href="bookdetails.css">
-</head>
-<body>
+
+
     <div class="main-content">
-        <div class="book-details">
+        <div class="book-details d-flex justify-content-center">
             <div class="book-image">
                 <img src="data:image/jpeg;base64,<?php echo base64_encode($book['bookImage']); ?>" alt="Book Image">
             </div>

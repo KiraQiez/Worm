@@ -8,12 +8,12 @@ $result = $conn->query($sql);
 
 <div class="main-content d-flex">
     <div class="sidebar dashboard">
-        <h4>Navigation</h4>
+        <h4>Menu</h4>
         <hr>
         <ul>
-            <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="#"><i class="fas fa-book"></i> Rental Books</a></li>
-            <li><a href="#"><i class="fas fa-history"></i> My History</a></li>
+            <li><a href="CustomerDashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="CustomerRental.php"><i class="fas fa-book"></i> Rental Books</a></li>
+            <li><a href="CustomerHistory.php"><i class="fas fa-history"></i> My History</a></li>
         </ul>
     </div>
     <div class="rent-content">
@@ -55,10 +55,46 @@ $result = $conn->query($sql);
         </div>
         <div class="user-dashboard">
             <div class="cont">
+                <h5>My History ⌚</h5>
+                <?php
+                 $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book  LIMIT 1";
+                 $result2 = $conn->query($sql2);
+                 if ($result->num_rows > 0) {
+                     while ($row2 = $result2->fetch_assoc()) {
+                         echo '<div class="book-item">';
+                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
+                         echo '<div>';
+                         echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
+                         echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
+                         echo '</div>';
+                         echo '</div>';
+                     }
+                 } else {
+                     echo '<p>You have no history yet</p>';
+                 }
+                ?>
 
             </div>
             <div class="cont">
-                a
+                <h5>Best Selling Books 🚀</h5>
+                <?php
+                 $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book  LIMIT 4";
+                 $result2 = $conn->query($sql2);
+                 if ($result->num_rows > 0) {
+                     while ($row2 = $result2->fetch_assoc()) {
+                         echo '<div class="book-item">';
+                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
+                         echo '<div>';
+                         echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
+                         echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
+                         echo '</div>';
+                         echo '</div>';
+                     }
+                 } else {
+                     echo '<p>No best selling books available.</p>';
+                 }
+                ?>
+                
             </div>
             <div class="cont popular-reads">
                 <h5>Random Picks ⭐ </h5>

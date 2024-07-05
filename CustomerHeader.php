@@ -38,7 +38,6 @@ if ($_SESSION['usertype'] != "customer") {
     <link rel="stylesheet" href="rsc/bootstrap.min.css">
     <link rel="stylesheet" href="rsc/styles.css">
     <link rel="stylesheet" href="rsc/main.css">
-    <link rel="stylesheet" href="rsc/bookdetails.css">
     <link rel="stylesheet" href="rsc/customer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
@@ -52,7 +51,7 @@ if ($_SESSION['usertype'] != "customer") {
         <div class="nav">
             <ul>
                 <li><a href="MainHomepage.php">Home</a></li>
-                <li><a href="CustomerRent.php">Rent</a></li>
+                <li><a href="CustomerDashboard.php">Dashboard</a></li>
                 <li class="dropdown">
                     <a href="CustomerCatalogue.php">Catalogue</a>
                     <i class="fas fa-caret-down"></i>
