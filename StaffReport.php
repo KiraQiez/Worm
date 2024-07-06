@@ -58,10 +58,10 @@ include 'db.php'; // Include your database connection script
                             <?php
                             $topBooks = getTopBooksByMonth();
                             foreach ($topBooks as $book) {
-                                echo '<div class="book-item">';
-                                echo '<img src="path/to/book/image.jpg" alt="' . htmlspecialchars($book['bookTitle']) . '" class="book-img">';
+                                echo '<a href="bookDetails.php?bookID=' . htmlspecialchars($book['bookID']) . '" class="book-item">';
+                                echo '<img src="data:image/jpeg;base64,' . base64_encode($book['bookImage']) . '" alt="' . htmlspecialchars($book['bookTitle']) . '" class="book-img">';
                                 echo '<div class="book-title">' . htmlspecialchars($book['bookTitle']) . '</div>';
-                                echo '</div>';
+                                echo '</a>';
                             }
                             ?>
                         </div>
@@ -157,7 +157,7 @@ include 'db.php'; // Include your database connection script
     // Function to get top rented books for the current month
     function getTopBooksByMonth() {
         $conn = getDatabaseConnection();
-        $sql = "SELECT b.bookTitle, COUNT(r.bookID) as rentals 
+        $sql = "SELECT b.bookID, b.bookTitle, b.bookImage, COUNT(r.bookID) as rentals 
                 FROM rental r
                 JOIN book b ON r.bookID = b.bookID
                 WHERE MONTH(r.StartDate) = MONTH(CURDATE()) AND YEAR(r.StartDate) = YEAR(CURDATE())
@@ -253,6 +253,11 @@ include 'db.php'; // Include your database connection script
             padding: 10px;
             box-shadow: 0 1px 5px rgba(0,0,0,0.1);
             width: 80%;
+            text-decoration: none;
+            color: inherit;
+        }
+        .book-item:hover {
+            background-color: #f0f0f0;
         }
         .book-img {
             width: 50px;
