@@ -95,6 +95,12 @@ $filteredBooks = displayBooks($books, $selectedCategories);
                 Mystery
             </label>
         </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Children" id="children" <?php echo in_array('Children', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="children">
+                Children
+            </label>
+        </div>
     </div>
 
     <div class="content">
