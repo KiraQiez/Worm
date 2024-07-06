@@ -66,11 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             Swal.fire({
                 icon: 'success',
                 title: 'Payment successful!',
-                text: 'Redirecting to Customer Rent page...',
+                text: 'Redirecting to your dashboard...',
                 showConfirmButton: false,
                 timer: 2000
             }).then(() => {
-                location.href = 'CustomerRent.php';
+                location.href = 'CustomerDashboard.php';
             });
           </script>";
 }

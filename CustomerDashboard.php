@@ -1,9 +1,16 @@
 <?php
 $title = "Rent";
 include 'CustomerHeader.php';
-// Fetch books from the database
-$sql = "SELECT bookTitle, bookAuthor, bookImage FROM book LIMIT 4";
-$result = $conn->query($sql);
+
+$sql = "SELECT book.bookTitle, book.bookAuthor, book.bookImage , rental.EndDate, rental.RentalStatus
+        FROM book
+        INNER JOIN rental ON book.bookID = rental.BookID
+        WHERE rental.CustID = ? AND rental.RentalStatus = 'out'
+        LIMIT 4";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $userid);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <div class="main-content d-flex">
@@ -36,7 +43,9 @@ $result = $conn->query($sql);
                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row['bookImage']) . '" alt="' . $row['bookTitle'] . '">';
                         echo '<h3 class="title">' . $row['bookTitle'] . '</h3>';
                         echo '<p class="author">' . $row['bookAuthor'] . '</p>';
-                        echo '<p class="due"> Due: 24/7/2024 </p>';
+                        $date = $row['EndDate'];
+                        $formattedDate = date('d/m/Y', strtotime($date));
+                        echo '<p class="due"> Due: ' . $formattedDate .   '</p>';
                         echo '</div>';
                     }
                 }
@@ -57,67 +66,74 @@ $result = $conn->query($sql);
             <div class="cont">
                 <h5>My History ⌚</h5>
                 <?php
-                 $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book  LIMIT 1";
-                 $result2 = $conn->query($sql2);
-                 if ($result->num_rows > 0) {
-                     while ($row2 = $result2->fetch_assoc()) {
-                         echo '<div class="book-item">';
-                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
-                         echo '<div>';
-                         echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
-                         echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
-                         echo '</div>';
-                         echo '</div>';
-                     }
-                 } else {
-                     echo '<p>You have no history yet</p>';
-                 }
+                $sqlHistory = "SELECT book.bookTitle, book.bookAuthor, book.bookImage , rental.EndDate, rental.RentalStatus
+                 FROM book
+                 INNER JOIN rental ON book.bookID = rental.BookID
+                 WHERE rental.CustID = ? AND rental.RentalStatus = 'out'
+                 LIMIT 4";
+                $stmtHistory = $conn->prepare($sqlHistory);
+                $stmtHistory->bind_param("s", $userid);
+                $stmtHistory->execute();
+                $resultHistory = $stmtHistory->get_result();
+                if ($resultHistory->num_rows > 0) {
+                    while ($row = $resultHistory->fetch_assoc()) {
+                        echo '<div class="book-item">';
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row['bookImage']) . '" alt="' . $row['bookTitle'] . '">';
+                        echo '<div>';
+                        echo '<h3 class="book-title">' . $row['bookTitle'] . '</h3>';
+                        echo '<p class="book-author">' . $row['bookAuthor'] . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                } else {
+                    echo '<p>You have no history yet</p>';
+                }
                 ?>
 
             </div>
             <div class="cont">
                 <h5>Best Selling Books 🚀</h5>
                 <?php
-                 $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book  LIMIT 4";
-                 $result2 = $conn->query($sql2);
-                 if ($result->num_rows > 0) {
-                     while ($row2 = $result2->fetch_assoc()) {
-                         echo '<div class="book-item">';
-                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
-                         echo '<div>';
-                         echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
-                         echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
-                         echo '</div>';
-                         echo '</div>';
-                     }
-                 } else {
-                     echo '<p>No best selling books available.</p>';
-                 }
+                $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book  LIMIT 4";
+                $result2 = $conn->query($sql2);
+                if ($result->num_rows > 0) {
+                    while ($row2 = $result2->fetch_assoc()) {
+                        echo '<div class="book-item">';
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
+                        echo '<div>';
+                        echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
+                        echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                } else {
+                    echo '<p>No best selling books available.</p>';
+                }
                 ?>
-                
+
             </div>
             <div class="cont popular-reads">
                 <h5>Random Picks ⭐ </h5>
 
                 <?php
-                 $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book ORDER BY RAND() LIMIT 4";
-                 $result2 = $conn->query($sql2);
-                 if ($result->num_rows > 0) {
-                     while ($row2 = $result2->fetch_assoc()) {
-                         echo '<div class="book-item">';
-                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
-                         echo '<div>';
-                         echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
-                         echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
-                         echo '</div>';
-                         echo '</div>';
-                     }
-                 } else {
-                     echo '<p>No recommendations available.</p>';
-                 }
+                $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book ORDER BY RAND() LIMIT 4";
+                $result2 = $conn->query($sql2);
+                if ($result->num_rows > 0) {
+                    while ($row2 = $result2->fetch_assoc()) {
+                        echo '<div class="book-item">';
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
+                        echo '<div>';
+                        echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
+                        echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                } else {
+                    echo '<p>No recommendations available.</p>';
+                }
                 ?>
-                
-                   
+
+
             </div>
         </div>
     </div>

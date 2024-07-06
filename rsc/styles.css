@@ -276,9 +276,6 @@ body {
     text-align: right;
 }
 
-.fade {
-    opacity: 0;
-}
 
 .info img {
     width: auto;
@@ -419,3 +416,6 @@ body {
         text-align: center;
     }
 }
+
+
+
