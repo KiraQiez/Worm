@@ -60,10 +60,17 @@ $filteredBooks = displayBooks($books, $selectedCategories);
             <label class="form-check-label" for="scifi">
                 SciFi
             </label>
-        </div><div class="form-check">
+        </div>
+        <div class="form-check">
             <input class="form-check-input" type="checkbox" value="Mystery" id="mystery" <?php echo in_array('Mystery', $selectedCategories) ? 'checked' : ''; ?>>
             <label class="form-check-label" for="mystery">
                 Mystery
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Children" id="children" <?php echo in_array('Children', $selectedCategories) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="children">
+                Children
             </label>
         </div>
     </div>
