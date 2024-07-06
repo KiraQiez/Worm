@@ -30,6 +30,7 @@ if ($_SESSION['usertype'] != "staff") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.0.0/flickity.css"></script>
 </head>
 
 <body>
@@ -76,7 +77,7 @@ if ($_SESSION['usertype'] != "staff") {
                     </div>
                 </li>
 
-                <li><a href="#">Report</a></li>
+                <li><a href="StaffReport.php">Report</a></li>
             </ul>
         </div>
         <div class="user-profile">
