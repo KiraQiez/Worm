@@ -7,6 +7,29 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+// Check if the customer is logged in
+if (isset($_SESSION['userid'])) {
+    $custid = $_SESSION['userid'];
+    
+    // Fetch the customer status
+    $stmt = $conn->prepare("SELECT status FROM customer WHERE custid = ?");
+    $stmt->bind_param('s', $custid);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $customer = $result->fetch_assoc();
+    $stmt->close();
+    
+    // Redirect if the customer is suspended
+    if ($customer['status'] == 'suspend') {
+        header('Location: CustomerSuspend.php');
+        exit;
+    }
+} else {
+    echo "No customer logged in.";
+    exit;
+}
+
+// Fetch book details
 if (isset($_GET['bookID'])) {
     $bookID = $_GET['bookID'];
     $stmt = $conn->prepare("SELECT * FROM book WHERE bookID = ?");
@@ -21,30 +44,27 @@ if (isset($_GET['bookID'])) {
 }
 ?>
 
-
-
-    <div class="main-content d-flex justify-content-center">
-        <div class="book-details d-flex justify-content-center">
-            <div class="book-image">
-                <img src="data:image/jpeg;base64,<?php echo base64_encode($book['bookImage']); ?>" alt="Book Image">
-            </div>
-            <div class="book-info">
-                <h2><b><?php echo htmlspecialchars($book['bookTitle']); ?></b></h2>
-                <p><strong>Author:</strong> <?php echo htmlspecialchars($book['bookAuthor']); ?></p>
-                <p><strong>Category:</strong> <?php echo htmlspecialchars($book['bookCategory']); ?></p>
-                <p><strong>Price:</strong> $<?php echo htmlspecialchars($book['bookPrice']); ?></p>
-                <p><strong>Date Published:</strong> <?php echo htmlspecialchars($book['bookDatePublished']); ?></p>
-                <p><strong>Status:</strong> <?php echo htmlspecialchars($book['bookStatus']); ?></p>
-                <p><strong>Synopsis:</strong> <?php echo nl2br(htmlspecialchars($book['bookSynopsis'])); ?></p>
-                <form action="CustomerPayment.php" method="GET">
-                    <label for="startRent">Start Rent:</label>
-                    <input type="date" id="startRent" name="startRent" class="form-control" required>
-                    <input type="hidden" name="bookID" value="<?php echo htmlspecialchars($book['bookID']); ?>">
-                    <button type="submit" class="btn btn-success">Checkout</button>
-                </form>
-            </div>
+<div class="main-content d-flex justify-content-center">
+    <div class="book-details d-flex justify-content-center">
+        <div class="book-image">
+            <img src="data:image/jpeg;base64,<?php echo base64_encode($book['bookImage']); ?>" alt="Book Image">
+        </div>
+        <div class="book-info">
+            <h2><b><?php echo htmlspecialchars($book['bookTitle']); ?></b></h2>
+            <p><strong>Author:</strong> <?php echo htmlspecialchars($book['bookAuthor']); ?></p>
+            <p><strong>Category:</strong> <?php echo htmlspecialchars($book['bookCategory']); ?></p>
+            <p><strong>Price:</strong> $<?php echo htmlspecialchars($book['bookPrice']); ?></p>
+            <p><strong>Date Published:</strong> <?php echo htmlspecialchars($book['bookDatePublished']); ?></p>
+            <p><strong>Status:</strong> <?php echo htmlspecialchars($book['bookStatus']); ?></p>
+            <p><strong>Synopsis:</strong> <?php echo nl2br(htmlspecialchars($book['bookSynopsis'])); ?></p>
+            <form action="CustomerPayment.php" method="GET">
+                <label for="startRent">Start Rent:</label>
+                <input type="date" id="startRent" name="startRent" class="form-control" required>
+                <input type="hidden" name="bookID" value="<?php echo htmlspecialchars($book['bookID']); ?>">
+                <button type="submit" class="btn btn-success">Checkout</button>
+            </form>
         </div>
     </div>
+</div>
 </body>
-
 </html>
