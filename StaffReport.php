@@ -104,13 +104,13 @@ function getBookCategories()
     return $categories;
 }
 
-function getTopBooksByMonth()
+function getTopBooksByYear()
 {
     $conn = getDatabaseConnection();
     $sql = "SELECT b.bookID, b.bookTitle, b.bookImage, COUNT(r.bookID) as rentals 
             FROM rental r
             JOIN book b ON r.bookID = b.bookID
-            WHERE MONTH(r.StartDate) = MONTH(CURDATE()) AND YEAR(r.StartDate) = YEAR(CURDATE())
+            WHERE YEAR(r.StartDate) = YEAR(CURDATE())
             GROUP BY r.bookID
             ORDER BY rentals DESC
             LIMIT 3";
@@ -148,13 +148,13 @@ $bookCategories = getBookCategories();
             </div>
         </div>
 
-        <!-- Top 3 Book Rentals This Month -->
+        <!-- Top 3 Book Rentals This Year -->
         <div class="card card-medium">
             <div class="card-body">
-                <h5 class="card-title">Top 3 Book Rentals This Month</h5>
+                <h5 class="card-title">Top 3 Book Rentals This Year</h5>
                 <div id="topBooks" class="top-books">
                     <?php
-                    $topBooks = getTopBooksByMonth();
+                    $topBooks = getTopBooksByYear();
                     foreach ($topBooks as $book) {
                         echo '<a href="StaffBookDetails.php?bookID=' . htmlspecialchars($book['bookID']) . '" class="book-item">';
                         echo '<img src="data:image/jpeg;base64,' . base64_encode($book['bookImage']) . '" alt="' . htmlspecialchars($book['bookTitle']) . '" class="book-img">';
@@ -164,7 +164,6 @@ $bookCategories = getBookCategories();
                     ?>
                 </div>
             </div>
-
         </div>
 
         <!-- Total Book Rental -->

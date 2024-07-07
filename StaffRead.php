@@ -28,44 +28,6 @@ $result = $conn->query($query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <style>
-        .table {
-            width: 100%;
-            margin-bottom: 20px;
-            background-color: #fff;
-            border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .table th, .table td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-        }
-        .table th {
-            background-color: #f8f9fa;
-        }
-        .btn-edit, .btn-delete {
-            padding: 6px 12px;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        .btn-edit {
-            background-color: #17a2b8;
-            color: white;
-        }
-        .btn-edit:hover {
-            background-color: #138496;
-        }
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-        }
-        .btn-delete:hover {
-            background-color: #c82333;
-        }
-    </style>
-</head>
 <body>
     <div class="container mt-5">
         <h2>Staff Details</h2>

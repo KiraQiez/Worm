@@ -98,59 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #343a40;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .id-box {
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: bold;
-            color: #495057;
-        }
-
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            border-color: #545b62;
-        }
-    </style>
-</head>
 <body>
-    <div class="container mt-5 form-container">
+    <div class="container1">
         <h2>Edit Staff</h2>
         <div class="id-box">ID parameter received: <?php echo $userid; ?></div>
         <form action="StaffUpdate.php" method="POST">
