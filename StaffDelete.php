@@ -47,30 +47,34 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 // Handle the form submission for deletion
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Delete query for both system_users and staff tables
-    $sql = "DELETE FROM system_users WHERE userid = ?";
-    $sql2 = "DELETE FROM staff WHERE staffid = ?";
+    // Begin transaction
+    $conn->begin_transaction();
 
-    // Prepare statements
-    if ($stmt = $conn->prepare($sql) && $stmt2 = $conn->prepare($sql2)) {
-        // Bind variables to the prepared statement as parameters
+    try {
+        // Delete from staff table first
+        $sql1 = "DELETE FROM staff WHERE staffid = ?";
+        $stmt1 = $conn->prepare($sql1);
         $stmt1->bind_param("s", $userid);
-        $stmt2->bind_param("s", $userid);
-
-        // Attempt to execute the prepared statements
-        if ($stmt1->execute() && $stmt2->execute()) {
-            // Redirect to the main page or a success page
-            header("Location: staffData.php?delete=success");
-            exit();
-        } else {
-            echo "Error: Could not execute the delete queries. " . $conn->error;
-        }
-
-        // Close statements
+        $stmt1->execute();
         $stmt1->close();
+
+        // Then delete from system_users table
+        $sql2 = "DELETE FROM system_users WHERE userid = ?";
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->bind_param("s", $userid);
+        $stmt2->execute();
         $stmt2->close();
-    } else {
-        echo "Error: Could not prepare the delete queries. " . $conn->error;
+
+        // Commit transaction
+        $conn->commit();
+
+        // Redirect to the list of staff
+        header("Location: StaffRead.php?delete=success");
+        exit();
+    } catch (Exception $e) {
+        // Rollback transaction
+        $conn->rollback();
+        echo "Error: Could not execute the delete queries. " . $e->getMessage();
     }
 
     // Close connection
@@ -84,59 +88,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Staff</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
+    <script>
+        function confirmDelete(event) {
+            if (!confirm('Are you sure you want to delete this staff member?')) {
+                event.preventDefault();
+            }
         }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #343a40;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .id-box {
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: bold;
-            color: #495057;
-        }
-
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-        .btn-danger:hover {
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            border-color: #545b62;
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <div class="container mt-5 form-container">
+    <div class="container1">
         <h2>Delete Staff</h2>
         <div class="id-box">ID parameter received: <?php echo $userid; ?></div>
         <div class="mb-3">
@@ -151,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="mb-3">
             <strong>Staff Type:</strong> <?php echo $stafftype; ?>
         </div>
-        <form action="StaffDelete.php?id=<?php echo $userid; ?>" method="POST">
+        <form action="StaffDelete.php?id=<?php echo $userid; ?>" method="POST" onsubmit="confirmDelete(event)">
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-danger me-2">Delete</button>
                 <a href="StaffRead.php" class="btn btn-secondary">Cancel</a>
