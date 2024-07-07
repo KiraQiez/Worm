@@ -7,12 +7,26 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Fetch rented books from the database with start date and end date
+// Pagination settings
+$limit = 6; // Number of books per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
+$offset = ($page - 1) * $limit; // Offset for SQL query
+
+// Fetch total number of rented books
+$totalRentedBooksQuery = "SELECT COUNT(*) AS total FROM book b 
+                          INNER JOIN rental r ON b.bookID = r.BookID 
+                          WHERE b.bookStatus = 'Rented'";
+$totalRentedBooksResult = $conn->query($totalRentedBooksQuery);
+$totalRentedBooks = $totalRentedBooksResult->fetch_assoc()['total'];
+$totalPages = ceil($totalRentedBooks / $limit);
+
+// Fetch rented books with pagination
 $books = [];
-$sql = "SELECT b.*, r.StartDate, r.EndDate 
+$sql = "SELECT b.*, r.StartDate, r.EndDate, r.RentalStatus, r.CustID, r.RentalID
         FROM book b 
         INNER JOIN rental r ON b.bookID = r.BookID 
-        WHERE b.bookStatus = 'Rented'";
+        WHERE b.bookStatus = 'Rented'
+        LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -20,165 +34,62 @@ if ($result->num_rows > 0) {
         $books[] = [
             'bookID' => $row['bookID'],
             'title' => $row['bookTitle'],
-            'author' => $row['bookAuthor'],
-            'category' => $row['bookCategory'],
-            'price' => $row['bookPrice'],
-            'synopsis' => $row['bookSynopsis'],
-            'datePublished' => $row['bookDatePublished'],
-            'status' => $row['bookStatus'],
-            'image' => $row['bookImage'],
-            'startDate' => $row['StartDate'],
-            'endDate' => $row['EndDate']
+            'custID' => $row['CustID'],
+            'rentStatus' => $row['RentalStatus'],
+            'endDate' => $row['EndDate'],
+            'rentID' => $row['RentalID']
         ];
     }
 }
-
-$selectedCategories = isset($_GET['categories']) ? explode(',', $_GET['categories']) : [];
-
-function displayBooks($books, $selectedCategories)
-{
-    if (empty($selectedCategories)) {
-        return $books;
-    }
-
-    return array_filter($books, function ($book) use ($selectedCategories) {
-        return in_array($book['category'], $selectedCategories);
-    });
-}
-
-$filteredBooks = displayBooks($books, $selectedCategories);
 ?>
 
 <div class="main-content">
-    <div class="sidebarF">
-        <h4>Categories</h4>
-        <hr>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Fiction" id="fiction" <?php echo in_array('Fiction', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="fiction">
-                Fiction
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Non-Fiction" id="nonFiction" <?php echo in_array('Non-Fiction', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="nonFiction">
-                Non-Fiction
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Action" id="action" <?php echo in_array('Action', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="action">
-                Action
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Horror" id="horror" <?php echo in_array('Horror', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="horror">
-                Horror
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Romance" id="romance" <?php echo in_array('Romance', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="romance">
-                Romance
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="SciFi" id="scifi" <?php echo in_array('SciFi', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="scifi">
-                SciFi
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Mystery" id="mystery" <?php echo in_array('Mystery', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="mystery">
-                Mystery
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Children" id="children" <?php echo in_array('Children', $selectedCategories) ? 'checked' : ''; ?>>
-            <label class="form-check-label" for="children">
-                Children
-            </label>
-        </div>
-    </div>
-
     <div class="content">
-        <div class="Category-list">
-            <?php foreach ($selectedCategories as $category) : ?>
-                <button class="category-remove" data-category="<?php echo $category; ?>"><i class="fas fa-times" style="color:#FF5751;"></i> <?php echo $category; ?></button>
-            <?php endforeach; ?>
-        </div>
-
         <div class="book-list">
-            <h4><?php echo empty($selectedCategories) ? 'All Rented Books' : 'Rented Books in Selected Categories'; ?></h4>
-            <?php if (empty($filteredBooks)) : ?>
-                <p>No rented books available in the selected category.</p>
+            <h4>Rented Books</h4>
+            <?php if (empty($books)) : ?>
+                <p>No books available.</p>
             <?php else : ?>
-                <div class="book-grid">
-                    <?php foreach ($filteredBooks as $book) : ?>
-                        <div class="book">
-                            <?php if ($book['image']) : ?>
-                                <img src="data:image/jpeg;base64,<?php echo base64_encode($book['image']); ?>" alt="Book Image">
-                            <?php else : ?>
-                                <img src="default_image.jpg" alt="No Image Available">
-                            <?php endif; ?>
-                            <p class="book-title"><?php echo htmlspecialchars($book['title']); ?></p>
-                            <!-- <p class="book-desc"><?php echo htmlspecialchars($book['author']); ?></p>
-                            <p class="book-desc">RM <?php echo htmlspecialchars($book['price']); ?></p>
-                            <p class="book-desc"><?php echo htmlspecialchars($book['synopsis']); ?></p> -->
-                            <p class="book-desc">Start Date: <?php echo htmlspecialchars($book['startDate']); ?></p>
-                            <p class="book-desc">End Date: <?php echo htmlspecialchars($book['endDate']); ?></p>
-                            <button class="primary" onclick="window.location.href='StaffEditBook.php?bookID=<?php echo htmlspecialchars($book['bookID']); ?>'">Edit</button>
-                            <button class="delete" onclick="confirmDelete('<?php echo htmlspecialchars($book['bookID']); ?>')">Delete</button>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="rentID-col">Rent ID</th>
+                            <th class="title-col">Book Title</th>
+                            <th class="custID-col">Customer ID</th>
+                            <th class="status-col">Status</th>
+                            <th class="endDate-col">Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($books as $book) : ?>
+                            <tr>
+                                <td class="rentID-col"><?php echo htmlspecialchars($book['rentID']); ?></td>
+                                <td class="title-col"><?php echo htmlspecialchars($book['title']); ?></td>
+                                <td class="custID-col"><?php echo htmlspecialchars($book['custID']); ?></td>
+                                <td class="status-col"><?php echo htmlspecialchars($book['rentStatus']); ?></td>
+                                <td class="endDate-col"><?php echo htmlspecialchars($book['endDate']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             <?php endif; ?>
+
+            <!-- Pagination Controls -->
+            <div class="pagination">
+                <?php if ($page > 1) : ?>
+                    <a href="?page=<?php echo $page - 1; ?>" class="prev">Previous</a>
+                <?php endif; ?>
+                <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                    <a href="?page=<?php echo $i; ?>" class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
+                <?php endfor; ?>
+                <?php if ($page < $totalPages) : ?>
+                    <a href="?page=<?php echo $page + 1; ?>" class="next">Next</a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.querySelectorAll('.form-check-input').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            var selectedCategories = [];
-            document.querySelectorAll('.form-check-input:checked').forEach(function(checkedBox) {
-                selectedCategories.push(checkedBox.value);
-            });
-            window.location.href = '?categories=' + selectedCategories.join(',');
-        });
-    });
-
-    document.querySelectorAll('.category-remove').forEach(function(button) {
-        button.addEventListener('click', function() {
-            var categoryToRemove = this.getAttribute('data-category');
-            var selectedCategories = <?php echo json_encode($selectedCategories); ?>;
-            var index = selectedCategories.indexOf(categoryToRemove);
-            if (index !== -1) {
-                selectedCategories.splice(index, 1);
-            }
-            window.location.href = '?categories=' + selectedCategories.join(',');
-        });
-    });
-
-    function confirmDelete(bookID) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = 'StaffDeleteBook.php?bookID=' + bookID;
-            }
-        });
-    }
-</script>
 </body>
 
 </html>

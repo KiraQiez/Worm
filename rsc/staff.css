@@ -49,14 +49,20 @@
 }
 
 /* Book List */
-.main-content {
-    display: flex;
+
+.contentBL {
+    flex: 3;
+    background: #fff;
     padding: 20px;
+    border-radius: 15px;
+    height: 625px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .sidebarF {
     width: 250px;
-    height: 350px;
+    height: 380px;
     padding: 20px;
     margin-top: 60px;
     background-color: #f8f9fa;
@@ -80,12 +86,6 @@
 
 .form-check-input:focus {
     box-shadow: 0 0 0 0.25rem rgba(255, 59, 52, 0.25);
-}
-
-.content {
-    flex: 3;
-    margin-left: 30px;
-    padding: 20px;
 }
 
 .book-list {
@@ -124,7 +124,7 @@
     transition: transform 0.3s ease;
 }
 
-.book:hover{
+.book:hover {
     transform: scale(1.05);
 }
 
@@ -171,7 +171,8 @@ button {
     background-color: #77DD77;
 }
 
-.primary:hover, .delete:hover {
+.primary:hover,
+.delete:hover {
     filter: brightness(0.95);
     transform: scale(1.05);
 }
@@ -182,9 +183,13 @@ button {
 }
 
 .content {
+    flex: 3;
     background: #fff;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 15px;
+    max-width: 1000px;
+    height: 625px;
+    margin: auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -215,4 +220,109 @@ button {
 
 textarea.form-control {
     height: 100px;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    height: 70px;
+    border-bottom: 2px solid #ddd;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
+    height: 50px;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-size: 17px;
+}
+
+th.rentID-col,
+td.rentID-col {
+    width: 15%;
+}
+
+th.custID-col,
+td.custID-col {
+    width: 15%;
+}
+
+th.status-col,
+td.status-col {
+    width: 15%;
+}
+
+th.endDate-col,
+td.endDate-col {
+    width: 25%;
+}
+
+th.title-col,
+td.title-col {
+    width: 35%;
+}
+
+th.author-col,
+td.author-col {
+    width: 15%;
+}
+
+th.category-col,
+td.category-col {
+    width: 15%;
+}
+
+th.price-col,
+td.price-col {
+    width: 10%;
+}
+
+th.status-col,
+td.status-col {
+    width: 10%;
+}
+
+th.actions-col,
+td.actions-col {
+    width: 20%;
+}
+
+.pagination {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    color: #333;
+}
+
+.pagination a.active {
+    background-color: #77DD77;
+    color: white;
+    border: 1px solid #77DD77;
+}
+
+.pagination a.prev,
+.pagination a.next {
+    font-weight: bold;
 }

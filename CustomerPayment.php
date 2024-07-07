@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rentalDeposit = getBookPrice($bookID);
     $subtotal = $rentalPrice + $rentalDeposit;
     $endRent = date('Y-m-d', strtotime($startRent . ' + 60 days'));
-    $rentalStatus = "out"; // Setting rental status to 'out'
+    $rentalStatus = "Rent"; // Setting rental status to 'out'
 
     // Insert into rental table
     $stmt = $conn->prepare("INSERT INTO rental (StartDate, EndDate, RentalStatus, RentalPrice, RentalDeposit, RentalDuration, CustID, BookID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");

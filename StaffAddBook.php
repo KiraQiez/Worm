@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="main-content">
     <div class="content">
-        <h1>ADD BOOKS</h1>
+        <h4>Add Book</h4>
         <div class="container">
             <form action="StaffAddBook.php" method="post" enctype="multipart/form-data">
                 <div class="form-row">
