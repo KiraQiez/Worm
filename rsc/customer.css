@@ -279,20 +279,6 @@ h5 {
 
 }
 
-.add-rent:hover {
-    transform: scale(1.05);
-
-}
-
-
-
-
-.rent-card:hover {
-    transform: scale(1.05);
-
-}
-
-
 .rent-list img {
     width: 180px;
     height: 250px;
@@ -319,8 +305,6 @@ h5 {
 .rent-card {
     width: 180px;
     position: relative;
-    cursor: pointer;
-    transition: transform 0.3s ease;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -563,7 +547,7 @@ h5 {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    line-clamp: 4;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     height: 6em;
 }
