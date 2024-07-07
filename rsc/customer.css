@@ -343,39 +343,44 @@ h5 {
 }
 
 
-.book-details {
-    display: flex;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    max-width: 900px;
-    width: 100%;
-}
+
 
 .book-image img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+    width: 320px; /* Adjust width as needed */
+    height: 480px; /* Adjust height as needed */
+    object-fit: cover;
+    border-radius: 8px;
 }
 
-.book-info {
+
+.book-details {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
     padding: 20px;
-    flex-grow: 1;
+    max-width: 900px; /* Adjust as needed */
+    margin: auto; /* Center the container */
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    flex: 3;
+    background: #F9E4BC;
+}
+
+
+.book-info {
+    max-width: 600px;
 }
 
 .book-info h2 {
-    font-size: 28px;
-    color: #333;
-    margin-bottom: 20px;
+    font-size: 24px;
+    margin-bottom: 10px;
 }
 
 .book-info p {
     font-size: 16px;
-    color: #666;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
-
 .book-info label {
     display: block;
     font-size: 16px;
