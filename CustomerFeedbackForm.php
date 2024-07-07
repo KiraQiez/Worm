@@ -21,9 +21,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Execute query
     if (mysqli_query($conn, $query)) {
-        echo "Feedback submitted successfully.";
+        echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Feedback submitted!',
+                    text: 'Redirecting to your dashboard...',
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    location.href = 'CustomerDashboard.php';
+                });
+              </script>";
     } else {
-        echo "Error: " . $query . "<br>" . mysqli_error($conn);
+        echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Feedback submission failed. Please try again later.',
+                    showConfirmButton: true
+                });
+              </script>";
     }
 }
 ?>
@@ -35,12 +52,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Form</title>
     <link rel="stylesheet" href="feedbackform.css">
+    <!-- Include SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
     <div class="main-content">
         <div class="content">
             <h1>FEEDBACK FORM</h1>
-            <form action="CustomerDashboard.php" method="post">
+            <form action="CustomerFeedbackForm.php" method="post">
                 <input type="text" name="feedbID" placeholder="Feedback ID" required>
                 <!-- Assuming RentalID is entered by user or fetched from somewhere -->
                 <input type="text" name="rentalID" placeholder="Rental ID" required>
@@ -60,5 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         </div>
     </div>
+    <!-- Include SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </body>
 </html>
