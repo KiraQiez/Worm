@@ -2,182 +2,217 @@
 $title = "Staff Report";
 include 'StaffHeader.php';
 include 'db.php'; // Include your database connection script
+
+// Database functions
+function getDatabaseConnection()
+{
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "wormdb";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    return $conn;
+}
+
+function getTotalBookRentals()
+{
+    $conn = getDatabaseConnection();
+    $sql = "SELECT COUNT(*) as total FROM rental";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $conn->close();
+    return $row['total'];
+}
+
+function getTodayBookRentals()
+{
+    $conn = getDatabaseConnection();
+    $sql = "SELECT COUNT(*) as total FROM rental WHERE DATE(StartDate) = CURDATE()";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $conn->close();
+    return $row['total'];
+}
+
+function getThisMonthBookRentals()
+{
+    $conn = getDatabaseConnection();
+    $sql = "SELECT COUNT(*) as total FROM rental WHERE MONTH(StartDate) = MONTH(CURDATE()) AND YEAR(StartDate) = YEAR(CURDATE())";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $conn->close();
+    return $row['total'];
+}
+
+function getAvailableBooks()
+{
+    $conn = getDatabaseConnection();
+    $sql = "SELECT COUNT(*) as total FROM book WHERE bookStatus = 'available'";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $conn->close();
+    return $row['total'];
+}
+
+function getTotalBooks()
+{
+    $conn = getDatabaseConnection();
+    $sql = "SELECT COUNT(*) as total FROM book";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $conn->close();
+    return $row['total'];
+}
+
+function getTotalCustomers()
+{
+    $conn = getDatabaseConnection();
+    $sql = "SELECT COUNT(*) as total FROM customer";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $conn->close();
+    return $row['total'];
+}
+
+function getTotalStaff()
+{
+    $conn = getDatabaseConnection();
+    $sql = "SELECT COUNT(*) as total FROM staff";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $conn->close();
+    return $row['total'];
+}
+
+function getBookCategories()
+{
+    $conn = getDatabaseConnection();
+    $sql = "SELECT bookCategory, COUNT(*) as count FROM book GROUP BY bookCategory";
+    $result = $conn->query($sql);
+
+    $categories = [];
+    while ($row = $result->fetch_assoc()) {
+        $categories[] = $row;
+    }
+
+    $conn->close();
+    return $categories;
+}
+
+function getTopBooksByMonth()
+{
+    $conn = getDatabaseConnection();
+    $sql = "SELECT b.bookID, b.bookTitle, b.bookImage, COUNT(r.bookID) as rentals 
+            FROM rental r
+            JOIN book b ON r.bookID = b.bookID
+            WHERE MONTH(r.StartDate) = MONTH(CURDATE()) AND YEAR(r.StartDate) = YEAR(CURDATE())
+            GROUP BY r.bookID
+            ORDER BY rentals DESC
+            LIMIT 3";
+    $result = $conn->query($sql);
+
+    $topBooks = [];
+    while ($row = $result->fetch_assoc()) {
+        $topBooks[] = $row;
+    }
+
+    $conn->close();
+    return $topBooks;
+}
+
+$bookCategories = getBookCategories();
 ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Report</title>
+    <link rel="stylesheet" href="path/to/your/stylesheet.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
 <body>
-    <div class="container mt-5">
-        <div class="row">
-            <!-- Total Book Rental -->
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-book"></i>Total Book Rental</h5>
-                        <h2 class="card-text"><?php echo getTotalBookRentals(); ?></h2>
-                        <p>Today - <?php echo getTodayBookRentals(); ?> This month - <?php echo getThisMonthBookRentals(); ?></p>
-                    </div>
-                </div>
-            </div>
-            <!-- Book Available -->
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Book Available</h5>
-                        <h2 class="card-text"><?php echo getAvailableBooks(); ?></h2>
-                    </div>
-                </div>
-            </div>
-            <!-- Book Total -->
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Book Total</h5>
-                        <h2 class="card-text"><?php echo getTotalBooks(); ?></h2>
-                    </div>
-                </div>
+    <div class="grid-container">
+        <!-- Book Categories -->
+        <div class="card card-large">
+            <div class="card-body">
+                <h5 class="card-title">Book Categories</h5>
+                <canvas id="bookCategoriesChart"></canvas>
             </div>
         </div>
 
-        <div class="row mt-5">
-            <!-- Book Categories -->
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Book Categories</h5>
-                        <canvas id="bookCategoriesChart"></canvas>
-                    </div>
+        <!-- Top 3 Book Rentals This Month -->
+        <div class="card card-medium">
+            <div class="card-body">
+                <h5 class="card-title">Top 3 Book Rentals This Month</h5>
+                <div id="topBooks" class="top-books">
+                    <?php
+                    $topBooks = getTopBooksByMonth();
+                    foreach ($topBooks as $book) {
+                        echo '<a href="StaffBookDetails.php?bookID=' . htmlspecialchars($book['bookID']) . '" class="book-item">';
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($book['bookImage']) . '" alt="' . htmlspecialchars($book['bookTitle']) . '" class="book-img">';
+                        echo '<div class="book-title">' . htmlspecialchars($book['bookTitle']) . '</div>';
+                        echo '</a>';
+                    }
+                    ?>
                 </div>
+            </div>
+
+        </div>
+
+        <!-- Total Book Rental -->
+        <div class="card card-small">
+            <div class="card-body">
+                <div class="card-icon"><i class="fas fa-book-reader"></i></div>
+                <h5 class="card-title">Rented Book</h5>
+                <h2 class="card-text"><?php echo getTotalBookRentals(); ?></h2>
+                <p>Today - <?php echo getTodayBookRentals(); ?> | This month - <?php echo getThisMonthBookRentals(); ?></p>
             </div>
         </div>
 
-        <div class="row mt-5">
-            <!-- Book Ranking by Month -->
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Top 3 Book Rentals This Month</h5>
-                        <div id="topBooks" class="top-books">
-                            <?php
-                            $topBooks = getTopBooksByMonth();
-                            foreach ($topBooks as $book) {
-                                echo '<a href="StaffBookDetails.php?bookID=' . htmlspecialchars($book['bookID']) . '" class="book-item">';
-                                echo '<img src="data:image/jpeg;base64,' . base64_encode($book['bookImage']) . '" alt="' . htmlspecialchars($book['bookTitle']) . '" class="book-img">';
-                                echo '<div class="book-title">' . htmlspecialchars($book['bookTitle']) . '</div>';
-                                echo '</a>';
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
+        <!-- Book Available -->
+        <div class="card card-small">
+            <div class="card-body">
+                <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                <h5 class="card-title">Book Available</h5>
+                <h2 class="card-text"><?php echo getAvailableBooks(); ?></h2>
+            </div>
+        </div>
+
+        <!-- Book Total -->
+        <div class="card card-small">
+            <div class="card-body">
+                <div class="card-icon"><i class="fas fa-book-medical"></i></div>
+                <h5 class="card-title">Total Book</h5>
+                <h2 class="card-text"><?php echo getTotalBooks(); ?></h2>
+            </div>
+        </div>
+
+        <!-- Total Customers -->
+        <div class="card card-small">
+            <div class="card-body">
+                <div class="card-icon"><i class="fas fa-users"></i></div>
+                <h5 class="card-title">Total Customer</h5>
+                <h2 class="card-text"><?php echo getTotalCustomers(); ?></h2>
+            </div>
+        </div>
+
+        <!-- Total Staff -->
+        <div class="card card-small">
+            <div class="card-body">
+                <div class="card-icon"><i class="fas fa-address-card"></i></div>
+                <h5 class="card-title">Total Staff</h5>
+                <h2 class="card-text"><?php echo getTotalStaff(); ?></h2>
             </div>
         </div>
     </div>
-
-    <?php
-    // Function to establish a database connection
-    function getDatabaseConnection() {
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "wormdb";
-
-        // Create connection
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-        return $conn;
-    }
-
-    // Function to get total book rentals
-    function getTotalBookRentals() {
-        $conn = getDatabaseConnection();
-        $sql = "SELECT COUNT(*) as total FROM rental";
-        $result = $conn->query($sql);
-        $row = $result->fetch_assoc();
-        $conn->close();
-        return $row['total'];
-    }
-
-    // Function to get today's book rentals
-    function getTodayBookRentals() {
-        $conn = getDatabaseConnection();
-        $sql = "SELECT COUNT(*) as total FROM rental WHERE DATE(StartDate) = CURDATE()";
-        $result = $conn->query($sql);
-        $row = $result->fetch_assoc();
-        $conn->close();
-        return $row['total'];
-    }
-
-    // Function to get this month's book rentals
-    function getThisMonthBookRentals() {
-        $conn = getDatabaseConnection();
-        $sql = "SELECT COUNT(*) as total FROM rental WHERE MONTH(StartDate) = MONTH(CURDATE()) AND YEAR(StartDate) = YEAR(CURDATE())";
-        $result = $conn->query($sql);
-        $row = $result->fetch_assoc();
-        $conn->close();
-        return $row['total'];
-    }
-
-    // Function to get available books
-    function getAvailableBooks() {
-        $conn = getDatabaseConnection();
-        $sql = "SELECT COUNT(*) as total FROM book WHERE bookStatus = 'available'";
-        $result = $conn->query($sql);
-        $row = $result->fetch_assoc();
-        $conn->close();
-        return $row['total'];
-    }
-
-    // Function to get total books
-    function getTotalBooks() {
-        $conn = getDatabaseConnection();
-        $sql = "SELECT COUNT(*) as total FROM book";
-        $result = $conn->query($sql);
-        $row = $result->fetch_assoc();
-        $conn->close();
-        return $row['total'];
-    }
-
-    // Function to get book categories
-    function getBookCategories() {
-        $conn = getDatabaseConnection();
-        $sql = "SELECT bookCategory, COUNT(*) as count FROM book GROUP BY bookCategory";
-        $result = $conn->query($sql);
-
-        $categories = [];
-        while ($row = $result->fetch_assoc()) {
-            $categories[] = $row;
-        }
-
-        $conn->close();
-        return $categories;
-    }
-
-    // Function to get top rented books for the current month
-    function getTopBooksByMonth() {
-        $conn = getDatabaseConnection();
-        $sql = "SELECT b.bookID, b.bookTitle, b.bookImage, COUNT(r.bookID) as rentals 
-                FROM rental r
-                JOIN book b ON r.bookID = b.bookID
-                WHERE MONTH(r.StartDate) = MONTH(CURDATE()) AND YEAR(r.StartDate) = YEAR(CURDATE())
-                GROUP BY r.bookID
-                ORDER BY rentals DESC
-                LIMIT 3";
-        $result = $conn->query($sql);
-
-        $topBooks = [];
-        while ($row = $result->fetch_assoc()) {
-            $topBooks[] = $row;
-        }
-
-        $conn->close();
-        return $topBooks;
-    }
-
-    $bookCategories = getBookCategories();
-    ?>
-
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const ctx = document.getElementById('bookCategoriesChart').getContext('2d');
@@ -216,6 +251,7 @@ include 'db.php'; // Include your database connection script
                 data: {
                     labels: labels,
                     datasets: [{
+                        label: 'Book Categories',
                         data: data,
                         backgroundColor: backgroundColors,
                         borderColor: borderColors,
@@ -223,14 +259,10 @@ include 'db.php'; // Include your database connection script
                     }]
                 },
                 options: {
+                    responsive: true,
                     scales: {
                         y: {
                             beginAtZero: true
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
                         }
                     }
                 }
@@ -238,4 +270,5 @@ include 'db.php'; // Include your database connection script
         });
     </script>
 </body>
+
 </html>
