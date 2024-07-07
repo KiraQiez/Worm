@@ -7,49 +7,45 @@ include 'StaffHeader.php'; // Include header HTML
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve and sanitize input values
     $userid = htmlspecialchars($_POST["userid"]);
-    $username = htmlspecialchars($_POST["username"]);
-    $fullname = htmlspecialchars($_POST["fullname"]);
-    $gender = htmlspecialchars($_POST["gender"]);
-    $email = htmlspecialchars($_POST["email"]);
-    $password = htmlspecialchars($_POST["password"]);
-    $usertype = htmlspecialchars($_POST["usertype"]);
     $status = htmlspecialchars($_POST["status"]);
 
-    // Check if username and email are the same
-    if ($username === $email) {
-        echo "Error: Username and email cannot be the same.";
-    } else {
-        // Update query
-        $sql = "UPDATE system_users 
-                INNER JOIN customer ON system_users.userid = customer.custid
-                SET system_users.username = ?, system_users.fullname = ?, system_users.gender = ?, 
-                    system_users.email = ?, system_users.password = ?, system_users.usertype = ?, 
-                    customer.status = ?
-                WHERE system_users.userid = ?";
+    // Start a transaction
+    $conn->begin_transaction();
 
-        // Prepare statement
-        if ($stmt = $conn->prepare($sql)) {
+    try {
+        // Update customer table
+        $sql2 = "UPDATE customer 
+                SET status = ? 
+                WHERE custid = ?";
+
+        // Prepare statement for customer
+        if ($stmt2 = $conn->prepare($sql2)) {
             // Bind variables to the prepared statement as parameters
-            $stmt->bind_param("ssssssss", $username, $fullname, $gender, $email, $password, $usertype, $status, $userid);
+            $stmt2->bind_param("ss", $status, $userid);
 
-            // Attempt to execute the prepared statement
-            if ($stmt->execute()) {
-                // Redirect to the main page or a success page
-                header("Location: customerData.php?update=success");
-                exit();
-            } else {
-                echo "Error: Could not execute the update query. " . $conn->error;
-            }
+            // Execute the statement
+            $stmt2->execute();
 
             // Close statement
-            $stmt->close();
+            $stmt2->close();
         } else {
-            echo "Error: Could not prepare the update query. " . $conn->error;
+            throw new Exception("Error preparing statement for customer: " . $conn->error);
         }
 
-        // Close connection
-        $conn->close();
+        // Commit the transaction
+        $conn->commit();
+
+        // Redirect to the main page or a success page
+        header("Location: CustomerRead.php?update=success");
+        exit();
+    } catch (Exception $e) {
+        // Rollback the transaction
+        $conn->rollback();
+        echo "Error: Could not update the records. " . $e->getMessage();
     }
+
+    // Close connection
+    $conn->close();
 } else {
     // Check if the 'id' parameter exists in the URL
     if (isset($_GET['id']) && !empty($_GET['id'])) {
@@ -98,66 +94,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-        }
-        
-        .container {
-            width:500px;
-            height: 100px;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #343a40;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .id-box {
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: bold;
-            color: #495057;
-        }
-    </style>
-</head>
 <body>
-    <div class="container mt-5">
-        <h2>Edit Customer</h2>
+    <div class="container1">
+        <h2>Edit Customer Status</h2>
         <div class="id-box">ID parameter received: <?php echo $userid; ?></div>
-        <form action="customerUpdate.php" method="POST">
+        <form id="updateForm" action="customerUpdate.php" method="POST">
             <input type="hidden" name="userid" value="<?php echo $userid; ?>">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" required>
+                <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" readonly>
                 <label for="username">Username</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="fullname" name="fullname" value="<?php echo $fullname; ?>" required>
+                <input type="text" class="form-control" id="fullname" name="fullname" value="<?php echo $fullname; ?>" readonly>
                 <label for="fullname">Full Name</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="gender" name="gender" value="<?php echo $gender; ?>" required>
+                <select class="form-select" id="gender" name="gender" disabled>
+                    <option value="F" <?php if ($gender == 'F') echo 'selected'; ?>>Female</option>
+                    <option value="M" <?php if ($gender == 'M') echo 'selected'; ?>>Male</option>
+                </select>
                 <label for="gender">Gender</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" required>
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" readonly>
                 <label for="email">Email</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>" required>
+                <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>" readonly>
                 <label for="password">Password</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="usertype" name="usertype" value="<?php echo $usertype; ?>" required>
-                <label for="usertype">User Type</label>
             </div>
             <div class="form-floating mb-3">
                 <select class="form-select" id="status" name="status" required>
@@ -169,9 +133,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-primary me-2">Update</button>
-                <a href="CustomerRead.php" class="btn btn-secondary">Cancel</a>
+                <a href="CustomerRead.php" class="btn-cancel">Cancel</a>
             </div>
-
         </form>
     </div>
+    <script>
+        document.getElementById('updateForm').addEventListener('submit', function(event) {
+            if (!confirm('Are you sure you want to update?')) {
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
+</html>
+
+<?php
+$conn->close();
+?>
