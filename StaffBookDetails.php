@@ -26,7 +26,7 @@ if (isset($_GET['bookID'])) {
 }
 ?>
 
-<div class="main-content d-flex justify-content-center">
+<div class="content">
     <div class="book-details d-flex justify-content-center">
         <div class="book-image">
             <img src="data:image/jpeg;base64,<?php echo base64_encode($book['bookImage']); ?>" alt="Book Image">
@@ -39,14 +39,9 @@ if (isset($_GET['bookID'])) {
             <p><strong>Date Published:</strong> <?php echo htmlspecialchars($book['bookDatePublished']); ?></p>
             <p><strong>Status:</strong> <?php echo htmlspecialchars($book['bookStatus']); ?></p>
             <p><strong>Synopsis:</strong> <?php echo nl2br(htmlspecialchars($book['bookSynopsis'])); ?></p>
-            <form action="CustomerPayment.php" method="GET">
-                <label for="startRent">Start Rent:</label>
-                <input type="date" id="startRent" name="startRent" class="form-control" required>
-                <input type="hidden" name="bookID" value="<?php echo htmlspecialchars($book['bookID']); ?>">
-                <!-- <button type="submit" class="btn btn-success">Checkout</button> -->
-            </form>
         </div>
     </div>
 </div>
 </body>
+
 </html>
