@@ -37,67 +37,6 @@ function getStatusClass($status) {
     }
 }
 ?>
-    <style>
-        .table {
-            width: 100%;
-            margin-bottom: 20px;
-            background-color: #fff;
-            border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .table th, .table td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-        }
-        .table th {
-            background-color: #f8f9fa;
-        }
-        .badge {
-            padding: 0.5em 0.75em;
-            border-radius: 0.7em;
-        }
-        .pagination {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            justify-content: center;
-        }
-        .pagination li {
-            margin: 0 2px;
-        }
-        .pagination a {
-            padding: 8px 12px;
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            border: 1px solid transparent;
-            transition: background-color 0.3s;
-        }
-        .pagination a:hover, .pagination a.active {
-            background-color: #0056b3;
-        }
-        .btn-edit, .btn-delete {
-            padding: 6px 12px;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        .btn-edit {
-            background-color: #17a2b8;
-            color: white;
-        }
-        .btn-edit:hover {
-            background-color: #138496;
-        }
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-        }
-        .btn-delete:hover {
-            background-color: #c82333;
-        }
-    </style>
-</head>
 <body>
     <div class="container mt-5">
         <h2>Customer Details</h2>
