@@ -18,8 +18,9 @@ $result = $stmt->get_result();
         <hr>
         <ul>
             <li><a href="CustomerDashboard.php" ><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="CustomerRental.php" ><i class="fas fa-book"></i> Rental Books</a></li>
+            <li><a href="CustomerRental.php"><i class="fas fa-book"></i> Rental Books</a></li>
             <li><a href="CustomerHistory.php" class="active"><i class="fas fa-history"></i> My History</a></li>
+            <li><a href="CustomerFine.php"><i class="fas fa-dollar-sign"></i> Pay Fine</a></li>
         </ul>
     </div>
     <div class="rent-content">

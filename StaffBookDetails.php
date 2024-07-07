@@ -26,7 +26,7 @@ if (isset($_GET['bookID'])) {
 }
 ?>
 
-<div class="content">
+<div class="contentBD">
     <div class="book-details d-flex justify-content-center">
         <div class="book-image">
             <img src="data:image/jpeg;base64,<?php echo base64_encode($book['bookImage']); ?>" alt="Book Image">
