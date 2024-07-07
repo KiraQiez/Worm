@@ -71,59 +71,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #343a40;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .form-control:focus {
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            border-color: #545b62;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Staff</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container1">
         <h2>Create Staff</h2>
         <?php if (!empty($message)) : ?>
             <div class="alert alert-info"><?php echo $message; ?></div>
@@ -156,7 +110,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-floating mb-3">
                 <select class="form-select" id="stafftype" name="stafftype" required>
                     <option value="" disabled selected>Select Staff Type</option>
-                    <option value="admin">Admin</option>
                     <option value="manager">Manager</option>
                     <option value="employee">Employee</option>
                 </select>
