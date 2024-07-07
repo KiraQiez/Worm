@@ -10,7 +10,7 @@ include 'db.php'; // Include your database connection script
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Total Book Rental</h5>
+                        <h5 class="card-title"><i class="fas fa-book"></i>Total Book Rental</h5>
                         <h2 class="card-text"><?php echo getTotalBookRentals(); ?></h2>
                         <p>Today - <?php echo getTodayBookRentals(); ?> This month - <?php echo getThisMonthBookRentals(); ?></p>
                     </div>
@@ -58,7 +58,7 @@ include 'db.php'; // Include your database connection script
                             <?php
                             $topBooks = getTopBooksByMonth();
                             foreach ($topBooks as $book) {
-                                echo '<a href="bookDetails.php?bookID=' . htmlspecialchars($book['bookID']) . '" class="book-item">';
+                                echo '<a href="StaffBookDetails.php?bookID=' . htmlspecialchars($book['bookID']) . '" class="book-item">';
                                 echo '<img src="data:image/jpeg;base64,' . base64_encode($book['bookImage']) . '" alt="' . htmlspecialchars($book['bookTitle']) . '" class="book-img">';
                                 echo '<div class="book-title">' . htmlspecialchars($book['bookTitle']) . '</div>';
                                 echo '</a>';
@@ -237,44 +237,5 @@ include 'db.php'; // Include your database connection script
             });
         });
     </script>
-
-    <style>
-        .top-books {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .book-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 10px;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-            width: 80%;
-            text-decoration: none;
-            color: inherit;
-        }
-        .book-item:hover {
-            background-color: #f0f0f0;
-        }
-        .book-img {
-            width: 50px;
-            height: 50px;
-            margin-right: 15px;
-            border-radius: 5px;
-        }
-        .book-title {
-            font-size: 16px;
-            font-weight: 500;
-            color: #333;
-        }
-    </style>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
