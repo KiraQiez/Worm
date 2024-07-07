@@ -78,6 +78,7 @@ if ($_SESSION['usertype'] != "staff") {
                 </li>
 
                 <li><a href="StaffReport.php">Report</a></li>
+                <li><a href="StaffFeedbackForm.php">Feedback</a></li>
             </ul>
         </div>
         <div class="user-profile">
