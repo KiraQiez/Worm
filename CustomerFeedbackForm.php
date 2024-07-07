@@ -4,20 +4,19 @@ include 'db.php'; // Include your database connection file
 include 'CustomerHeader.php'; // Include the customer header file
 
 // Initialize variables for form values
-$feedbID = $rating = $description = '';
+$rating = $description = '';
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
-    $feedbID = $_POST['feedbID'];
     $rating = $_POST['rating'];
     $description = $_POST['description'];
     // Assuming RentalID needs to be fetched or set somehow, adjust as per your logic
     $rentalID = $_POST['rentalID'];
 
     // Prepare SQL statement to insert data
-    $query = "INSERT INTO feedback (feedbID, Rating, Description, RentalID) 
-              VALUES ('$feedbID', '$rating', '$description', '$rentalID')";
+    $query = "INSERT INTO feedback (Rating, Description, RentalID) 
+              VALUES ('$rating', '$description', '$rentalID')";
 
     // Execute query
     if (mysqli_query($conn, $query)) {
@@ -60,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="content">
             <h1>FEEDBACK FORM</h1>
             <form action="CustomerFeedbackForm.php" method="post">
-                <input type="text" name="feedbID" placeholder="Feedback ID" required>
                 <!-- Assuming RentalID is entered by user or fetched from somewhere -->
                 <input type="text" name="rentalID" placeholder="Rental ID" required>
                 <select name="rating" required>
