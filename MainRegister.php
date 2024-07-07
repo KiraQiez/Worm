@@ -46,7 +46,7 @@ include 'db.php';
 <?php
 function generate_std_id($conn)
 {
-    $sql = "SELECT userid FROM system_users ORDER BY userid DESC LIMIT 1";
+    $sql = "SELECT userid FROM system_users WHERE userid LIKE 'U%' ORDER BY userid DESC LIMIT 1;";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

@@ -47,25 +47,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
     $conn->begin_transaction();
 
     try {
-        // Delete from customer table first
-        $sql1 = "DELETE FROM customer WHERE custid = ?";
+        // Delete from payment table first
+        $sql1 = "DELETE FROM payment WHERE rentalID IN (SELECT rentalID FROM rental WHERE custID = ?)";
         $stmt1 = $conn->prepare($sql1);
         $stmt1->bind_param("s", $userid);
         $stmt1->execute();
         $stmt1->close();
 
-        // Delete from system_users table
-        $sql2 = "DELETE FROM system_users WHERE userid = ?";
+        // Delete from rental table
+        $sql2 = "DELETE FROM rental WHERE custID = ?";
         $stmt2 = $conn->prepare($sql2);
         $stmt2->bind_param("s", $userid);
         $stmt2->execute();
         $stmt2->close();
 
+        // Delete from customer table
+        $sql3 = "DELETE FROM customer WHERE custid = ?";
+        $stmt3 = $conn->prepare($sql3);
+        $stmt3->bind_param("s", $userid);
+        $stmt3->execute();
+        $stmt3->close();
+
+        // Delete from system_users table
+        $sql4 = "DELETE FROM system_users WHERE userid = ?";
+        $stmt4 = $conn->prepare($sql4);
+        $stmt4->bind_param("s", $userid);
+        $stmt4->execute();
+        $stmt4->close();
+
         // Commit transaction
         $conn->commit();
 
         // Redirect to the customer data page with success message
-        header("Location: customerData.php?delete=success");
+        header("Location: CustomerRead.php?delete=success");
         exit();
     } catch (mysqli_sql_exception $exception) {
         // Rollback transaction
@@ -78,73 +92,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
     $conn->close();
 }
 ?>
-<!DOCTYPE html>
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this customer?');
+        }
+    </script>
+    
+    <!DOCTYPE html>
 <html lang="en">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #343a40;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .form-control:focus {
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            border-color: #545b62;
-        }
-
-        .id-box {
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: bold;
-            color: #495057;
-        }
-    </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Staff</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
 <body>
-    <div class="container">
+    <div class="container1">
         <h2>Delete Customer</h2>
         <div class="id-box">ID: <?php echo $userid; ?></div>
-        <form method="POST" action="CustomerDelete.php?id=<?php echo $userid; ?>">
+        <form method="POST" action="CustomerDelete.php?id=<?php echo $userid; ?>" onsubmit="return confirmDelete()">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" disabled>
                 <label for="username">Username</label>
@@ -174,9 +140,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
             </div>
             <div class="d-flex justify-content-between">
                 <button type="submit" name="confirm" class="btn btn-danger me-2">Delete</button>
-                <a href="CustomerRead.php" class="btn btn-secondary">Cancel</a>
+                <a href="CustomerRead.php" class="btn btn-secondary btn-cancel">Cancel</a>
             </div>
         </form>
     </div>
 </body>
 </html>
+
+<?php
+$conn->close();
+?>

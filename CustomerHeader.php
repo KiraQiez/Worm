@@ -67,6 +67,7 @@ if ($_SESSION['usertype'] != "customer") {
     <link rel="stylesheet" href="rsc/styles.css">
     <link rel="stylesheet" href="rsc/main.css">
     <link rel="stylesheet" href="rsc/customer.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

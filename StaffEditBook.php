@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Update the book details in the database
     if ($image) {
         $stmt = $conn->prepare("UPDATE book SET bookTitle = ?, bookAuthor = ?, bookCategory = ?, bookPrice = ?, bookSynopsis = ?, bookDatePublished = ?, bookStatus = ?, bookImage = ? WHERE bookID = ?");
         $stmt->bind_param('sssssssss', $title, $author, $category, $price, $synopsis, $datePublished, $status, $image, $bookID);
@@ -66,11 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt->execute();
 
-    header('Location: StaffBookList.php');
+    // Set success message and redirect
+    $_SESSION['success'] = "Book details updated successfully!";
+    header('Location: StaffEditBook.php?bookID=' . $bookID);
     exit;
 }
 
-// Prepare and execute the select statement to fetch the book details
+// Fetch the book details for editing
 $stmt = $conn->prepare("SELECT * FROM book WHERE bookID = ?");
 $stmt->bind_param('s', $bookID);
 $stmt->execute();
@@ -143,7 +146,7 @@ if (!$book) {
                 </div>
                 <div class="form-group">
                     <button type="submit" class="primary">Save</button>
-                    <button type="button" onclick="history.back()" class="delete">Back</button>
+                    <button type="button" onclick="window.location.href = 'StaffBookList.php'" class="delete">Back</button>
                 </div>
             </form>
         </div>
@@ -151,7 +154,7 @@ if (!$book) {
 </div>
 
 <script>
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function() {
         <?php
         if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
             foreach ($_SESSION['errors'] as $error) {
@@ -160,8 +163,22 @@ if (!$book) {
             unset($_SESSION['errors']); // Clear errors after displaying
         }
         ?>
+
+        <?php
+        if (isset($_SESSION['success'])) {
+            echo "Swal.fire({
+                icon: 'success',
+                title: 'Book details updated successfully!',
+                text: 'Redirecting to Book List...',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                location.href = 'StaffBookList.php';
+            });";
+            unset($_SESSION['success']);
+        }
+        ?>
     });
 </script>
 </body>
-
 </html>
