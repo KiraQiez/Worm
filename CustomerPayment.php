@@ -2,6 +2,14 @@
 include 'CustomerHeader.php';
 include 'db.php';
 
+if ($status == "Suspend") {
+    echo "<script> 
+    alert('Wait how??? Pay your fine!!!.');
+    location.href='CustomerFine.php';
+    </script>";
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Validate and sanitize input
     $bookID = intval($_POST['bookID']);

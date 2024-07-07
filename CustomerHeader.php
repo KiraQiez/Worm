@@ -28,6 +28,20 @@ if ($result) {
     }
 }
 
+
+//Check if the user status is suspended
+$sqlStatus = "SELECT status FROM customer WHERE custid = '$userid'";
+$resultStatus = mysqli_query($conn, $sqlStatus); 
+$status = "";
+
+if ($resultStatus) {
+    $row = mysqli_fetch_assoc($resultStatus);
+    if ($row) {
+        $status = $row['status'];
+    }
+}
+
+
 if ($_SESSION['usertype'] != "customer") {
     echo "<script> 
     alert('You are not authorized to access this page.');
@@ -35,6 +49,9 @@ if ($_SESSION['usertype'] != "customer") {
     </script>";
     exit;
 }
+
+
+
 ?>
 
 <!DOCTYPE html>
