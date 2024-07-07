@@ -6,6 +6,7 @@ $sql = "SELECT book.bookTitle, book.bookAuthor, book.bookImage , rental.EndDate,
         FROM book
         INNER JOIN rental ON book.bookID = rental.BookID
         WHERE rental.CustID = ? AND rental.RentalStatus = 'out'
+        ORDER BY  rental.EndDate ASC
         LIMIT 4";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $userid);
@@ -38,14 +39,27 @@ $result = $stmt->get_result();
             <div class="rent-list img-fluid d-flex">
                 <?php
                 if ($result->num_rows > 0) {
+                    $today = new DateTime();
                     while ($row = $result->fetch_assoc()) {
+                        $dueDate = new DateTime($row['EndDate']);
+                        $interval = $today->diff($dueDate);
+                        $daysLeft = $interval->days;
+                        $pastDue = ($interval->invert == 1);
+
+                        $dueClass = '';
+                        if ($pastDue) {
+                            $dueClass = 'text-danger';
+                        } else if ($daysLeft <= 10) {
+                            $dueClass = 'text-warning';
+                        }
+
                         echo '<div class="rent-card">';
                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row['bookImage']) . '" alt="' . $row['bookTitle'] . '">';
                         echo '<h3 class="title">' . $row['bookTitle'] . '</h3>';
                         echo '<p class="author">' . $row['bookAuthor'] . '</p>';
-                        $date = $row['EndDate'];
-                        $formattedDate = date('d/m/Y', strtotime($date));
-                        echo '<p class="due"> Due: ' . $formattedDate .   '</p>';
+                        
+                        $formattedDate = $dueDate->format('d/m/Y');
+                        echo '<p class="due ' . $dueClass . '"> Due: ' . $formattedDate . '</p>';
                         echo '</div>';
                     }
                 }
@@ -67,10 +81,11 @@ $result = $stmt->get_result();
                 <h5>My History ⌚</h5>
                 <?php
                 $sqlHistory = "SELECT book.bookTitle, book.bookAuthor, book.bookImage , rental.EndDate, rental.RentalStatus
-                 FROM book
-                 INNER JOIN rental ON book.bookID = rental.BookID
-                 WHERE rental.CustID = ? AND rental.RentalStatus = 'out'
-                 LIMIT 4";
+                FROM book
+                INNER JOIN rental ON book.bookID = rental.BookID
+                WHERE rental.CustID = ?
+                ORDER BY rental.RentalID DESC
+                LIMIT 4";
                 $stmtHistory = $conn->prepare($sqlHistory);
                 $stmtHistory->bind_param("s", $userid);
                 $stmtHistory->execute();
@@ -94,37 +109,37 @@ $result = $stmt->get_result();
             <div class="cont">
                 <h5>Best Selling Books 🚀</h5>
                 <?php
-                $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book  LIMIT 4";
-                $result2 = $conn->query($sql2);
-                if ($result->num_rows > 0) {
-                    while ($row2 = $result2->fetch_assoc()) {
+                // Best Selling Books
+                $sqlBestSelling = "SELECT bookTitle, bookAuthor, bookImage FROM book LIMIT 4";
+                $resultBestSelling = $conn->query($sqlBestSelling);
+                if ($resultBestSelling->num_rows > 0) {
+                    while ($row = $resultBestSelling->fetch_assoc()) {
                         echo '<div class="book-item">';
-                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row['bookImage']) . '" alt="' . $row['bookTitle'] . '">';
                         echo '<div>';
-                        echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
-                        echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
+                        echo '<h3 class="book-title">' . $row['bookTitle'] . '</h3>';
+                        echo '<p class="book-author">' . $row['bookAuthor'] . '</p>';
                         echo '</div>';
                         echo '</div>';
                     }
                 } else {
                     echo '<p>No best selling books available.</p>';
-                }
-                ?>
+                } ?>
 
             </div>
             <div class="cont popular-reads">
                 <h5>Random Picks ⭐ </h5>
 
                 <?php
-                $sql2 = "SELECT bookTitle, bookAuthor, bookImage FROM book ORDER BY RAND() LIMIT 4";
-                $result2 = $conn->query($sql2);
-                if ($result->num_rows > 0) {
-                    while ($row2 = $result2->fetch_assoc()) {
+                $sqlRandomPicks = "SELECT bookTitle, bookAuthor, bookImage FROM book ORDER BY RAND() LIMIT 4";
+                $resultRandomPicks = $conn->query($sqlRandomPicks);
+                if ($resultRandomPicks->num_rows > 0) {
+                    while ($row = $resultRandomPicks->fetch_assoc()) {
                         echo '<div class="book-item">';
-                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row2['bookImage']) . '" alt="' . $row2['bookTitle'] . '">';
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row['bookImage']) . '" alt="' . $row['bookTitle'] . '">';
                         echo '<div>';
-                        echo '<h3 class="book-title">' . $row2['bookTitle'] . '</h3>';
-                        echo '<p class="book-author">' . $row2['bookAuthor'] . '</p>';
+                        echo '<h3 class="book-title">' . $row['bookTitle'] . '</h3>';
+                        echo '<p class="book-author">' . $row['bookAuthor'] . '</p>';
                         echo '</div>';
                         echo '</div>';
                     }
