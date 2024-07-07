@@ -10,14 +10,14 @@ $query = "
         feedback.Rating,
         feedback.Description,
         rental.RentalID,
-        rental.custid;
+        rental.custid,
         book.bookTitle
     FROM 
         feedback
     JOIN 
         rental ON feedback.RentalID = rental.RentalID
     JOIN 
-        book ON rental.bookID = book.BookID
+        book ON rental.bookID = book.bookID
 ";
 
 $result = mysqli_query($conn, $query);
@@ -32,13 +32,13 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff View of Customer Feedback</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Make sure to have a CSS file for styling -->
+    <link rel="stylesheet" href="styles.css"> <!-- Ensure this file contains the CSS above -->
 </head>
 <body>
     <div class="main-content">
         <div class="content">
-            <h1>Customer Feedback</h1>
-            <table border="1">
+            <h1><b>Customer Feedback</b></h1>
+            <table class="styled-table">
                 <thead>
                     <tr>
                         <th>Rental ID</th>
@@ -53,7 +53,7 @@ if (!$result) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($row['RentalID']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['custID']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['custid']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['bookTitle']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['Rating']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['Description']) . "</td>";

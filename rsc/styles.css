@@ -1,3 +1,5 @@
+/* Existing styles here */
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 :root {
@@ -13,8 +15,6 @@ body {
     padding: 0;
     font-family: 'Roboto', sans-serif;
     background-color: #F5F4FF;
-   
-
 }
 
 .headerbg {
@@ -23,7 +23,6 @@ body {
     width: 100%;
     height: 300px;
     justify-content: flex;
-
 }
 
 .header-content {
@@ -42,10 +41,8 @@ body {
     border-color: #FF5751;
 }
 
-
 .main-content {
     padding: 20px;
-
 }
 
 .header {
@@ -87,7 +84,6 @@ body {
 .nav ul li a {
     text-decoration: none;
     color: var(--link-color);
-
 }
 
 .nav ul li a:hover {
@@ -276,7 +272,6 @@ body {
     text-align: right;
 }
 
-
 .info img {
     width: auto;
     height: 150px;
@@ -323,14 +318,10 @@ body {
     width: 70%;
 }
 
-
-
 .terms-container li {
     margin-bottom: 10px;
     color: #666;
-
 }
-
 
 .contact-container {
     background-color: white;
@@ -417,5 +408,46 @@ body {
     }
 }
 
+/* Styles for Feedback Table */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 1em;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
 
+.styled-table thead tr {
+    background-color: #c1b3a5ea;
+    color: #ffffff;
+    text-align: left;
+}
 
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    border-right: 1px solid #dddddd;
+}
+
+.styled-table th:last-child,
+.styled-table td:last-child {
+    border-right: none;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid  #c1b3a5ea;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color:  #c1b3a5ea;
+}

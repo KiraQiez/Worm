@@ -1,8 +1,49 @@
 <?php
-    $title = "Catalogue";
-    include 'db.php';
-    include 'CustomerHeader.php';
+$title = "Catalogue";
+include 'db.php'; // Include your database connection file
+include 'CustomerHeader.php'; // Include the customer header file
+
+// Initialize variables for form values
+$rating = $description = '';
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $rating = $_POST['rating'];
+    $description = $_POST['description'];
+    // Assuming RentalID needs to be fetched or set somehow, adjust as per your logic
+    $rentalID = $_POST['rentalID'];
+
+    // Prepare SQL statement to insert data
+    $query = "INSERT INTO feedback (Rating, Description, RentalID) 
+              VALUES ('$rating', '$description', '$rentalID')";
+
+    // Execute query
+    if (mysqli_query($conn, $query)) {
+        echo "<script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Feedback submitted!',
+                    text: 'Redirecting to your dashboard...',
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    location.href = 'CustomerDashboard.php';
+                });
+              </script>";
+    } else {
+        echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Feedback submission failed. Please try again later.',
+                    showConfirmButton: true
+                });
+              </script>";
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,13 +51,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Form</title>
     <link rel="stylesheet" href="feedbackform.css">
+    <!-- Include SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
     <div class="main-content">
         <div class="content">
             <h1>FEEDBACK FORM</h1>
-            <form action="process_feedback.php" method="post">
-                <input type="text" name="feedbID" placeholder="Rental id" required>
+            <form action="CustomerFeedbackForm.php" method="post">
+                <!-- Assuming RentalID is entered by user or fetched from somewhere -->
+                <input type="text" name="rentalID" placeholder="Rental ID" required>
                 <select name="rating" required>
                     <option value="" disabled selected>Rate your experience</option>
                     <option value="1">1</option>
@@ -33,5 +77,7 @@
             </form>
         </div>
     </div>
+    <!-- Include SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </body>
 </html>
