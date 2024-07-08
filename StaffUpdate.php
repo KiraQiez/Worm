@@ -1,151 +1,163 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 include 'db.php'; // Include your database connection
-$title = "Customer Update"; // Title of the page
-include 'StaffHeader.php'; // Include header HTML
 
-// Check if the form was submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve and sanitize input values
-    $userid = htmlspecialchars($_POST["userid"]);
-    $username = htmlspecialchars($_POST["username"]);
-    $fullname = htmlspecialchars($_POST["fullname"]);
-    $gender = htmlspecialchars($_POST["gender"]);
-    $email = htmlspecialchars($_POST["email"]);
-    $password = htmlspecialchars($_POST["password"]);
-    $usertype = htmlspecialchars($_POST["usertype"]);
-    $stafftype = htmlspecialchars($_POST["stafftype"]);
+// Ensure usertype is set in the session to avoid undefined index warnings
+if (!isset($_SESSION['usertype'])) {
+    $_SESSION['usertype'] = null;
+}
 
-    // Check if username and email are the same
-    if ($username === $email) {
-        echo "Error: Username and email cannot be the same.";
-    } else {
-        // Update query
-        $sql = "UPDATE system_users 
-                INNER JOIN staff ON system_users.userid = staff.staffid
-                SET system_users.username = ?, system_users.fullname = ?, system_users.gender = ?, 
-                    system_users.email = ?, system_users.password = ?, system_users.usertype = ?, 
-                    staff.stafftype = ?
-                WHERE system_users.userid = ?";
+// Initialize variables
+$userid = "";
+$username = "";
+$fullname = "";
+$email = "";
+$stafftype = "";
 
-        // Prepare statement
-        if ($stmt = $conn->prepare($sql)) {
-            // Bind variables to the prepared statement as parameters
-            $stmt->bind_param("ssssssss", $username, $fullname, $gender, $email, $password, $usertype, $stafftype, $userid);
+// Check if the 'id' parameter exists in the URL
+if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $userid = htmlspecialchars($_GET['id']);
 
-            // Attempt to execute the prepared statement
-            if ($stmt->execute()) {
-                // Redirect to the main page or a success page
-                header("Location: staffData.php?update=success");
-                exit();
-            } else {
-                echo "Error: Could not execute the update query. " . $conn->error;
-            }
-
-            // Close statement
-            $stmt->close();
-        } else {
-            echo "Error: Could not prepare the update query. " . $conn->error;
-        }
-
-        // Close connection
-        $conn->close();
-    }
-} else {
-    // Check if the 'id' parameter exists in the URL
-    if (isset($_GET['id']) && !empty($_GET['id'])) {
-        $userid = htmlspecialchars($_GET['id']);
-
-        // Fetch existing data to prefill the form
-        $sql = "SELECT system_users.userid, system_users.username, system_users.fullname, system_users.gender, 
-                       system_users.email, system_users.password, system_users.usertype, staff.stafftype 
-                FROM system_users 
-                INNER JOIN staff ON system_users.userid = staff.staffid 
-                WHERE system_users.userid = ?";
-        
-        if ($stmt = $conn->prepare($sql)) {
-            // Bind variables to the prepared statement as parameters
-            $stmt->bind_param("s", $userid);
-
-            // Attempt to execute the prepared statement
-            $stmt->execute();
-
-            // Fetch the result
-            $result = $stmt->get_result();
-
-            if ($result->num_rows == 1) {
-                $row = $result->fetch_assoc();
-                $username = $row['username'];
-                $fullname = $row['fullname'];
-                $gender = $row['gender'];
-                $email = $row['email'];
-                $password = $row['password'];
-                $usertype = $row['usertype'];
-                $stafftype = $row['stafftype'];
-            } else {
-                echo "No records found for the provided ID.";
-                exit();
-            }
-
-            // Close statement
-            $stmt->close();
-        } else {
-            echo "Error: Could not prepare the select query. " . $conn->error;
-            exit();
-        }
-    } else {
-        echo "Error: Invalid ID parameter.";
+    // Check if the logged-in user is trying to delete themselves
+    if ($userid == $_SESSION['userid']) {
+        echo "<script>alert('Error: You cannot delete your own account.'); location.href='StaffRead.php';</script>";
         exit();
     }
+
+    // Fetch existing data to show the details before deletion
+    $sql = "SELECT system_users.userid, system_users.username, system_users.fullname, system_users.email, staff.stafftype 
+            FROM system_users 
+            INNER JOIN staff ON system_users.userid = staff.staffid 
+            WHERE system_users.userid = ?";
+    
+    if ($stmt = $conn->prepare($sql)) {
+        // Bind variables to the prepared statement as parameters
+        $stmt->bind_param("s", $userid);
+
+        // Attempt to execute the prepared statement
+        $stmt->execute();
+
+        // Fetch the result
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            $username = $row['username'];
+            $fullname = $row['fullname'];
+            $email = $row['email'];
+            $stafftype = $row['stafftype'];
+        } else {
+            echo "<script>alert('No records found for the provided ID.'); location.href='StaffRead.php';</script>";
+            exit();
+        }
+
+        // Close statement
+        $stmt->close();
+    } else {
+        echo "<script>alert('Error: Could not prepare the select query. " . $conn->error . "'); location.href='StaffRead.php';</script>";
+        exit();
+    }
+} else {
+    echo "<script>alert('Error: Invalid ID parameter.'); location.href='StaffRead.php';</script>";
+    exit();
+}
+
+// Handle the form submission for deletion
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Begin transaction
+    $conn->begin_transaction();
+
+    try {
+        // Delete related records from customer table first
+        $sql1 = "DELETE FROM customer WHERE custid = ?";
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->bind_param("s", $userid);
+        $stmt1->execute();
+        $stmt1->close();
+
+        // Delete from staff table
+        $sql2 = "DELETE FROM staff WHERE staffid = ?";
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->bind_param("s", $userid);
+        $stmt2->execute();
+        $stmt2->close();
+
+        // Then delete from system_users table
+        $sql3 = "DELETE FROM system_users WHERE userid = ?";
+        $stmt3 = $conn->prepare($sql3);
+        $stmt3->bind_param("s", $userid);
+        $stmt3->execute();
+        $stmt3->close();
+
+        // Commit transaction
+        $conn->commit();
+
+        // Redirect to the list of staff
+        header("Location: StaffRead.php?delete=success");
+        exit();
+    } catch (Exception $e) {
+        // Rollback transaction
+        $conn->rollback();
+        echo "<script>alert('Error: Could not execute the delete queries. " . $e->getMessage() . "');</script>";
+    }
+
+    // Close connection
+    $conn->close();
 }
 ?>
+
+<?php
+// Include header HTML after the PHP logic to avoid output before header redirect
+include 'StaffHeader.php';
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Staff</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <script>
+        function confirmDelete(event) {
+            if (!confirm('Are you sure you want to delete this staff member?')) {
+                event.preventDefault();
+            }
+        }
+    </script>
+</head>
 <body>
     <div class="container1">
-        <h2>Edit Staff</h2>
+        <h2>Delete Staff</h2>
         <div class="id-box">ID parameter received: <?php echo $userid; ?></div>
-        <form action="StaffUpdate.php" method="POST">
-            <input type="hidden" name="userid" value="<?php echo $userid; ?>">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" required>
-                <label for="username">Username</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="fullname" name="fullname" value="<?php echo $fullname; ?>" required>
-                <label for="fullname">Full Name</label>
-            </div>
-            <div class="form-floating mb-3">
-                <select class="form-select" id="gender" name="gender" required>
-                    <option value="M" <?php if ($gender == 'M') echo 'selected'; ?>>Male</option>
-                    <option value="F" <?php if ($gender == 'F') echo 'selected'; ?>>Female</option>
-                </select>
-                <label for="gender">Gender</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" required>
-                <label for="email">Email</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>" required>
-                <label for="password">Password</label>
-            </div>
-            <div class="form-floating mb-3">
-                <select class="form-select" id="usertype" name="usertype" required>
-                    <option value="admin" <?php if ($usertype == 'admin') echo 'selected'; ?>>Admin</option>
-                    <option value="staff" <?php if ($usertype == 'staff') echo 'selected'; ?>>Staff</option>
-                </select>
-                <label for="usertype">User Type</label>
-            </div>
-            <div class="form-floating mb-3">
-                <select class="form-select" id="stafftype" name="stafftype" required>
-                    <option value="admin" <?php if ($stafftype == 'admin') echo 'selected'; ?>>Admin</option>
-                    <option value="manager" <?php if ($stafftype == 'manager') echo 'selected'; ?>>Manager</option>
-                    <option value="employee" <?php if ($stafftype == 'employee') echo 'selected'; ?>>Employee</option>
-                </select>
-                <label for="stafftype">Staff Type</label>
-            </div>
+        <div class="mb-3">
+            <strong>Username:</strong> <?php echo $username; ?>
+        </div>
+        <div class="mb-3">
+            <strong>Full Name:</strong> <?php echo $fullname; ?>
+        </div>
+        <div class="mb-3">
+            <strong>Email:</strong> <?php echo $email; ?>
+        </div>
+        <div class="mb-3">
+            <strong>Staff Type:</strong> <?php echo $stafftype; ?>
+        </div>
+        <form action="StaffDelete.php?id=<?php echo $userid; ?>" method="POST" onsubmit="confirmDelete(event)">
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary me-2">Update</button>
+                <button type="submit" class="btn btn-danger me-2">Delete</button>
                 <a href="StaffRead.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
 </body>
+</html>
+
+<?php
+// Close connection if still open
+if ($conn) {
+    $conn->close();
+}
+?>
