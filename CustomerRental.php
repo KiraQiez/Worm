@@ -35,7 +35,7 @@ if (isset($_POST['return'])) {
     $bookID = $_POST['bookID'];
     
     // Update rental status
-    $sql = "UPDATE rental SET RentalStatus = 'returned' WHERE BookID = ? AND CustID = ?";
+    $sql = "UPDATE rental SET RentalStatus = 'Request' WHERE BookID = ? AND CustID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("is", $bookID, $userid);
     $stmt->execute();

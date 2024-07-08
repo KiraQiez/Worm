@@ -92,9 +92,9 @@ if (isset($_POST['submit'])) {
             <p class="user text-center">
                 <?php echo htmlspecialchars($row['fullname']); ?>
                 <?php if ($row['gender'] == 'M') : ?>
-                    <span class="badge badge-primary ms-2">M</span>
+                    <span class="badge badge-primary ms-2" style="background-color:#3572EF;">M</span>
                 <?php else : ?>
-                    <span class="badge badge-danger ms-2">F</span>
+                    <span class="badge badge-danger ms-2" style="background-color:red;">F</span>
                 <?php endif; ?>
             </p>
             <div class="ping-container" style="display: none;">
