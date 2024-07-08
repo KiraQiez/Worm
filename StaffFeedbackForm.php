@@ -32,7 +32,7 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff View of Customer Feedback</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Ensure this file contains the CSS above -->
+  
 </head>
 <body>
     <div class="main-content">
