@@ -97,15 +97,6 @@ $showStaffDropdown = ($staffType == 'manager');
                         </div>
                     </li>
                 <?php endif; ?>
-                <li class="dropdown">
-                    <a href="#">Transaction</a>
-                    <i class="fas fa-caret-down"></i>
-                    <div class="dropdown-menu">
-                        <a href="#">Transaction Data</a>
-                        <a href="#">Insert Transaction</a>
-                        <a href="#">Update Transaction</a>
-                    </div>
-                </li>
                 <li><a href="StaffReport.php">Report</a></li>
                 <li><a href="StaffFeedbackForm.php">Feedback</a></li>
             </ul>

@@ -5,13 +5,18 @@ include 'CustomerHeader.php'; // Include the customer header file
 
 // Initialize variables for form values
 $rating = $description = '';
+$rentalID = '';
+
+// Get the rentalID from the URL
+if (isset($_GET['rentalID'])) {
+    $rentalID = $_GET['rentalID'];
+}
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
     $rating = $_POST['rating'];
     $description = $_POST['description'];
-    // Assuming RentalID needs to be fetched or set somehow, adjust as per your logic
     $rentalID = $_POST['rentalID'];
 
     // Prepare SQL statement to insert data
@@ -59,8 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="content">
             <h1>FEEDBACK FORM</h1>
             <form action="CustomerFeedbackForm.php" method="post">
-                <!-- Assuming RentalID is entered by user or fetched from somewhere -->
-                <input type="text" name="rentalID" placeholder="Rental ID" required>
+                <input type="hidden" name="rentalID" value="<?php echo htmlspecialchars($rentalID); ?>">
                 <select name="rating" required>
                     <option value="" disabled selected>Rate your experience</option>
                     <option value="1">1</option>

@@ -3,9 +3,24 @@ $title = "Library";
 include 'CustomerHeader.php';
 include 'db.php';
 
-// Fetch books from database
-$query = "SELECT * FROM book";
-$result = $conn->query($query);
+// Set a date for checking availability (e.g., 2024-07-01)
+$checkDate = isset($_GET['checkDate']) ? $_GET['checkDate'] : date('Y-m-d');
+$userid = $_SESSION['userid']; // Assuming userid is stored in session
+
+// Fetch books from database that are available on the check date
+$query = "
+    SELECT b.*
+    FROM book b
+    LEFT JOIN rental r ON b.bookID = r.BookID AND r.RentalStatus IN ('Rented', 'Reserved') 
+    AND (
+        (r.StartDate <= ? AND r.EndDate >= ?) OR
+        (r.StartDate <= DATE_ADD(?, INTERVAL 60 DAY) AND r.EndDate >= DATE_ADD(?, INTERVAL 60 DAY))
+    )
+    WHERE b.bookStatus = 'available' AND r.BookID IS NULL";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('ssss', $checkDate, $checkDate, $checkDate, $checkDate);
+$stmt->execute();
+$result = $stmt->get_result();
 $books = $result->fetch_all(MYSQLI_ASSOC);
 
 $selectedCategories = isset($_GET['categories']) ? explode(',', $_GET['categories']) : [];
@@ -22,17 +37,13 @@ function displayBooks($books, $selectedCategories)
 
 $filteredBooks = displayBooks($books, $selectedCategories);
 
-
 //Check if user have due books and if have set user to suspend
-$sql = "SELECT * FROM rental WHERE CustID = '$userid' AND RentalStatus = 'Rent' AND EndDate < CURDATE()";
+$sql = "SELECT * FROM rental WHERE CustID = '$userid' AND RentalStatus = 'Rented' AND EndDate < CURDATE()";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $sqlUpdate = "UPDATE customer SET Status = 'Suspend' WHERE CustID = '$userid'";
-} 
-
+}
 ?>
-
-
 
 <div class="main-content">
     <div class="sidebar">
@@ -106,50 +117,38 @@ if ($result->num_rows > 0) {
                             <img src="data:image/jpeg;base64,<?php echo base64_encode($book['bookImage']); ?>" alt="Book Image">
                             <p class="book-title"><?php echo $book['bookTitle']; ?></p>
                             <p class="book-author"><?php echo $book['bookAuthor']; ?></p>
-                            <?php if($status == 'Suspend'){
+                            <?php if ($status == 'Suspend') {
                                 echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SuspendModal">View</button>';
-                            }
-                            else{
+                            } else {
                                 echo '<a href="CustomerBookDetails.php?bookID=' . $book['bookID'] . '" class="btn btn-primary">View</a>';
-                            }?>
-                            
+                            } ?>
+
                         </div>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
-            
+
         </div>
     </div>
-
-    
-
     <div class="modal fade" id="SuspendModal" tabindex="-1" aria-labelledby="suspendModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body d-flex justify-content-center align-items-center">
-                <div class="card p-4">
-                    <h1 class="title text-center mb-4">Account Suspended</h1>
-                    <img src="rsc/image/due.gif" alt="Due hamster" class="img-fluid mx-auto d-block">
-                    <div class="alert alert-danger text-center" role="alert">
-                        <strong>Important:</strong> Immediate action is required to lift the suspension. You can must return the overdue books and pay the fines associated with them.
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <div class="card p-4">
+                        <h1 class="title text-center mb-4">Account Suspended</h1>
+                        <img src="rsc/image/due.gif" alt="Due hamster" class="img-fluid mx-auto d-block">
+                        <div class="alert alert-danger text-center" role="alert">
+                            <strong>Important:</strong> Immediate action is required to lift the suspension. You can must return the overdue books and pay the fines associated with them.
+                        </div>
+                        <a href="CustomerFine.php" class="btn btn-primary btn-block mb-3">Return Books</a>
                     </div>
-                    <a href="CustomerFine.php" class="btn btn-primary btn-block mb-3">Return Books</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
-
-
-</div>
-
 <script>
-
-  
-
-
     document.querySelectorAll('.form-check-input').forEach(function(checkbox) {
         checkbox.addEventListener('change', function() {
             var selectedCategories = [];

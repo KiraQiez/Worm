@@ -1,4 +1,5 @@
 <?php
+ob_start();
 $title = "Add Book";
 include 'StaffHeader.php';
 include 'db.php';
@@ -143,5 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
 </script>
 </body>
-
+<?php
+ob_start();
+?>
 </html>

@@ -95,49 +95,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
     $conn->close();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Customer</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+         .container1 {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-cancel:hover {
+            background-color: #5a6268;
+        }
+        .id-box {
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        .form-floating label {
+            color: #495057;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+    </style>
 </head>
 <body>
     <div class="container1">
         <h2>Delete Customer</h2>
-        <div class="id-box">ID: <?php echo $userid; ?></div>
-        <form method="POST" action="CustomerDelete.php?id=<?php echo $userid; ?>" onsubmit="return confirmDelete()">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" disabled>
-                <label for="username">Username</label>
+        <div class="id-box">ID: <?php echo htmlspecialchars($userid); ?></div>
+        <form method="POST" action="CustomerDelete.php?id=<?php echo htmlspecialchars($userid); ?>" onsubmit="return confirmDelete()">
+            <div class="mb-3">
+                <label for="username" class="form-label"><strong>Username:</strong> <?php echo htmlspecialchars($username); ?></label>
             </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="fullname" name="fullname" value="<?php echo $fullname; ?>" disabled>
-                <label for="fullname">Full Name</label>
+            <div class="mb-3">
+                <label for="fullname" class="form-label"><strong>Full Name:</strong> <?php echo htmlspecialchars($fullname); ?></label>
             </div>
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" disabled>
-                <label for="email">Email</label>
+            <div class="mb-3">
+                <label for="email" class="form-label"><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></label>
             </div>
-            <div class="form-floating mb-3">
-                <select class="form-select" id="gender" name="gender" disabled>
-                    <option value="M" <?php if ($gender == 'M') echo 'selected'; ?>>Male</option>
-                    <option value="F" <?php if ($gender == 'F') echo 'selected'; ?>>Female</option>
-                </select>
-                <label for="gender">Gender</label>
+            <div class="mb-3">
+                <label for="gender" class="form-label"><strong>Gender :</strong> <?php echo htmlspecialchars($gender == 'M' ? 'Male' : 'Female'); ?></label>
             </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="usertype" name="usertype" value="<?php echo $usertype; ?>" disabled>
-                <label for="usertype">User Type</label>
+            <div class="mb-3">
+                <label for="user type" class="form-label"><strong>User Type:</strong> <?php echo htmlspecialchars($usertype); ?></label>
             </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="status" name="status" value="<?php echo $status; ?>" disabled>
-                <label for="status">Status</label>
+            <div class="mb-3">
+            <label for="status" class="form-label"><strong>Status:</strong> <?php echo htmlspecialchars($status); ?></label>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" name="confirm" class="btn btn-danger me-2">Delete</button>
-                <a href="CustomerRead.php" class="btn btn-secondary btn-cancel">Cancel</a>
+                <button type="submit" name="confirm" class="btn btn-delete">Delete</button>
+                <button type="button" onclick="window.location.href = 'CustomerRead.php'" class="btn btn-cancel">Cancel</button>
             </div>
         </form>
     </div>

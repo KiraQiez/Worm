@@ -46,11 +46,32 @@ if (isset($_GET['rentalID']) && isset($_GET['status'])) {
     $rentalID = $_GET['rentalID'];
     $status = $_GET['status'];
 
-    // Update rental status
-    $stmt = $conn->prepare("UPDATE rental SET rentalStatus = ? WHERE RentalID = ?");
-    $stmt->bind_param('si', $status, $rentalID);
+    // Start transaction
+    $conn->begin_transaction();
 
-    if ($stmt->execute()) {
+    try {
+        // Update rental status
+        $stmt = $conn->prepare("UPDATE rental SET rentalStatus = ? WHERE RentalID = ?");
+        $stmt->bind_param('si', $status, $rentalID);
+        $stmt->execute();
+
+        // Update book status to 'Available' if the status is 'Returned'
+        if ($status === 'Returned') {
+            $bookIDQuery = $conn->prepare("SELECT BookID FROM rental WHERE RentalID = ?");
+            $bookIDQuery->bind_param('i', $rentalID);
+            $bookIDQuery->execute();
+            $bookIDResult = $bookIDQuery->get_result();
+            $bookIDRow = $bookIDResult->fetch_assoc();
+            $bookID = $bookIDRow['BookID'];
+
+            $updateBookStatusStmt = $conn->prepare("UPDATE book SET bookStatus = 'Available' WHERE BookID = ?");
+            $updateBookStatusStmt->bind_param('i', $bookID);
+            $updateBookStatusStmt->execute();
+        }
+
+        // Commit transaction
+        $conn->commit();
+
         echo "<script>
             Swal.fire({
                 title: 'Success!',
@@ -61,7 +82,10 @@ if (isset($_GET['rentalID']) && isset($_GET['status'])) {
                 window.location.href = 'StaffReturnRequest.php';
             });
         </script>";
-    } else {
+    } catch (Exception $e) {
+        // Rollback transaction in case of error
+        $conn->rollback();
+
         echo "<script>
             Swal.fire({
                 title: 'Error!',
@@ -148,3 +172,6 @@ if (isset($_GET['rentalID']) && isset($_GET['status'])) {
         });
     }
 </script>
+
+</body>
+</html>
