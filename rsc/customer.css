@@ -570,8 +570,8 @@ h5 {
     margin: 25px 0;
     font-size: 0.9em;
     font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+
 }
 
 .styled-table thead tr {
@@ -597,7 +597,6 @@ h5 {
     border-bottom: 2px solid #009879;
 }
 
-
-.fine-total a{
+.fine-total button{
     margin-left: auto;
 }

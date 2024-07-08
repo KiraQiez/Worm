@@ -255,3 +255,8 @@
     background-color: #ff5751;
     border-color: #ff5751;
 }
+
+.btn-primary:focus {
+    background-color: #ff5751;
+    border-color: #ff5751;
+}
