@@ -1,4 +1,7 @@
 <?php
+session_start();
+ob_start(); // Start output buffering
+
 include 'db.php'; // Include your database connection
 $title = "Customer Delete"; // Title of the page
 include 'StaffHeader.php'; // Include header HTML
@@ -92,18 +95,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
     $conn->close();
 }
 ?>
-    <script>
-        function confirmDelete() {
-            return confirm('Are you sure you want to delete this customer?');
-        }
-    </script>
-    
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Staff</title>
+    <title>Delete Customer</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -144,9 +141,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
             </div>
         </form>
     </div>
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this customer?');
+        }
+    </script>
 </body>
 </html>
 
 <?php
 $conn->close();
+ob_end_flush(); // Flush the output buffer and send output to browser
 ?>
