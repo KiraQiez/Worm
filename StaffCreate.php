@@ -68,14 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Staff</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-</head>
 <body>
     <div class="container1">
         <h2>Create Staff</h2>
@@ -116,8 +108,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="stafftype">Staff Type</label>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary me-2">Create</button>
-                <a href="StaffRead.php" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="primary">Create</button>
+                <button type="button" onclick="window.location.href = 'StaffRead.php'" class="delete">Back</button>
             </div>
         </form>
     </div>

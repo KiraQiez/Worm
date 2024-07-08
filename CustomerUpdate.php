@@ -142,8 +142,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="status">Status</label>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary me-2">Update</button>
-                <a href="CustomerRead.php" class="btn-cancel">Cancel</a>
+                <button type="submit" class="primary">Save</button>
+                <button type="button" onclick="window.location.href = 'CustomerRead.php'" class="delete">Back</button>
             </div>
         </form>
     </div>

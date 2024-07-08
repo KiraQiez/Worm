@@ -43,15 +43,6 @@ function getStatusClass($status) {
     }
 }
 ?>
-
-    <style>
-        h2 {
-            margin-bottom: 20px;
-            color: #343a40;
-            font-weight: bold;
-            text-align: center;
-        }
-    </style>
 <body>
     <div class="container mt-5">
         <h2>Customer Details</h2>

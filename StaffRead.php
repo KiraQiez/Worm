@@ -50,10 +50,31 @@ $result = $conn->query($query);
                         echo "<td>" . htmlspecialchars($row["username"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["fullname"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["stafftype"]) . "</td>";
-                        echo '<td>
-                                <a class="btn-edit" href="StaffUpdate.php?id=' . htmlspecialchars($row["userid"]) . '">Update</a>
-                                <a class="btn-delete" href="StaffDelete.php?id=' . htmlspecialchars($row["userid"]) . '">Delete</a>
-                              </td>';
+                        
+                        // Determine whether to show action buttons based on user type and staff type
+                        $showButtons = false;
+                        
+                        if ($_SESSION['usertype'] == 'manager') {
+                            // Managers can only edit/delete employees
+                            if ($row['stafftype'] == 'employee') {
+                                $showButtons = true;
+                            }
+                        } else {
+                            // Employees cannot edit/delete managers or their own record
+                            if ($row['stafftype'] == 'employee' && $row['userid'] != $_SESSION['userid']) {
+                                $showButtons = true;
+                            }
+                        }
+                        
+                        if ($showButtons) {
+                            echo '<td>
+                                    <a class="btn-edit" href="StaffUpdate.php?id=' . htmlspecialchars($row["userid"]) . '">Update</a>
+                                    <a class="btn-delete" href="StaffDelete.php?id=' . htmlspecialchars($row["userid"]) . '">Delete</a>
+                                  </td>';
+                        } else {
+                            echo '<td></td>';
+                        }
+                        
                         echo "</tr>";
                     }
                 } else {
