@@ -3,8 +3,8 @@ $title = "Library";
 include 'CustomerHeader.php';
 include 'db.php';
 
-// Fetch books from database
-$query = "SELECT * FROM book";
+// Fetch books from database that are available
+$query = "SELECT * FROM book WHERE LOWER(bookStatus) = 'available'";
 $result = $conn->query($query);
 $books = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -22,15 +22,15 @@ function displayBooks($books, $selectedCategories)
 
 $filteredBooks = displayBooks($books, $selectedCategories);
 
-
 //Check if user have due books and if have set user to suspend
-$sql = "SELECT * FROM rental WHERE CustID = '$userid' AND RentalStatus = 'Rent' AND EndDate < CURDATE()";
+$sql = "SELECT * FROM rental WHERE CustID = '$userid' AND RentalStatus = 'Rented' AND EndDate < CURDATE()";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $sqlUpdate = "UPDATE customer SET Status = 'Suspend' WHERE CustID = '$userid'";
 } 
-
 ?>
+
+<!-- Your HTML and PHP continue as before -->
 
 
 
