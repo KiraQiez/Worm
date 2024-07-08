@@ -95,7 +95,6 @@
     border-radius: 10px;
     background-color: #fff;
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .title {
@@ -343,39 +342,45 @@ h5 {
 }
 
 
-.book-details {
-    display: flex;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    max-width: 900px;
-    width: 100%;
-}
+
 
 .book-image img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+    width: 320px; /* Adjust width as needed */
+    height: 480px; /* Adjust height as needed */
+    object-fit: cover;
+    border-radius: 8px;
 }
 
-.book-info {
+
+.book-details {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
     padding: 20px;
-    flex-grow: 1;
+    max-width: 1000px; /* Adjust as needed */
+    margin: auto; /* Center the container */
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    flex: 3;
+    background: #f2e9d8;
+}
+
+
+
+.book-info {
+    max-width: 600px;
 }
 
 .book-info h2 {
-    font-size: 28px;
-    color: #333;
-    margin-bottom: 20px;
+    font-size: 24px;
+    margin-bottom: 10px;
 }
 
 .book-info p {
     font-size: 16px;
-    color: #666;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
-
 .book-info label {
     display: block;
     font-size: 16px;
@@ -516,7 +521,6 @@ h5 {
     width: 180px;
     height: auto;
     margin-right: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
 }
 
@@ -559,4 +563,40 @@ h5 {
 .modal-c {
     display: flex;
     flex-direction: column;
+}
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    width: 100%;
+
+}
+
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.fine-total button{
+    margin-left: auto;
 }

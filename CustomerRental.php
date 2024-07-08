@@ -18,7 +18,7 @@ if (isset($_SESSION['userid'])) {
 $sql = "SELECT book.bookID, book.bookTitle, book.bookAuthor, book.bookImage, rental.EndDate, rental.RentalStatus, book.bookSynopsis
         FROM book
         INNER JOIN rental ON book.bookID = rental.BookID
-        WHERE rental.CustID = ? AND rental.RentalStatus = 'out'";
+        WHERE rental.CustID = ? AND rental.RentalStatus = 'rent'";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $userid);
 $stmt->execute();
@@ -72,9 +72,10 @@ if (isset($_POST['return'])) {
         <h4>Menu</h4>
         <hr>
         <ul>
-            <li><a href="CustomerDashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="CustomerDashboard.php" ><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
             <li><a href="CustomerRental.php" class="active"><i class="fas fa-book"></i> Rental Books</a></li>
             <li><a href="CustomerHistory.php"><i class="fas fa-history"></i> My History</a></li>
+            <li><a href="CustomerFine.php"><i class="fas fa-dollar-sign"></i> Pay Fine</a></li>
         </ul>
     </div>
     <div class="rent-content">

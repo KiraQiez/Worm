@@ -28,6 +28,20 @@ if ($result) {
     }
 }
 
+
+//Check if the user status is suspended
+$sqlStatus = "SELECT status FROM customer WHERE custid = '$userid'";
+$resultStatus = mysqli_query($conn, $sqlStatus); 
+$status = "";
+
+if ($resultStatus) {
+    $row = mysqli_fetch_assoc($resultStatus);
+    if ($row) {
+        $status = $row['status'];
+    }
+}
+
+
 if ($_SESSION['usertype'] != "customer") {
     echo "<script> 
     alert('You are not authorized to access this page.');
@@ -35,6 +49,9 @@ if ($_SESSION['usertype'] != "customer") {
     </script>";
     exit;
 }
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +67,6 @@ if ($_SESSION['usertype'] != "customer") {
     <link rel="stylesheet" href="rsc/styles.css">
     <link rel="stylesheet" href="rsc/main.css">
     <link rel="stylesheet" href="rsc/customer.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -58,7 +74,6 @@ if ($_SESSION['usertype'] != "customer") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -71,16 +86,7 @@ if ($_SESSION['usertype'] != "customer") {
             <ul>
                 <li><a href="MainHomepage.php">Home</a></li>
                 <li><a href="CustomerDashboard.php">Dashboard</a></li>
-                <li class="dropdown">
-                    <a href="CustomerCatalogue.php">Catalogue</a>
-                    <i class="fas fa-caret-down"></i>
-                    <div class="dropdown-menu">
-                        <a href="#">Fiction</a>
-                        <a href="#">Non-Fiction</a>
-                        <a href="#">Mystery</a>
-                        <a href="#">Romance</a>
-                    </div>
-                </li>
+                <li><a href="CustomerCatalogue.php">Catalogue</a></li>
                 <li class="dropdown">
                     <a href="#">About</a>
                     <i class="fas fa-caret-down"></i>

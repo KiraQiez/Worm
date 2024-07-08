@@ -7,27 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if the customer is logged in
-if (isset($_SESSION['userid'])) {
-    $custid = $_SESSION['userid'];
-    
-    // Fetch the customer status
-    $stmt = $conn->prepare("SELECT status FROM customer WHERE custid = ?");
-    $stmt->bind_param('s', $custid);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $customer = $result->fetch_assoc();
-    $stmt->close();
-    
-    // Redirect if the customer is suspended
-    if ($customer['status'] == 'suspend') {
-        header('Location: CustomerSuspend.php');
-        exit;
-    }
-} else {
-    echo "No customer logged in.";
-    exit;
-}
+
 
 // Fetch book details
 if (isset($_GET['bookID'])) {
@@ -40,6 +20,13 @@ if (isset($_GET['bookID'])) {
     $stmt->close();
 } else {
     echo "No book selected.";
+}
+
+if ($status == "Suspend") {
+    echo "<script> 
+    alert('Wait how??? Pay your fine!!!.');
+    location.href='CustomerFine.php';
+    </script>";
     exit;
 }
 ?>

@@ -5,7 +5,7 @@ include 'CustomerHeader.php';
 $sql = "SELECT book.bookTitle, book.bookAuthor, book.bookImage , rental.EndDate, rental.RentalStatus
         FROM book
         INNER JOIN rental ON book.bookID = rental.BookID
-        WHERE rental.CustID = ? AND rental.RentalStatus = 'out'
+        WHERE rental.CustID = ? AND rental.RentalStatus = 'rent'
         ORDER BY  rental.EndDate ASC
         LIMIT 4";
 $stmt = $conn->prepare($sql);
@@ -22,6 +22,7 @@ $result = $stmt->get_result();
             <li><a href="CustomerDashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
             <li><a href="CustomerRental.php"><i class="fas fa-book"></i> Rental Books</a></li>
             <li><a href="CustomerHistory.php"><i class="fas fa-history"></i> My History</a></li>
+            <li><a href="CustomerFine.php"><i class="fas fa-dollar-sign"></i> Pay Fine</a></li>
         </ul>
     </div>
     <div class="rent-content">
@@ -57,7 +58,7 @@ $result = $stmt->get_result();
                         echo '<img src="data:image/jpeg;base64,' . base64_encode($row['bookImage']) . '" alt="' . $row['bookTitle'] . '">';
                         echo '<h3 class="title">' . $row['bookTitle'] . '</h3>';
                         echo '<p class="author">' . $row['bookAuthor'] . '</p>';
-                        
+
                         $formattedDate = $dueDate->format('d/m/Y');
                         echo '<p class="due ' . $dueClass . '"> Due: ' . $formattedDate . '</p>';
                         echo '</div>';

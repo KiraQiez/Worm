@@ -10,7 +10,8 @@ $books = $result->fetch_all(MYSQLI_ASSOC);
 
 $selectedCategories = isset($_GET['categories']) ? explode(',', $_GET['categories']) : [];
 
-function displayBooks($books, $selectedCategories) {
+function displayBooks($books, $selectedCategories)
+{
     if (empty($selectedCategories)) {
         return $books;
     }
@@ -55,7 +56,8 @@ $filteredBooks = displayBooks($books, $selectedCategories);
             <label class="form-check-label" for="romance">
                 Romance
             </label>
-        </div><div class="form-check">
+        </div>
+        <div class="form-check">
             <input class="form-check-input" type="checkbox" value="SciFi" id="scifi" <?php echo in_array('SciFi', $selectedCategories) ? 'checked' : ''; ?>>
             <label class="form-check-label" for="scifi">
                 SciFi
@@ -93,16 +95,50 @@ $filteredBooks = displayBooks($books, $selectedCategories);
                             <img src="data:image/jpeg;base64,<?php echo base64_encode($book['bookImage']); ?>" alt="Book Image">
                             <p class="book-title"><?php echo $book['bookTitle']; ?></p>
                             <p class="book-author"><?php echo $book['bookAuthor']; ?></p>
-                            <a href="CustomerBookDetails.php?bookID=<?php echo $book['bookID']; ?>" class="btn btn-primary">View</a>
+                            <?php if($status == 'Suspend'){
+                                echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SuspendModal">View</button>';
+                            }
+                            else{
+                                echo '<a href="CustomerBookDetails.php?bookID=' . $book['bookID'] . '" class="btn btn-primary">View</a>';
+                            }?>
+                            
                         </div>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+            
+        </div>
+    </div>
+
+    
+
+    <div class="modal fade" id="SuspendModal" tabindex="-1" aria-labelledby="suspendModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body d-flex justify-content-center align-items-center">
+                <div class="card p-4">
+                    <h1 class="title text-center mb-4">Account Suspended</h1>
+                    <img src="rsc/image/due.gif" alt="Due hamster" class="img-fluid mx-auto d-block">
+                    <div class="alert alert-danger text-center" role="alert">
+                        <strong>Important:</strong> Immediate action is required to lift the suspension. You can must return the overdue books and pay the fines associated with them.
+                    </div>
+                    <a href="CustomerFine.php" class="btn btn-primary btn-block mb-3">Return Books</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+
+
+
+</div>
+
 <script>
+
+  
+
+
     document.querySelectorAll('.form-check-input').forEach(function(checkbox) {
         checkbox.addEventListener('change', function() {
             var selectedCategories = [];
@@ -126,4 +162,5 @@ $filteredBooks = displayBooks($books, $selectedCategories);
     });
 </script>
 </body>
+
 </html>
