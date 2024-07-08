@@ -109,61 +109,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
     $conn->close();
 }
 ?>
-<style> 
-button {
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    margin-right: 10px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-    transition: transform 0.3s ease;
-}
-.primary {
-    background-color: grey;
-}
-.primary:hover,
-.delete:hover {
-    filter: brightness(0.95);
-    transform: scale(1.05);
-}
 
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Staff</title>
+    <style>
+        .container1 {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-cancel:hover {
+            background-color: #5a6268;
+        }
+        .id-box {
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        .form-floating label {
+            color: #495057;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+    </style>
+</head>
 <body>
     <div class="container1">
         <h2>Delete Staff</h2>
-        <div class="id-box">ID: <?php echo htmlspecialchars($userid); ?></div>
+        <div class="id-box">ID parameter received: <?php echo htmlspecialchars($userid); ?></div>
         <form method="POST" action="StaffDelete.php?id=<?php echo htmlspecialchars($userid); ?>" onsubmit="return confirmDelete()">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($username); ?>" disabled>
-                <label for="username">Username</label>
+            <div class="mb-3">
+                <label for="username" class="form-label"><strong>Username:</strong> <?php echo htmlspecialchars($username); ?></label>
             </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="fullname" name="fullname" value="<?php echo htmlspecialchars($fullname); ?>" disabled>
-                <label for="fullname">Full Name</label>
+            <div class="mb-3">
+                <label for="fullname" class="form-label"><strong>Full Name:</strong> <?php echo htmlspecialchars($fullname); ?></label>
             </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="gender" name="gender" value="<?php echo htmlspecialchars($gender); ?>" disabled>
-                <label for="gender">Gender</label>
+            <div class="mb-3">
+                <label for="email" class="form-label"><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></label>
             </div>
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" disabled>
-                <label for="email">Email</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="password" name="password" value="<?php echo htmlspecialchars($password); ?>" disabled>
-                <label for="password">Password</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="stafftype" name="stafftype" value="<?php echo htmlspecialchars($stafftype); ?>" disabled>
-                <label for="stafftype">Staff Type</label>
+            <div class="mb-3">
+                <label for="stafftype" class="form-label"><strong>Staff Type:</strong> <?php echo htmlspecialchars($stafftype); ?></label>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" name="confirm" class="delete">Delete</button>
-                <button type="button" onclick="window.location.href = 'StaffRead.php'" class="primary">Cancel</button>
+                <button type="submit" name="confirm" class="btn btn-delete">Delete</button>
+                <button type="button" onclick="window.location.href = 'StaffRead.php'" class="btn btn-cancel">Cancel</button>
             </div>
         </form>
     </div>
