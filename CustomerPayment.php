@@ -1,8 +1,10 @@
 <?php
+session_start();
 include 'CustomerHeader.php';
 include 'db.php';
 
-if ($status == "Suspend") {
+// Check if the user is suspended
+if (isset($status) && $status == "Suspend") {
     echo "<script> 
     alert('Wait how??? Pay your fine!!!.');
     location.href='CustomerFine.php';
@@ -24,7 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rentalDeposit = getBookPrice($bookID);
     $subtotal = $rentalPrice + $rentalDeposit;
     $endRent = date('Y-m-d', strtotime($startRent . ' + 60 days'));
-    $rentalStatus = "Rent"; // Setting rental status to 'out'
+    $rentalStatus = "Rent"; // Setting rental status to 'Rent'
+
+
 
     // Insert into rental table
     $stmt = $conn->prepare("INSERT INTO rental (StartDate, EndDate, RentalStatus, RentalPrice, RentalDeposit, RentalDuration, CustID, BookID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -42,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $rentalID = $stmt->insert_id;
     $stmt->close();
 
-    // Update book status to 'rented'
+    // Update book status to 'Rented'
     $stmt = $conn->prepare("UPDATE book SET bookStatus = 'Rented' WHERE bookID = ?");
     if ($stmt === false) {
         error_log('mysqli statement prepare error:' . $conn->error);

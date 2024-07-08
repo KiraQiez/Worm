@@ -8,20 +8,10 @@ $checkDate = isset($_GET['checkDate']) ? $_GET['checkDate'] : date('Y-m-d');
 $userid = $_SESSION['userid']; // Assuming userid is stored in session
 
 // Fetch books from database that are available on the check date
-$query = "
-    SELECT b.*
-    FROM book b
-    LEFT JOIN rental r ON b.bookID = r.BookID AND r.RentalStatus IN ('Rented', 'Reserved') 
-    AND (
-        (r.StartDate <= ? AND r.EndDate >= ?) OR
-        (r.StartDate <= DATE_ADD(?, INTERVAL 60 DAY) AND r.EndDate >= DATE_ADD(?, INTERVAL 60 DAY))
-    )
-    WHERE b.bookStatus = 'available' AND r.BookID IS NULL";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('ssss', $checkDate, $checkDate, $checkDate, $checkDate);
-$stmt->execute();
-$result = $stmt->get_result();
-$books = $result->fetch_all(MYSQLI_ASSOC);
+$query = "SELECT * FROM book";
+$result = mysqli_query($conn, $query);
+$books = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 
 $selectedCategories = isset($_GET['categories']) ? explode(',', $_GET['categories']) : [];
 
@@ -37,12 +27,6 @@ function displayBooks($books, $selectedCategories)
 
 $filteredBooks = displayBooks($books, $selectedCategories);
 
-//Check if user have due books and if have set user to suspend
-$sql = "SELECT * FROM rental WHERE CustID = '$userid' AND RentalStatus = 'Rented' AND EndDate < CURDATE()";
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    $sqlUpdate = "UPDATE customer SET Status = 'Suspend' WHERE CustID = '$userid'";
-}
 ?>
 
 <div class="main-content">

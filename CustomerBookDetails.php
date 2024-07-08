@@ -7,8 +7,6 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-
-
 // Fetch book details
 if (isset($_GET['bookID'])) {
     $bookID = $_GET['bookID'];
@@ -20,13 +18,6 @@ if (isset($_GET['bookID'])) {
     $stmt->close();
 } else {
     echo "No book selected.";
-}
-
-if ($status == "Suspend") {
-    echo "<script> 
-    alert('Wait how??? Pay your fine!!!.');
-    location.href='CustomerFine.php';
-    </script>";
     exit;
 }
 ?>
@@ -44,14 +35,34 @@ if ($status == "Suspend") {
             <p><strong>Date Published:</strong> <?php echo htmlspecialchars($book['bookDatePublished']); ?></p>
             <p><strong>Status:</strong> <?php echo htmlspecialchars($book['bookStatus']); ?></p>
             <p><strong>Synopsis:</strong> <?php echo nl2br(htmlspecialchars($book['bookSynopsis'])); ?></p>
-            <form action="CustomerPayment.php" method="GET">
+            <form id="rentalForm" method="GET" action="CustomerPayment.php">
                 <label for="startRent">Start Rent:</label>
                 <input type="date" id="startRent" name="startRent" class="form-control" required>
                 <input type="hidden" name="bookID" value="<?php echo htmlspecialchars($book['bookID']); ?>">
-                <button type="submit" class="btn btn-success">Checkout</button>
+                <button type="button" class="btn btn-success" onclick="validateAndSubmit()">Checkout</button>
             </form>
         </div>
     </div>
 </div>
-</body>
-</html>
+
+<script>
+    function validateAndSubmit() {
+        var startRent = document.getElementById('startRent').value;
+        var bookID = "<?php echo $bookID; ?>";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "CustomerValidateRental.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.status == "success") {
+                    document.getElementById('rentalForm').submit();
+                } else {
+                    alert(response.message);
+                }
+            }
+        };
+        xhr.send("startRent=" + startRent + "&bookID=" + bookID);
+    }
+</script>
