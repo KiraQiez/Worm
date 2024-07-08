@@ -1,11 +1,31 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 include 'db.php'; // Include your database connection
-$title = "Customer Data"; // Title of the page
-include 'StaffHeader.php'; // Include header HTML
+
+// Ensure usertype is set in the session to avoid undefined index warnings
+if (!isset($_SESSION['usertype'])) {
+    $_SESSION['usertype'] = null;
+}
+
+// Initialize variables
+$userid = "";
+$username = "";
+$fullname = "";
+$email = "";
+$stafftype = "";
 
 // Check if the 'id' parameter exists in the URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $userid = htmlspecialchars($_GET['id']);
+
+    // Check if the logged-in user is trying to delete themselves
+    if ($userid == $_SESSION['userid']) {
+        echo "<script>alert('Error: You cannot delete your own account.'); location.href='StaffRead.php';</script>";
+        exit();
+    }
 
     // Fetch existing data to show the details before deletion
     $sql = "SELECT system_users.userid, system_users.username, system_users.fullname, system_users.email, staff.stafftype 
@@ -30,53 +50,67 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             $email = $row['email'];
             $stafftype = $row['stafftype'];
         } else {
-            echo "No records found for the provided ID.";
+            echo "<script>alert('No records found for the provided ID.'); location.href='StaffRead.php';</script>";
             exit();
         }
 
         // Close statement
         $stmt->close();
     } else {
-        echo "Error: Could not prepare the select query. " . $conn->error;
+        echo "<script>alert('Error: Could not prepare the select query.'); location.href='StaffRead.php';</script>";
         exit();
     }
 } else {
-    echo "Error: Invalid ID parameter.";
+    echo "<script>alert('Error: Invalid ID parameter.'); location.href='StaffRead.php';</script>";
     exit();
 }
 
 // Handle the form submission for deletion
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Delete query for both system_users and staff tables
-    $sql = "DELETE FROM system_users WHERE userid = ?";
-    $sql2 = "DELETE FROM staff WHERE staffid = ?";
+    // Begin transaction
+    $conn->begin_transaction();
 
-    // Prepare statements
-    if ($stmt = $conn->prepare($sql) && $stmt2 = $conn->prepare($sql2)) {
-        // Bind variables to the prepared statement as parameters
+    try {
+        // Delete related records from customer table first
+        $sql1 = "DELETE FROM customer WHERE custid = ?";
+        $stmt1 = $conn->prepare($sql1);
         $stmt1->bind_param("s", $userid);
-        $stmt2->bind_param("s", $userid);
-
-        // Attempt to execute the prepared statements
-        if ($stmt1->execute() && $stmt2->execute()) {
-            // Redirect to the main page or a success page
-            header("Location: staffData.php?delete=success");
-            exit();
-        } else {
-            echo "Error: Could not execute the delete queries. " . $conn->error;
-        }
-
-        // Close statements
+        $stmt1->execute();
         $stmt1->close();
-        $stmt2->close();
-    } else {
-        echo "Error: Could not prepare the delete queries. " . $conn->error;
-    }
 
-    // Close connection
-    $conn->close();
+        // Delete from staff table
+        $sql2 = "DELETE FROM staff WHERE staffid = ?";
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->bind_param("s", $userid);
+        $stmt2->execute();
+        $stmt2->close();
+
+        // Then delete from system_users table
+        $sql3 = "DELETE FROM system_users WHERE userid = ?";
+        $stmt3 = $conn->prepare($sql3);
+        $stmt3->bind_param("s", $userid);
+        $stmt3->execute();
+        $stmt3->close();
+
+        // Commit transaction
+        $conn->commit();
+
+        // Redirect to the list of staff
+        echo "<script>alert('Staff deleted successfully.'); location.href='StaffRead.php';</script>";
+        exit();
+    } catch (Exception $e) {
+        // Rollback transaction
+        $conn->rollback();
+        echo "<script>alert('Error: Could not execute the delete queries.'); location.href='StaffRead.php';</script>";
+    }
 }
 ?>
+
+<?php
+// Include header HTML after the PHP logic to avoid output before header redirect
+include 'StaffHeader.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,74 +118,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Staff</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
+    <script>
+        function confirmDelete(event) {
+            if (!confirm('Are you sure you want to delete this staff member?')) {
+                event.preventDefault();
+            }
         }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #343a40;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .id-box {
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: bold;
-            color: #495057;
-        }
-
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-        .btn-danger:hover {
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            border-color: #545b62;
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <div class="container mt-5 form-container">
+    <div class="container">
         <h2>Delete Staff</h2>
-        <div class="id-box">ID parameter received: <?php echo $userid; ?></div>
+        <div class="id-box">ID parameter received: <?php echo htmlspecialchars($userid); ?></div>
         <div class="mb-3">
-            <strong>Username:</strong> <?php echo $username; ?>
+            <strong>Username:</strong> <?php echo htmlspecialchars($username); ?>
         </div>
         <div class="mb-3">
-            <strong>Full Name:</strong> <?php echo $fullname; ?>
+            <strong>Full Name:</strong> <?php echo htmlspecialchars($fullname); ?>
         </div>
         <div class="mb-3">
-            <strong>Email:</strong> <?php echo $email; ?>
+            <strong>Email:</strong> <?php echo htmlspecialchars($email); ?>
         </div>
         <div class="mb-3">
-            <strong>Staff Type:</strong> <?php echo $stafftype; ?>
+            <strong>Staff Type:</strong> <?php echo htmlspecialchars($stafftype); ?>
         </div>
-        <form action="StaffDelete.php?id=<?php echo $userid; ?>" method="POST">
+        <form action="StaffDelete.php?id=<?php echo htmlspecialchars($userid); ?>" method="POST" onsubmit="confirmDelete(event)">
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-danger me-2">Delete</button>
                 <a href="StaffRead.php" class="btn btn-secondary">Cancel</a>
@@ -160,3 +151,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
+
+<?php
+// Close connection if still open
+if ($conn) {
+    $conn->close();
+}
+?>

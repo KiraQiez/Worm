@@ -1,7 +1,15 @@
 <?php
+// Start output buffering
+ob_start();
+
 include 'db.php'; // Include your database connection
 $title = "Customer Update"; // Title of the page
 include 'StaffHeader.php'; // Include header HTML
+
+// Start the session if it's not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -52,8 +60,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $userid = htmlspecialchars($_GET['id']);
 
         // Fetch existing data to prefill the form
-        $sql = "SELECT system_users.userid, system_users.username, system_users.fullname, system_users.gender, 
-                       system_users.email, system_users.password, system_users.usertype, customer.status 
+        $sql = "SELECT system_users.userid, system_users.username, system_users.fullname, 
+                       system_users.gender, system_users.email, system_users.password, 
+                       system_users.usertype, customer.status 
                 FROM system_users 
                 INNER JOIN customer ON system_users.userid = customer.custid 
                 WHERE system_users.userid = ?";
@@ -94,11 +103,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <body>
     <div class="container1">
         <h2>Edit Customer Status</h2>
         <div class="id-box">ID parameter received: <?php echo $userid; ?></div>
-        <form id="updateForm" action="customerUpdate.php" method="POST">
+        <form id="updateForm" action="CustomerUpdate.php" method="POST">
             <input type="hidden" name="userid" value="<?php echo $userid; ?>">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" readonly>
@@ -148,5 +158,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </html>
 
 <?php
-$conn->close();
+// End output buffering and flush the output
+ob_end_flush();
 ?>

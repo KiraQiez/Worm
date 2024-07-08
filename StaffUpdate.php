@@ -1,50 +1,68 @@
 <?php
+// Start output buffering
+ob_start();
+
 include 'db.php'; // Include your database connection
-$title = "Customer Update"; // Title of the page
+$title = "Staff Update"; // Title of the page
 include 'StaffHeader.php'; // Include header HTML
+
+// Start the session if it's not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve and sanitize input values
-    $userid = htmlspecialchars($_POST["userid"]);
-    $username = htmlspecialchars($_POST["username"]);
-    $fullname = htmlspecialchars($_POST["fullname"]);
-    $gender = htmlspecialchars($_POST["gender"]);
-    $email = htmlspecialchars($_POST["email"]);
-    $password = htmlspecialchars($_POST["password"]);
-    $usertype = htmlspecialchars($_POST["usertype"]);
-    $stafftype = htmlspecialchars($_POST["stafftype"]);
+    $userid = isset($_POST["userid"]) ? htmlspecialchars($_POST["userid"]) : '';
+    $username = isset($_POST["username"]) ? htmlspecialchars($_POST["username"]) : '';
+    $fullname = isset($_POST["fullname"]) ? htmlspecialchars($_POST["fullname"]) : '';
+    $gender = isset($_POST["gender"]) ? htmlspecialchars($_POST["gender"]) : '';
+    $email = isset($_POST["email"]) ? htmlspecialchars($_POST["email"]) : '';
+    $password = isset($_POST["password"]) ? htmlspecialchars($_POST["password"]) : '';
+    $usertype = isset($_POST["usertype"]) ? htmlspecialchars($_POST["usertype"]) : '';
+    $stafftype = isset($_POST["stafftype"]) ? htmlspecialchars($_POST["stafftype"]) : '';
 
     // Check if username and email are the same
     if ($username === $email) {
         echo "Error: Username and email cannot be the same.";
     } else {
-        // Update query
-        $sql = "UPDATE system_users 
-                INNER JOIN staff ON system_users.userid = staff.staffid
-                SET system_users.username = ?, system_users.fullname = ?, system_users.gender = ?, 
-                    system_users.email = ?, system_users.password = ?, system_users.usertype = ?, 
-                    staff.stafftype = ?
-                WHERE system_users.userid = ?";
+        // Start a transaction
+        $conn->begin_transaction();
 
-        // Prepare statement
-        if ($stmt = $conn->prepare($sql)) {
-            // Bind variables to the prepared statement as parameters
-            $stmt->bind_param("ssssssss", $username, $fullname, $gender, $email, $password, $usertype, $stafftype, $userid);
+        try {
+            // Update query
+            $sql = "UPDATE system_users 
+                    INNER JOIN staff ON system_users.userid = staff.staffid
+                    SET system_users.username = ?, system_users.fullname = ?, system_users.gender = ?, 
+                        system_users.email = ?, system_users.password = ?, system_users.usertype = ?, 
+                        staff.stafftype = ?
+                    WHERE system_users.userid = ?";
 
-            // Attempt to execute the prepared statement
-            if ($stmt->execute()) {
-                // Redirect to the main page or a success page
-                header("Location: staffData.php?update=success");
-                exit();
+            // Prepare statement
+            if ($stmt = $conn->prepare($sql)) {
+                // Bind variables to the prepared statement as parameters
+                $stmt->bind_param("ssssssss", $username, $fullname, $gender, $email, $password, $usertype, $stafftype, $userid);
+
+                // Execute the statement
+                $stmt->execute();
+
+                // Close statement
+                $stmt->close();
             } else {
-                echo "Error: Could not execute the update query. " . $conn->error;
+                throw new Exception("Error preparing statement: " . $conn->error);
             }
 
-            // Close statement
-            $stmt->close();
-        } else {
-            echo "Error: Could not prepare the update query. " . $conn->error;
+            // Commit the transaction
+            $conn->commit();
+
+            // Redirect to the main page or a success page
+            header("Location: staffRead.php?update=success");
+            exit();
+        } catch (Exception $e) {
+            // Rollback the transaction
+            $conn->rollback();
+            echo "Error: Could not update the records. " . $e->getMessage();
         }
 
         // Close connection
@@ -66,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Bind variables to the prepared statement as parameters
             $stmt->bind_param("s", $userid);
 
-            // Attempt to execute the prepared statement
+            // Execute the statement
             $stmt->execute();
 
             // Fetch the result
@@ -102,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container1">
         <h2>Edit Staff</h2>
         <div class="id-box">ID parameter received: <?php echo $userid; ?></div>
-        <form action="StaffUpdate.php" method="POST">
+        <form id="updateForm" action="StaffUpdate.php" method="POST">
             <input type="hidden" name="userid" value="<?php echo $userid; ?>">
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" required>
@@ -128,15 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="password">Password</label>
             </div>
             <div class="form-floating mb-3">
-                <select class="form-select" id="usertype" name="usertype" required>
-                    <option value="admin" <?php if ($usertype == 'admin') echo 'selected'; ?>>Admin</option>
-                    <option value="staff" <?php if ($usertype == 'staff') echo 'selected'; ?>>Staff</option>
-                </select>
-                <label for="usertype">User Type</label>
-            </div>
-            <div class="form-floating mb-3">
                 <select class="form-select" id="stafftype" name="stafftype" required>
-                    <option value="admin" <?php if ($stafftype == 'admin') echo 'selected'; ?>>Admin</option>
                     <option value="manager" <?php if ($stafftype == 'manager') echo 'selected'; ?>>Manager</option>
                     <option value="employee" <?php if ($stafftype == 'employee') echo 'selected'; ?>>Employee</option>
                 </select>
@@ -148,4 +158,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
     </div>
+    <script>
+        document.getElementById('updateForm').addEventListener('submit', function(event) {
+            if (!confirm('Are you sure you want to update?')) {
+                event.preventDefault();
+            } else {
+                // Redirect to StaffRead.php
+                window.location.href = 'StaffRead.php';
+            }
+        });
+    </script>
 </body>
+</html>
+
+<?php
+// End output buffering and flush the output
+ob_end_flush();
+?>

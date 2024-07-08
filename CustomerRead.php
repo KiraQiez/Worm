@@ -6,8 +6,10 @@ include 'StaffHeader.php'; // Include header HTML
 // Define the number of results per page
 $results_per_page = 25;
 
-// Find out the number of results stored in database
-$sql = "SELECT COUNT(userid) AS total FROM customer INNER JOIN system_users ON customer.custid = system_users.userid";
+// Find out the number of results stored in the database
+$sql = "SELECT COUNT(userid) AS total FROM customer 
+        INNER JOIN system_users ON customer.custid = system_users.userid 
+        WHERE system_users.usertype = 'customer'";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 $number_of_results = $row['total'];
@@ -16,14 +18,18 @@ $number_of_results = $row['total'];
 $number_of_pages = ceil($number_of_results / $results_per_page);
 
 // Determine which page number visitor is currently on
-$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? (int) $_GET['page'] : 1;
+$page = (isset($_GET['page']) && is_numeric($_GET['page'])) ? (int)$_GET['page'] : 1;
 $current_page = $page; // Set the current page
 
 // Determine the SQL LIMIT starting number for the results on the displaying page
 $this_page_first_result = ($page - 1) * $results_per_page;
 
 // Fetch customer data with limits for pagination
-$query = "SELECT system_users.userid, system_users.username, system_users.fullname, LOWER(customer.status) AS status FROM customer INNER JOIN system_users ON customer.custid = system_users.userid LIMIT $this_page_first_result, $results_per_page";
+$query = "SELECT system_users.userid, system_users.username, system_users.fullname, LOWER(customer.status) AS status 
+          FROM customer 
+          INNER JOIN system_users ON customer.custid = system_users.userid 
+          WHERE system_users.usertype = 'customer' 
+          LIMIT $this_page_first_result, $results_per_page";
 $result = $conn->query($query);
 
 function getStatusClass($status) {
@@ -37,6 +43,15 @@ function getStatusClass($status) {
     }
 }
 ?>
+
+    <style>
+        h2 {
+            margin-bottom: 20px;
+            color: #343a40;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
 <body>
     <div class="container mt-5">
         <h2>Customer Details</h2>
@@ -86,6 +101,7 @@ function getStatusClass($status) {
         </nav>
     </div>
 </body>
+</html>
 <?php
 $conn->close();
 ?>

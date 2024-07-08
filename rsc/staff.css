@@ -174,6 +174,18 @@
 
 /* Book List */
 
+.contentBD {
+    flex: 3;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 1000px;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
 .contentBL {
     flex: 3;
     background: #fff;
@@ -309,13 +321,12 @@ button {
 
 .content {
     flex: 3;
-    background: #d4d1ca;
+    background: #fff;
     padding: 20px;
     border-radius: 15px;
     max-width: 1000px;
-
     margin: auto;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .container {
@@ -481,11 +492,13 @@ td.actions-col {
     text-decoration: none;
     border-radius: 4px;
     transition: background-color 0.3s;
+    text-decoration: none;
 }
 
 .btn-edit {
     background-color: #77DD77;
     color: white;
+
 }
 
 .btn-edit:hover {
@@ -541,7 +554,7 @@ td.actions-col {
 
 .btn-cancel:hover {
     background-color: #5a6268;
-    border-color: #545b62;
+    border-color: #51575e;
 }
 
 /* Styles for Feedback Table */
