@@ -5,7 +5,7 @@ include 'CustomerHeader.php';
 $sql = "SELECT book.bookTitle, book.bookAuthor, book.bookImage , rental.EndDate, rental.RentalStatus
         FROM book
         INNER JOIN rental ON book.bookID = rental.BookID
-        WHERE rental.CustID = ? AND rental.RentalStatus = 'out'
+        WHERE rental.CustID = ? AND rental.RentalStatus = 'rent'
         ORDER BY  rental.EndDate ASC
         LIMIT 4";
 $stmt = $conn->prepare($sql);

@@ -18,7 +18,7 @@ if (isset($_SESSION['userid'])) {
 $sql = "SELECT book.bookID, book.bookTitle, book.bookAuthor, book.bookImage, rental.EndDate, rental.RentalStatus, book.bookSynopsis
         FROM book
         INNER JOIN rental ON book.bookID = rental.BookID
-        WHERE rental.CustID = ? AND rental.RentalStatus = 'out'";
+        WHERE rental.CustID = ? AND rental.RentalStatus = 'rent'";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $userid);
 $stmt->execute();

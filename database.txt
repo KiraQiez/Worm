@@ -37,20 +37,23 @@ CREATE TABLE book (
 );
 
 CREATE TABLE RENTAL (
-  RentalID INT AUTO_INCREMENT PRIMARY KEY, //generated
-  StartDate DATE, //input
-  EndDate DATE, //generated
-  RentalStatus VARCHAR(10), //generated (out)
-  RentalPrice DECIMAL(10,2), //generated (5)
-  RentalDeposit DECIMAL(10,2), //generated (bookPrice)
-  RentalDuration INT, //generated (60days)
-  CustID VARCHAR(8), //generated (session)
-  StaffID VARCHAR(8), //null
-  BookID INT, //generated (session)
+  RentalID INT AUTO_INCREMENT PRIMARY KEY, 
+  StartDate DATE, 
+  EndDate DATE, 
+  ReturnDate DATE,  
+  RentalStatus VARCHAR(10), 
+  RentalPrice DECIMAL(10,2), 
+  RentalDeposit DECIMAL(10,2), 
+  RentalDuration INT,
+  CustID VARCHAR(8), 
+  StaffID VARCHAR(8), 
+  BookID INT, 
   FOREIGN KEY (CustID) REFERENCES Customer(CustID),
   FOREIGN KEY (StaffID) REFERENCES Staff(StaffID),
   FOREIGN KEY (BookID) REFERENCES Book(BookID)
 );
+
+
 ALTER TABLE RENTAL AUTO_INCREMENT = 1000;
 
 CREATE TABLE PAYMENT (
@@ -62,6 +65,17 @@ CREATE TABLE PAYMENT (
     FOREIGN KEY (RentalID) REFERENCES RENTAL(RentalID)
 );
 ALTER TABLE PAYMENT AUTO_INCREMENT = 10000;
+
+
+CREATE TABLE FINE(
+    FineID INT AUTO_INCREMENT PRIMARY KEY,
+    FineAmount DECIMAL(10,2),
+    RentalID INT,
+    FineReceipt LONGBLOB,
+    FOREIGN KEY (RentalID) REFERENCES Rental(RentalID)
+)
+
+
 
 //LATEST TABLE FEEDBACK (HERE)
 CREATE TABLE FEEDBACK (
