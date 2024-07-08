@@ -28,9 +28,9 @@ if ($result) {
             <p class="user text-center">
                 <?php echo htmlspecialchars($row['fullname']); ?>
                 <?php if ($row['gender'] == 'M') : ?>
-                    <span class="badge badge-primary ms-2">M</span>
+                    <span class="badge badge-primary ms-2" style="background-color:#3572EF;">M</span>
                 <?php else : ?>
-                    <span class="badge badge-danger ms-2">F</span>
+                    <span class="badge badge-danger ms-2" style="background-color:red;">F</span>
                 <?php endif; ?>
             </p>
         </div>
@@ -54,25 +54,7 @@ if ($result) {
             </div>
         </div>
     </div>
-    <div class="read-progress">
-        <h4>Read Progress</h4>
-        <label>Fiction</label>
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-        </div>
-        <label>Non-Fiction</label>
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-        </div>
-        <label>Mystery</label>
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
-        </div>
-        <label>Romance</label>
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
-        </div>
-    </div>
+  
 </div>
 
 

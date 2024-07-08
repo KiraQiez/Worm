@@ -17,6 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['checkReturn'])) {
         if (!$returned) {
             $showAlert = true;
+        }else {
+            
+            $token = bin2hex(random_bytes(32));
+            $_SESSION['payment_token'] = $token;
         }
     }
 }
@@ -142,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="alert alert-danger text-center mt-4" role="alert">
                             <strong>Important:</strong> The total fine amount is <strong>RM <?php echo number_format($totalFine, 2); ?></strong>. Please scan the QR code to pay the fine.
                         </div>
-                        <a href="CustomerFine.php" class="btn btn-primary btn-block mb-3">Close</a>
+                        <a href="CustomerFine.php?cancel=1" class="btn btn-primary btn-block mb-3">Close</a>
                     </div>
                 </div>
             </div>
@@ -163,9 +167,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 timer: 2000
             }).then(async () => {
                 await fetch('CustomerPayFunc.php', {
-                    method: 'POST'
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ token: '<?php echo $token; ?>' })
                 });
-
                 await fetch('delete_payment_status.php', {
                     method: 'POST'
                 });
@@ -186,6 +193,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         checkPayment();
     });
 </script>
+<?php
+// Invalidate the token if the user cancels the payment
+if (isset($_GET['cancel']) && $_GET['cancel'] == 1) {
+    unset($_SESSION['payment_token']);
+}
+?>
 
 
 </body>

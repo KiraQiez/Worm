@@ -21,7 +21,18 @@ function displayBooks($books, $selectedCategories)
 }
 
 $filteredBooks = displayBooks($books, $selectedCategories);
+
+
+//Check if user have due books and if have set user to suspend
+$sql = "SELECT * FROM rental WHERE CustID = '$userid' AND RentalStatus = 'Rent' AND EndDate < CURDATE()";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    $sqlUpdate = "UPDATE customer SET Status = 'Suspend' WHERE CustID = '$userid'";
+} 
+
 ?>
+
+
 
 <div class="main-content">
     <div class="sidebar">
