@@ -30,8 +30,6 @@ if ($result->num_rows > 0) {
 } 
 ?>
 
-<!-- Your HTML and PHP continue as before -->
-
 
 
 <div class="main-content">
