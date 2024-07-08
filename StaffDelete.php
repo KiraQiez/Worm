@@ -1,21 +1,15 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
+ob_start(); // Start output buffering
 
 include 'db.php'; // Include your database connection
+$title = "Staff Delete"; // Title of the page
+include 'StaffHeader.php'; // Include header HTML
 
 // Ensure usertype is set in the session to avoid undefined index warnings
 if (!isset($_SESSION['usertype'])) {
     $_SESSION['usertype'] = null;
 }
-
-// Initialize variables
-$userid = "";
-$username = "";
-$fullname = "";
-$email = "";
-$stafftype = "";
 
 // Check if the 'id' parameter exists in the URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {
@@ -28,7 +22,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     }
 
     // Fetch existing data to show the details before deletion
-    $sql = "SELECT system_users.userid, system_users.username, system_users.fullname, system_users.email, staff.stafftype 
+    $sql = "SELECT system_users.userid, system_users.username, system_users.fullname, system_users.gender, system_users.email, system_users.password, staff.stafftype 
             FROM system_users 
             INNER JOIN staff ON system_users.userid = staff.staffid 
             WHERE system_users.userid = ?";
@@ -47,7 +41,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             $row = $result->fetch_assoc();
             $username = $row['username'];
             $fullname = $row['fullname'];
+            $gender = $row['gender'];
             $email = $row['email'];
+            $password = $row['password'];
             $stafftype = $row['stafftype'];
         } else {
             echo "<script>alert('No records found for the provided ID.'); location.href='StaffRead.php';</script>";
@@ -65,12 +61,18 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     exit();
 }
 
-// Handle the form submission for deletion
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Handle delete confirmation
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
     // Begin transaction
     $conn->begin_transaction();
 
     try {
+        // Check if the staff type allows deletion of this user
+        if ($_SESSION['usertype'] == 'staff' && $stafftype == 'manager') {
+            echo "<script>alert('Error: Managers cannot delete other managers.'); location.href='StaffRead.php';</script>";
+            exit();
+        }
+
         // Delete related records from customer table first
         $sql1 = "DELETE FROM customer WHERE custid = ?";
         $stmt1 = $conn->prepare($sql1);
@@ -101,14 +103,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } catch (Exception $e) {
         // Rollback transaction
         $conn->rollback();
-        echo "<script>alert('Error: Could not execute the delete queries.'); location.href='StaffRead.php';</script>";
+        echo "<script>alert('Error: Could not execute the delete queries.'); console.error('Error: " . $e->getMessage() . "');</script>";
     }
+    // Close connection
+    $conn->close();
 }
-?>
-
-<?php
-// Include header HTML after the PHP logic to avoid output before header redirect
-include 'StaffHeader.php';
 ?>
 
 <!DOCTYPE html>
@@ -118,43 +117,51 @@ include 'StaffHeader.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Staff</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <script>
-        function confirmDelete(event) {
-            if (!confirm('Are you sure you want to delete this staff member?')) {
-                event.preventDefault();
-            }
-        }
-    </script>
 </head>
 <body>
-    <div class="container">
+    <div class="container1">
         <h2>Delete Staff</h2>
-        <div class="id-box">ID parameter received: <?php echo htmlspecialchars($userid); ?></div>
-        <div class="mb-3">
-            <strong>Username:</strong> <?php echo htmlspecialchars($username); ?>
-        </div>
-        <div class="mb-3">
-            <strong>Full Name:</strong> <?php echo htmlspecialchars($fullname); ?>
-        </div>
-        <div class="mb-3">
-            <strong>Email:</strong> <?php echo htmlspecialchars($email); ?>
-        </div>
-        <div class="mb-3">
-            <strong>Staff Type:</strong> <?php echo htmlspecialchars($stafftype); ?>
-        </div>
-        <form action="StaffDelete.php?id=<?php echo htmlspecialchars($userid); ?>" method="POST" onsubmit="confirmDelete(event)">
+        <div class="id-box">ID: <?php echo htmlspecialchars($userid); ?></div>
+        <form method="POST" action="StaffDelete.php?id=<?php echo htmlspecialchars($userid); ?>" onsubmit="return confirmDelete()">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($username); ?>" disabled>
+                <label for="username">Username</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="fullname" name="fullname" value="<?php echo htmlspecialchars($fullname); ?>" disabled>
+                <label for="fullname">Full Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="gender" name="gender" value="<?php echo htmlspecialchars($gender); ?>" disabled>
+                <label for="gender">Gender</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" disabled>
+                <label for="email">Email</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="password" name="password" value="<?php echo htmlspecialchars($password); ?>" disabled>
+                <label for="password">Password</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="stafftype" name="stafftype" value="<?php echo htmlspecialchars($stafftype); ?>" disabled>
+                <label for="stafftype">Staff Type</label>
+            </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-danger me-2">Delete</button>
+                <button type="submit" name="confirm" class="btn btn-danger me-2">Delete</button>
                 <a href="StaffRead.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this staff member?');
+        }
+    </script>
 </body>
 </html>
 
 <?php
-// Close connection if still open
-if ($conn) {
-    $conn->close();
-}
+$conn->close();
+ob_end_flush(); // Flush the output buffer and send output to browser
 ?>
