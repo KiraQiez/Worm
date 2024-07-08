@@ -62,7 +62,7 @@ include 'CustomerHeader.php';
                         echo '<td>' . $currentDate->format('Y-m-d') . '</td>';
                         echo '<td>' . $row['RentalStatus'] . '</td>';
                         echo '<td>' . $exceedDate . ' days</td>';
-                        echo '<td>RM ' . $fine  . '</td>';
+                        echo '<td>RM ' . number_format($fine,2)  . '</td>';
                         $totalFine += $fine;
                     
                        
@@ -76,27 +76,48 @@ include 'CustomerHeader.php';
             <div class="fine-total d-flex">
                 <h3>Total Fine Amount: RM
                     <?php
-                    echo $totalFine;
+                    echo number_format($totalFine,2);
                     ?>
                 </h3>
                 <?php
                 // Check if user have returned all books
-                $sqlCheck = "SELECT * FROM rental WHERE CustID = ? AND RentalStatus = 'Rent'";
+                $sqlCheck = "SELECT * FROM rental WHERE CustID = ? AND RentalStatus = 'Rent' AND EndData < CURDATE()";
                 $stmtCheck = $conn->prepare($sqlCheck);
                 $stmtCheck->bind_param("s", $userid);
                 $stmtCheck->execute();
                 $resultCheck = $stmtCheck->get_result();
                 if ($resultCheck->num_rows == 0) {
-                    echo '<a href="CustomerFinePayment.php" class="btn btn-primary">Pay Now</a>';
+                    $returned = false;
+                    
+
                 }
+                else {
+                    $returned = true;
+                    }
                 ?>
-                <a href="CustomerFinePayment.php" class="btn btn-primary">Pay Now</a>
+                <button class="btn btn-primary" onclick="checkReturn()">Pay Now</button>	
             </div>
 
 
         </div>
     </div>
 </div>
+
+<script>
+function checkReturn(){
+    var returned= <?php $returned ?>
+
+    if(returned) {
+        alert('Please return all book first before paying')
+        } else {
+            windows.location("CustomerFinePayment.php");
+        }
+
+
+        
+    }
+
+</script>
 
     </body>
 
