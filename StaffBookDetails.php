@@ -38,7 +38,8 @@ if (isset($_GET['bookID'])) {
             <p><strong>Price:</strong> $<?php echo htmlspecialchars($book['bookPrice']); ?></p>
             <p><strong>Date Published:</strong> <?php echo htmlspecialchars($book['bookDatePublished']); ?></p>
             <p><strong>Status:</strong> <?php echo htmlspecialchars($book['bookStatus']); ?></p>
-            <p><strong>Synopsis:</strong> <?php echo nl2br(htmlspecialchars($book['bookSynopsis'])); ?></p>
+            <p><strong>Synopsis:</strong> <?php echo nl2br(htmlspecialchars($book['bookSynopsis'])); ?></p><br>
+            <button type="button" onclick="window.location.href='StaffReport.php'" class="delete">BACK</button>
         </div>
     </div>
 </div>

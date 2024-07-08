@@ -1,4 +1,5 @@
 <?php
+ob_start();
 $title = "Delete Book";
 include 'StaffHeader.php';
 include 'db.php';
@@ -17,4 +18,5 @@ if ($bookID) {
 
 header('Location: StaffBookList.php');
 exit;
+ob_start();
 ?>

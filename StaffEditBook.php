@@ -1,4 +1,5 @@
 <?php
+ob_start();
 $title = "Edit Book";
 include 'StaffHeader.php';
 include 'db.php';
@@ -181,4 +182,7 @@ if (!$book) {
     });
 </script>
 </body>
+<?php
+ob_start();
+?>
 </html>
