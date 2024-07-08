@@ -95,14 +95,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
     $conn->close();
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Customer</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-</head>
+
+<style> 
+button {
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    transition: transform 0.3s ease;
+}
+.primary {
+    background-color: grey;
+}
+.primary:hover,
+.delete:hover {
+    filter: brightness(0.95);
+    transform: scale(1.05);
+}
+
+</style>
 <body>
     <div class="container1">
         <h2>Delete Customer</h2>
@@ -136,8 +152,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirm'])) {
                 <label for="status">Status</label>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" name="confirm" class="btn btn-danger me-2">Delete</button>
-                <a href="CustomerRead.php" class="btn btn-secondary btn-cancel">Cancel</a>
+                <button type="submit" name="confirm" class="delete">Delete</button>
+                <button type="button" onclick="window.location.href = 'CustomerRead.php'" class="primary">Cancel</button>
             </div>
         </form>
     </div>
