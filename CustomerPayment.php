@@ -153,9 +153,9 @@ function getBookPrice($bookID)
             <div>Rental Duration: 60 Days</div>
             <div>Start Date: <?php echo htmlspecialchars($startRent); ?></div>
             <div>End Date: <?php echo date('Y-m-d', strtotime($startRent . ' + 60 days')); ?></div>
-            <div>Deposit: $<?php echo htmlspecialchars($book['bookPrice']); ?></div>
-            <div>Rental Price: $5.00</div>
-            <div>Subtotal: $<?php echo htmlspecialchars($book['bookPrice'] + 5); ?></div>
+            <div>Deposit: RM<?php echo htmlspecialchars($book['bookPrice']); ?></div>
+            <div>Rental Price: RM5.00</div>
+            <div>Subtotal: RM<?php echo htmlspecialchars($book['bookPrice'] + 5); ?></div>
         </div>
         <div class="button-container">
             <form action="CustomerPayment.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm();">

@@ -3,11 +3,12 @@ include 'db.php';
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
     $input = json_decode(file_get_contents('php://input'), true);
     $token = $input['token'];
 
     if ($token === $_SESSION['payment_token']) {
-        // Assuming $userid is already set with the user's ID from the session or another method
+        
         $userid = $_SESSION['userid'];
 
         $sqlUpdate = "UPDATE fine
