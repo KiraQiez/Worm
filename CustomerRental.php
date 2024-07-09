@@ -36,31 +36,18 @@ if (isset($_POST['return'])) {
     $rentalID = $_POST['rentalID'];
 
     // Update rental status
-    $sql = "UPDATE rental SET RentalStatus = 'Request' WHERE BookID = ? AND CustID = ?";
+    $sql = "UPDATE rental SET RentalStatus = 'Request' WHERE RentalID = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("is", $bookID, $userid);
+    $stmt->bind_param("i", $rentalID);
     $stmt->execute();
 
     if ($stmt->error) {
         echo '<div class="alert alert-danger" role="alert">Error returning book: ' . $stmt->error . '</div>';
     } else {
-        // Update book availability
-        $sql2 = "UPDATE book SET bookStatus = 'available' WHERE bookID = ?";
-        $stmt2 = $conn->prepare($sql2);
-        $stmt2->bind_param("i", $bookID);
-        $stmt2->execute();
-
-        if ($stmt2->error) {
-            echo '<div class="alert alert-danger" role="alert">Error updating book availability: ' . $stmt2->error . '</div>';
-        } else {
-            if ($stmt->affected_rows > 0 && $stmt2->affected_rows > 0) {
-                echo '<div class="alert alert-success" role="alert">Book returned successfully. Redirecting to feedback form...</div>';
-                echo '<meta http-equiv="refresh" content="2; url=CustomerFeedbackForm.php?rentalID=' . $rentalID . '">';
-            } else {
-                echo '<div class="alert alert-warning" role="alert">No changes made (perhaps the book was already returned).</div>';
-            }
-        }
+        echo '<div class="alert alert-success" role="alert">Book return requested successfully. Redirecting to feedback form...</div>';
+        echo '<meta http-equiv="refresh" content="2; url=CustomerFeedbackForm.php?rentalID=' . $rentalID . '">';
     }
+    $stmt->close();
 }
 ?>
 
@@ -69,7 +56,7 @@ if (isset($_POST['return'])) {
         <h4>Menu</h4>
         <hr>
         <ul>
-            <li><a href="CustomerDashboard.php" ><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="CustomerDashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
             <li><a href="CustomerRental.php" class="active"><i class="fas fa-book"></i> Rental Books</a></li>
             <li><a href="CustomerHistory.php"><i class="fas fa-history"></i> My History</a></li>
             <li><a href="CustomerFine.php"><i class="fas fa-dollar-sign"></i> Pay Fine</a></li>
@@ -85,17 +72,16 @@ if (isset($_POST['return'])) {
                     while ($row = $result->fetch_assoc()) {
                         $date = $row['EndDate'];
                         $formattedDate = date('d/m/Y', strtotime($date));
-                        echo '<div class="rent-card" data-book-id="' . $row['bookID'] . '" data-book-title="' . $row['bookTitle'] . '" data-book-author="' . $row['bookAuthor'] . '" data-book-synopsis="' . htmlspecialchars($row['bookSynopsis'], ENT_QUOTES) . '" data-book-due="' . $formattedDate . '" data-rental-id="' . $row['RentalID'] . '">';
-                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row['bookImage']) . '" alt="' . $row['bookTitle'] . '">';
-                        echo '<h3 class="title">' . $row['bookTitle'] . '</h3>';
-                        echo '<p class="author">' . $row['bookAuthor'] . '</p>';
+                        echo '<div class="rent-card" data-book-id="' . $row['bookID'] . '" data-book-title="' . htmlspecialchars($row['bookTitle'], ENT_QUOTES) . '" data-book-author="' . htmlspecialchars($row['bookAuthor'], ENT_QUOTES) . '" data-book-synopsis="' . htmlspecialchars($row['bookSynopsis'], ENT_QUOTES) . '" data-book-due="' . $formattedDate . '" data-rental-id="' . $row['RentalID'] . '">';
+                        echo '<img src="data:image/jpeg;base64,' . base64_encode($row['bookImage']) . '" alt="' . htmlspecialchars($row['bookTitle'], ENT_QUOTES) . '">';
+                        echo '<h3 class="title">' . htmlspecialchars($row['bookTitle'], ENT_QUOTES) . '</h3>';
+                        echo '<p class="author">' . htmlspecialchars($row['bookAuthor'], ENT_QUOTES) . '</p>';
                         echo '<p class="due"> Due: ' . $formattedDate . '</p>';
                         echo '<button type="button" class="btn btn-primary detail" data-bs-toggle="modal" data-bs-target="#bookDetailsModal">Open Details</button>';
                         echo '</div>';
                     }
                 } 
                 ?>
-
                 <a href="CustomerCatalogue.php" class="add-rent-link">
                     <div class="add-rent">
                         <i class="fas fa-plus"></i>
@@ -145,27 +131,29 @@ if (isset($_POST['return'])) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
-   $('.detail').click(function(event) {
-    var card = $(this).closest('.rent-card');
-    var bookId = card.data('book-id');
-    var rentalId = card.data('rental-id');
-    console.log("Book ID: ", bookId);
-    console.log("Rental ID: ", rentalId);
+    document.querySelectorAll('.detail').forEach(button => {
+        button.addEventListener('click', function(event) {
+            var card = this.closest('.rent-card');
+            var bookId = card.getAttribute('data-book-id');
+            var rentalId = card.getAttribute('data-rental-id');
 
-    $('#modalBookImage').attr('src', card.find('img').attr('src'));
-    $('#modalBookTitle').text(card.data('book-title'));
-    $('#modalBookAuthor').text(card.data('book-author'));
-    $('#modalBookSynopsis').text(card.data('book-synopsis'));
-    $('#modalBookDue').text(card.data('book-due'));
-    $('#modalBookID').val(bookId); 
-    $('#modalRentalID').val(rentalId);
+            document.getElementById('modalBookImage').src = card.querySelector('img').src;
+            document.getElementById('modalBookTitle').textContent = card.getAttribute('data-book-title');
+            document.getElementById('modalBookAuthor').textContent = card.getAttribute('data-book-author');
+            document.getElementById('modalBookSynopsis').textContent = card.getAttribute('data-book-synopsis');
+            document.getElementById('modalBookDue').textContent = card.getAttribute('data-book-due');
+            document.getElementById('modalBookID').value = bookId;
+            document.getElementById('modalRentalID').value = rentalId;
 
-    $('#bookDetailsModal').modal('show');
-});
+            var modal = new bootstrap.Modal(document.getElementById('bookDetailsModal'));
+            modal.show();
+        });
+    });
 </script>
 
 </body>
 </html>
+
 <?php
 $conn->close();
-?> 
+?>

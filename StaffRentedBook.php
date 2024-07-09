@@ -25,7 +25,8 @@ $books = [];
 $sql = "SELECT b.*, r.StartDate, r.EndDate, r.RentalStatus, r.CustID, r.RentalID
         FROM book b 
         INNER JOIN rental r ON b.bookID = r.BookID 
-        WHERE b.bookStatus = 'Rented'
+        WHERE b.bookStatus = 'Rented' AND r.RentalStatus <> 'Returned'
+        ORDER BY r.EndDate 
         LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
@@ -67,7 +68,9 @@ if ($result->num_rows > 0) {
                                 <td class="title-col"><?php echo htmlspecialchars($book['title']); ?></td>
                                 <td class="custID-col"><?php echo htmlspecialchars($book['custID']); ?></td>
                                 <td class="status-col"><?php echo htmlspecialchars($book['rentStatus']); ?></td>
-                                <td class="endDate-col"><?php echo htmlspecialchars($book['endDate']); ?></td>
+                                <td class="endDate-col" style="<?php echo (strtotime($book['endDate']) < time()) ? 'color: red;' : ''; ?>">
+                                    <?php echo htmlspecialchars($book['endDate']); ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
