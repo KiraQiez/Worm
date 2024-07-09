@@ -31,7 +31,7 @@ if (isset($_GET['bookID'])) {
             <h2><b><?php echo htmlspecialchars($book['bookTitle']); ?></b></h2>
             <p><strong>Author:</strong> <?php echo htmlspecialchars($book['bookAuthor']); ?></p>
             <p><strong>Category:</strong> <?php echo htmlspecialchars($book['bookCategory']); ?></p>
-            <p><strong>Price:</strong> $<?php echo htmlspecialchars($book['bookPrice']); ?></p>
+            <p><strong>Price:</strong> RM <?php echo htmlspecialchars($book['bookPrice']); ?></p>
             <p><strong>Date Published:</strong> <?php echo htmlspecialchars($book['bookDatePublished']); ?></p>
             <p><strong>Status:</strong> <?php echo htmlspecialchars($book['bookStatus']); ?></p>
             <p><strong>Synopsis:</strong> <?php echo nl2br(htmlspecialchars($book['bookSynopsis'])); ?></p>
