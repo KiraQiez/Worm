@@ -24,6 +24,7 @@ $sql = "SELECT r.*, b.bookTitle
         FROM rental r
         INNER JOIN book b ON r.BookID = b.BookID
         WHERE r.rentalStatus = 'Request'
+        ORDER BY r.endDate
         LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
@@ -45,14 +46,15 @@ if ($result->num_rows > 0) {
 if (isset($_GET['rentalID']) && isset($_GET['status'])) {
     $rentalID = $_GET['rentalID'];
     $status = $_GET['status'];
+    $staffID = $_SESSION['UserID']; // Assume the staff ID is stored in the session
 
     // Start transaction
     $conn->begin_transaction();
 
     try {
-        // Update rental status
-        $stmt = $conn->prepare("UPDATE rental SET rentalStatus = ? WHERE RentalID = ?");
-        $stmt->bind_param('si', $status, $rentalID);
+        // Update rental status and staff ID
+        $stmt = $conn->prepare("UPDATE rental SET rentalStatus = ?, StaffID = ? WHERE RentalID = ?");
+        $stmt->bind_param('ssi', $status, $staffID, $rentalID);
         $stmt->execute();
 
         // Update book status to 'Available' if the status is 'Returned'
@@ -118,7 +120,7 @@ if (isset($_GET['rentalID']) && isset($_GET['status'])) {
                             <th class="date-col">Start Date</th>
                             <th class="date-col">End Date</th>
                             <th class="status-col">Rental Status</th>
-                            <th class="actions-col">Actions</th>
+                            <th class="actions2-col">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -130,7 +132,7 @@ if (isset($_GET['rentalID']) && isset($_GET['status'])) {
                                 <td class="date-col"><?php echo htmlspecialchars($rental['StartDate']); ?></td>
                                 <td class="date-col"><?php echo htmlspecialchars($rental['EndDate']); ?></td>
                                 <td class="status-col"><?php echo htmlspecialchars($rental['RentalStatus']); ?></td>
-                                <td class="actions-col">
+                                <td class="actions2-col">
                                     <button class="primary" onclick="updateRentalStatus('<?php echo htmlspecialchars($rental['RentalID']); ?>', 'Returned')">Accept</button>
                                     <button class="delete" onclick="updateRentalStatus('<?php echo htmlspecialchars($rental['RentalID']); ?>', 'Rent')">Reject</button>
                                 </td>

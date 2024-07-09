@@ -12,15 +12,22 @@ $limit = 6; // Number of books per page
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
 $offset = ($page - 1) * $limit; // Offset for SQL query
 
-// Fetch total number of books
-$totalBooksQuery = "SELECT COUNT(*) AS total FROM book";
+// Fetch total number of books based on search query
+$searchQuery = "";
+$searchParam = "";
+if (isset($_GET['search'])) {
+    $searchParam = $_GET['search'];
+    $searchQuery = "WHERE bookID LIKE '%$searchParam%' OR bookTitle LIKE '%$searchParam%'";
+}
+
+$totalBooksQuery = "SELECT COUNT(*) AS total FROM book $searchQuery";
 $totalBooksResult = $conn->query($totalBooksQuery);
 $totalBooks = $totalBooksResult->fetch_assoc()['total'];
 $totalPages = ceil($totalBooks / $limit);
 
-// Fetch books from the database with pagination
+// Fetch books from the database with pagination and search query
 $books = [];
-$sql = "SELECT * FROM book LIMIT $limit OFFSET $offset";
+$sql = "SELECT * FROM book $searchQuery ORDER BY bookCategory ASC LIMIT $limit OFFSET $offset;";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -44,6 +51,10 @@ if ($result->num_rows > 0) {
     <div class="contentBL">
         <div class="book-list">
             <h4>All Books</h4>
+            <form method="get" action="">
+                <input type="text" name="search" placeholder="Search by Book ID or Title" class="special-text-input" value="<?php echo htmlspecialchars($searchParam); ?>">
+                <button class="secondary" action="submit">Search</button>
+            </form>
             <?php if (empty($books)) : ?>
                 <p>No books available.</p>
             <?php else : ?>
@@ -67,6 +78,7 @@ if ($result->num_rows > 0) {
                                 <td class="price-col">RM <?php echo htmlspecialchars($book['price']); ?></td>
                                 <td class="status-col"><?php echo htmlspecialchars($book['status']); ?></td>
                                 <td class="actions-col">
+                                    <button class="tertiary" onclick="window.location.href='StaffBookDetails.php?bookID=<?php echo htmlspecialchars($book['bookID']); ?>'">View</button>
                                     <button class="primary" onclick="window.location.href='StaffEditBook.php?bookID=<?php echo htmlspecialchars($book['bookID']); ?>'">Edit</button>
                                     <button class="delete" onclick="confirmDelete('<?php echo htmlspecialchars($book['bookID']); ?>')">Delete</button>
                                 </td>
@@ -78,13 +90,13 @@ if ($result->num_rows > 0) {
 
             <div class="pagination">
                 <?php if ($page > 1) : ?>
-                    <a href="?page=<?php echo $page - 1; ?>" class="prev">Previous</a>
+                    <a href="?page=<?php echo $page - 1; ?>&search=<?php echo htmlspecialchars($searchParam); ?>" class="prev">Previous</a>
                 <?php endif; ?>
                 <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-                    <a href="?page=<?php echo $i; ?>" class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
+                    <a href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($searchParam); ?>" class="<?php echo $i === $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
                 <?php endfor; ?>
                 <?php if ($page < $totalPages) : ?>
-                    <a href="?page=<?php echo $page + 1; ?>" class="next">Next</a>
+                    <a href="?page=<?php echo $page + 1; ?>&search=<?php echo htmlspecialchars($searchParam); ?>" class="next">Next</a>
                 <?php endif; ?>
             </div>
         </div>
@@ -109,5 +121,4 @@ if ($result->num_rows > 0) {
     }
 </script>
 </body>
-
 </html>

@@ -23,7 +23,7 @@ $current_page = $page; // Set the current page
 $this_page_first_result = ($page - 1) * $results_per_page;
 
 // Fetch staff data with limits for pagination
-$query = "SELECT system_users.userid, system_users.username, system_users.fullname, staff.stafftype FROM staff INNER JOIN system_users ON staff.staffid = system_users.userid LIMIT $this_page_first_result, $results_per_page";
+$query = "SELECT system_users.userid, system_users.username, system_users.fullname, staff.stafftype FROM staff INNER JOIN system_users ON staff.staffid = system_users.userid ORDER BY staff.staffType DESC LIMIT $this_page_first_result, $results_per_page";
 $result = $conn->query($query);
 ?>
 <!DOCTYPE html>

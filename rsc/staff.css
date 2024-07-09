@@ -176,7 +176,7 @@
 
 .contentBD {
     flex: 3;
-    background: #fff;
+    background: #f2e9d8;
     padding: 20px;
     border-radius: 15px;
     max-width: 1000px;
@@ -188,7 +188,7 @@
 
 .contentBL {
     flex: 3;
-    background: #fff;
+    background: #f2e9d8;
     padding: 20px;
     border-radius: 15px;
     height: 625px;
@@ -308,8 +308,19 @@ button {
     background-color: #77DD77;
 }
 
+.secondary {
+    background-color: #ffa500;
+    margin-left: 5px;
+}
+
+.tertiary {
+    background-color: #7894EA;
+}
+
 .primary:hover,
-.delete:hover {
+.delete:hover,
+.secondary:hover,
+.tertiary:hover {
     filter: brightness(0.95);
     transform: scale(1.05);
 }
@@ -321,10 +332,10 @@ button {
 
 .content {
     flex: 3;
-    background: #fff;
+    background: #f2e9d8;
     padding: 20px;
     border-radius: 15px;
-    max-width: 1000px;
+    max-width: 1300px;
     margin: auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
@@ -358,6 +369,14 @@ textarea.form-control {
     height: 100px;
 }
 
+.special-text-input {
+    width: 23%;
+    padding: 4px 10px;
+    margin: 8px 0;
+    border: 2px solid white;
+    border-radius: 20px;
+}
+
 .pagination a:hover:not(.active) {
     background-color: #ddd;
 }
@@ -369,7 +388,7 @@ table {
 
 td {
     height: 70px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #ffffff;
 }
 
 tr:hover {
@@ -384,7 +403,7 @@ td {
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #ffffff;
     font-size: 17px;
 }
 
@@ -420,7 +439,7 @@ td.author-col {
 
 th.category-col,
 td.category-col {
-    width: 15%;
+    width: 10%;
 }
 
 th.price-col,
@@ -435,6 +454,11 @@ td.status-col {
 
 th.actions-col,
 td.actions-col {
+    width: 30%;
+}
+
+th.actions2-col,
+td.actions2-col {
     width: 20%;
 }
 
@@ -448,6 +472,7 @@ td.actions-col {
     padding: 5px 10px;
     text-decoration: none;
     border: 1px solid #ddd;
+    background-color: #ffffff;
     border-radius: 10px;
     color: #333;
 }
@@ -581,10 +606,10 @@ td.actions-col {
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid  #c1b3a5ea;
+    border-bottom: 2px solid #c1b3a5ea;
 }
 
 .styled-table tbody tr.active-row {
     font-weight: bold;
-    color:  #c1b3a5ea;
+    color: #c1b3a5ea;
 }

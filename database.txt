@@ -72,6 +72,7 @@ CREATE TABLE FINE(
     FineAmount DECIMAL(10,2),
     RentalID INT,
     FineReceipt LONGBLOB,
+    FineStatus VARCHAR(10),
     FOREIGN KEY (RentalID) REFERENCES Rental(RentalID)
 )
 

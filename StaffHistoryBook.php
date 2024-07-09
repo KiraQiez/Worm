@@ -1,5 +1,5 @@
 <?php
-$title = "Rented Book";
+$title = "Book History";
 include 'StaffHeader.php';
 include 'db.php';
 
@@ -20,21 +20,21 @@ if (isset($_GET['search'])) {
     $searchQuery = "AND (b.bookTitle LIKE '%$searchParam%' OR r.CustID LIKE '%$searchParam%')";
 }
 
-// Fetch total number of rented books based on search query
-$totalRentedBooksQuery = "SELECT COUNT(*) AS total 
-                          FROM book b 
-                          INNER JOIN rental r ON b.bookID = r.BookID 
-                          WHERE b.bookStatus = 'Rented' AND r.RentalStatus <> 'Returned' $searchQuery";
-$totalRentedBooksResult = $conn->query($totalRentedBooksQuery);
-$totalRentedBooks = $totalRentedBooksResult->fetch_assoc()['total'];
-$totalPages = ceil($totalRentedBooks / $limit);
+// Fetch total number of returned books based on search query
+$totalReturnedBooksQuery = "SELECT COUNT(*) AS total 
+                            FROM book b 
+                            INNER JOIN rental r ON b.bookID = r.BookID 
+                            WHERE r.RentalStatus = 'Returned' $searchQuery";
+$totalReturnedBooksResult = $conn->query($totalReturnedBooksQuery);
+$totalReturnedBooks = $totalReturnedBooksResult->fetch_assoc()['total'];
+$totalPages = ceil($totalReturnedBooks / $limit);
 
-// Fetch rented books with pagination and search query
+// Fetch returned books with pagination and search query
 $books = [];
-$sql = "SELECT b.*, r.StartDate, r.EndDate, r.RentalStatus, r.CustID, r.RentalID
+$sql = "SELECT b.bookTitle, r.RentalID, r.StartDate, r.EndDate, r.RentalStatus, r.CustID
         FROM book b 
         INNER JOIN rental r ON b.bookID = r.BookID 
-        WHERE b.bookStatus = 'Rented' AND r.RentalStatus <> 'Returned' $searchQuery
+        WHERE r.RentalStatus = 'Returned' $searchQuery
         ORDER BY r.EndDate 
         LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
@@ -42,13 +42,12 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $books[] = [
-            'bookID' => $row['bookID'],
-            'title' => $row['bookTitle'],
-            'custID' => $row['CustID'],
-            'bookStatus' => $row['bookStatus'],
-            'rentStatus' => $row['RentalStatus'],
+            'rentID' => $row['RentalID'],
+            'startDate' => $row['StartDate'],
             'endDate' => $row['EndDate'],
-            'rentID' => $row['RentalID']
+            'rentStatus' => $row['RentalStatus'],
+            'custID' => $row['CustID'],
+            'title' => $row['bookTitle']
         ];
     }
 }
@@ -57,13 +56,13 @@ if ($result->num_rows > 0) {
 <div class="main-content">
     <div class="content">
         <div class="book-list">
-            <h4>Rented Books</h4>
+            <h4>Book Rent History</h4>
             <form method="get" action="">
                 <input type="text" name="search" placeholder="Search by Book Title or Customer ID" class="special-text-input" value="<?php echo htmlspecialchars($searchParam); ?>">
                 <button type="submit" class="secondary">Search</button>
             </form>
             <?php if (empty($books)) : ?>
-                <p>No books available.</p>
+                <p>No returned books available.</p>
             <?php else : ?>
                 <table>
                     <thead>
@@ -71,9 +70,9 @@ if ($result->num_rows > 0) {
                             <th class="rentID-col">Rent ID</th>
                             <th class="title-col">Book Title</th>
                             <th class="custID-col">Customer ID</th>
-                            <th class="status-col">Book Status</th>
+                            <th class="status-col">Start Date</th>
+                            <th class="status-col">End Date</th>
                             <th class="status-col">Rental Status</th>
-                            <th class="endDate-col">Due Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,11 +81,9 @@ if ($result->num_rows > 0) {
                                 <td class="rentID-col"><?php echo htmlspecialchars($book['rentID']); ?></td>
                                 <td class="title-col"><?php echo htmlspecialchars($book['title']); ?></td>
                                 <td class="custID-col"><?php echo htmlspecialchars($book['custID']); ?></td>
-                                <td class="status-col"><?php echo htmlspecialchars($book['bookStatus']); ?></td>
+                                <td class="status-col"><?php echo htmlspecialchars($book['startDate']); ?></td>
+                                <td class="status-col"><?php echo htmlspecialchars($book['endDate']); ?></td>
                                 <td class="status-col"><?php echo htmlspecialchars($book['rentStatus']); ?></td>
-                                <td class="endDate-col" style="<?php echo (strtotime($book['endDate']) < time()) ? 'color: red;' : ''; ?>">
-                                    <?php echo htmlspecialchars($book['endDate']); ?>
-                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

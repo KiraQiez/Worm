@@ -78,6 +78,7 @@ $showStaffDropdown = ($staffType == 'manager');
                         <a href="StaffAddBook.php">Insert Book</a>
                         <a href="StaffRentedBook.php">Rented Book</a>
                         <a href="StaffReturnRequest.php">Return Request</a>
+                        <a href="StaffHistoryBook.php">Book History</a>
                     </div>
                 </li>
                 <li class="dropdown">

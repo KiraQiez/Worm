@@ -28,7 +28,8 @@ $this_page_first_result = ($page - 1) * $results_per_page;
 $query = "SELECT system_users.userid, system_users.username, system_users.fullname, LOWER(customer.status) AS status 
           FROM customer 
           INNER JOIN system_users ON customer.custid = system_users.userid 
-          WHERE system_users.usertype = 'customer' 
+          WHERE system_users.usertype = 'customer'
+          ORDER BY customer.status 
           LIMIT $this_page_first_result, $results_per_page";
 $result = $conn->query($query);
 
