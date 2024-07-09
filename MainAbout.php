@@ -19,7 +19,7 @@ if (isset($_SESSION['usertype'])) {
 <div class="main-content">
     <div class="about-container">
         <h2 class="text-center">Book Your Next Escape</h2>
-        <p class="text-center">At Bibliotech, our passion drives us to connect readers with the books they love. Founded with a vision
+        <p class="text-center">At Worm, our passion drives us to connect readers with the books they love. Founded with a vision
             to make literature accessible to all, we embark on a journey to revolutionize the way people engage with
             reading materials. We strive to create a world where access to knowledge and literature is effortless,
             enriching lives and fostering a love for reading among individuals of all backgrounds and ages.</p>

@@ -151,7 +151,7 @@ $bookCategories = getBookCategories();
         <!-- Top 3 Book Rentals This Year -->
         <div class="card card-medium">
             <div class="card-body">
-                <h5 class="card-title">Top 3 Book Rentals This Year</h5>
+                <h5 class="card-title">Top Book Rentals This Year</h5>
                 <div id="topBooks" class="top-books">
                     <?php
                     $topBooks = getTopBooksByYear();

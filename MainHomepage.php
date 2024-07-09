@@ -25,7 +25,7 @@ if (isset($_SESSION['usertype'])) {
             if ($_SESSION['usertype'] == 'customer') {
                 echo '<a class="btn btn-primary" href="CustomerCatalogue.php">Get Started</a>';
             } else if ($_SESSION['usertype'] == 'staff') {
-                echo '<a class="btn btn-primary" href="StaffLibrary.php">Get Started</a>';
+                echo '<a class="btn btn-primary" href="StaffBookList.php">Get Started</a>';
             } else {
                 echo '<a class="btn btn-primary" href="MainLogin.php">Get Started</a>';
             }
