@@ -46,7 +46,7 @@ if ($result->num_rows > 0) {
 if (isset($_GET['rentalID']) && isset($_GET['status'])) {
     $rentalID = $_GET['rentalID'];
     $status = $_GET['status'];
-    $staffID = $_SESSION['UserID']; // Assume the staff ID is stored in the session
+    $staffID = $_SESSION['userid']; // Correctly fetch the staff ID from the session
 
     // Start transaction
     $conn->begin_transaction();
